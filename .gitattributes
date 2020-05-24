@@ -1,0 +1,4 @@
+/resource/font/** filter=lfs diff=lfs merge=lfs -text
+/resource/image/** filter=lfs diff=lfs merge=lfs -text
+/resource/rc/** filter=lfs diff=lfs merge=lfs -text
+/resource/xcf/** filter=lfs diff=lfs merge=lfs -text

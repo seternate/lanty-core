@@ -1,0 +1,11 @@
+<RCC>
+    <qresource prefix="/">
+        <file>image/logo_256x256.png</file>
+        <file>image/add_plus_128x128.png</file>
+        <file>image/trash_delete_128x128.png</file>
+        <file>image/ban_128x128.png</file>
+        <file>image/dummycover.jpg</file>
+        <file>image/dummyicon.png</file>
+        <file>image/logo_font_256x320.png</file>
+    </qresource>
+</RCC>
