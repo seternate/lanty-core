@@ -14,7 +14,7 @@ SOURCES += \
     $$PWD/src/game/game.cpp \
     $$PWD/src/game/gamelist.cpp \
     $$PWD/src/game/version.cpp \
-    $$PWD/src/setting/*.cpp
+    $$PWD/src/setting/setting.cpp
 	
 HEADERS += \
     $$PWD/src/include/ltycore.h \

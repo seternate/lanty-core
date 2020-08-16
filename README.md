@@ -12,5 +12,5 @@ To be written.
 
 ## Build environment
 - IDE name: Qt Creator
-- IDE version: Qt Creator 4.12.0
-- Qt Version: 5.12.6
+- IDE version: Qt Creator 4.12.4
+- Qt Version: 5.14.2
