@@ -3,4 +3,4 @@
 	url = ../../../library/yaml-cpp.git
 [submodule "library/googletest"]
 	path = library/googletest
-	url = https://gitlab.home/library/googletest.git
+	url = ../../../library/googletest.git
