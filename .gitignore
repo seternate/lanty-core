@@ -15,11 +15,13 @@
 !/resource/rc/**
 !/resource/translation/
 !/resource/xcf/
-!/src/
-!/src/core/
-!/src/game/
-!/src/include/
-!/src/setting/
+!/project/
+!/project/src/
+!/project/src/core/
+!/project/src/game/
+!/project/src/include/
+!/project/src/setting/
+!/test/
 
 #Whitelist files
 !/.gitattributes
@@ -48,13 +50,15 @@
 !/resource/xcf/logo_font_256x320.xcf
 !/resource/xcf/search_glass_128x128.xcf
 !/resource/xcf/trash_delete_128x128.xcf
-!/src/core/ltycore_global.hpp
-!/src/game/Game.cpp
-!/src/game/Game.hpp
-!/src/game/GameList.cpp
-!/src/game/GameList.hpp
-!/src/game/GameVersion.cpp
-!/src/game/GameVersion.hpp
-!/src/include/ltycore.hpp
-!/src/setting/Setting.cpp
-!/src/setting/Setting.hpp
+!/project/project.pro
+!/project/src/core/ltycore_global.hpp
+!/project/src/core/version.hpp
+!/project/src/game/Game.cpp
+!/project/src/game/Game.hpp
+!/project/src/game/GameList.cpp
+!/project/src/game/GameList.hpp
+!/project/src/game/GameVersion.cpp
+!/project/src/game/GameVersion.hpp
+!/project/src/include/ltycore.hpp
+!/project/src/setting/Setting.cpp
+!/project/src/setting/Setting.hpp

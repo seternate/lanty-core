@@ -8,19 +8,19 @@
 Game::Game(const QString &yamlfile)
 {
     //Load YAML file
-    this->base = YAML::LoadFile(yamlfile.toStdString());
-    if(this->base.IsNull())
+    this->loadedYamlFile = YAML::LoadFile(yamlfile.toStdString());
+    if(this->loadedYamlFile.IsNull())
     {
         qDebug() << "Can't load " << yamlfile << ".\n";
     }
 
     //Check for the 'game' key
-    if(false == this->base["game"].IsDefined())
+    if(false == this->loadedYamlFile["game"].IsDefined())
     {
         qDebug() << "Can not find key 'game' in '" << yamlfile << "'.\n";
         return;
     }
-    YAML::Node gameNode = base["game"];
+    YAML::Node gameNode = loadedYamlFile["game"];
 
     //Check for the 'name' key
     if(false == gameNode["name"].IsDefined())
@@ -107,12 +107,12 @@ Game::Game(const QString &yamlfile)
     }
     else
     {
-        this->executableServer = QString("");
-        this->argServer = QString("");
+        this->serverExecutableFilePath = QString("");
+        this->serverCommandLineArgument = QString("");
         this->openServer = false;
     }
 
-    this->yamlFile = yamlfile;
+    this->yamlFilePath = yamlfile;
 
     this->setImagePath("");
 
@@ -129,15 +129,15 @@ Game::Game(const QDir &yamldir, const QString &name)
     //yamlfile path
     QString filename = name.simplified().toLower();
     filename.replace(" ", "");
-    this->yamlFile = yamldir.absoluteFilePath(filename + ".yaml");
+    this->yamlFilePath = yamldir.absoluteFilePath(filename + ".yaml");
     //Setup name
     this->setName(name);
 }
 
 Game::Game(const Game &game) : QObject()
 {
-    this->base = game.base;
-    this->yamlFile = game.yamlFile;
+    this->loadedYamlFile = game.loadedYamlFile;
+    this->yamlFilePath = game.yamlFilePath;
     this->setName(game.getName());
     this->setArchive(game.getArchive());
     this->setExecutable(game.getExecutable());
@@ -156,8 +156,8 @@ Game::~Game(void)
 
 Game& Game::operator=(const Game &game)
 {
-    this->base = game.base;
-    this->yamlFile = game.yamlFile;
+    this->loadedYamlFile = game.loadedYamlFile;
+    this->yamlFilePath = game.yamlFilePath;
     this->setName(game.getName());
     this->setArchive(game.getArchive());
     this->setExecutable(game.getExecutable());
@@ -187,41 +187,41 @@ bool Game::operator==(const Game &game) const
 
 const QString& Game::getName(void) const
 {
-    return this->name;
+    return this->gameName;
 }
 
 const QString& Game::getArchive(void) const
 {
-    return this->archive;
+    return this->archiveFilePath;
 }
 
 const QString& Game::getExecutable(void) const
 {
-    return this->executable;
+    return this->clientExecutableFilePath;
 }
 
 const QString& Game::getArgument(void) const
 {
-    return this->argStart;
+    return this->serverCommandLineArgument;
 }
 
 const QString& Game::getArgumentConnect(void) const
 {
-    return this->argConnect;
+    return this->clientConnectCommandLineArgument;
 }
 
 const QString& Game::getExecutableServer(void) const
 {
-    if(this->executableServer.isEmpty())
+    if(this->serverExecutableFilePath.isEmpty())
     {
         return this->getExecutable();
     }
-    return this->executableServer;
+    return this->serverExecutableFilePath;
 }
 
 const QString& Game::getArgumentServer(void) const
 {
-    return this->argServer;
+    return this->serverCommandLineArgument;
 }
 
 const QString& Game::getVersionInfo(void) const
@@ -324,15 +324,15 @@ bool Game::isVersion(void) const
 
 bool Game::deleteFile(void)
 {
-    QFile yaml(yamlFile);
+    QFile yaml(yamlFilePath);
     return yaml.remove();
 }
 
 bool Game::saveToFile(void)
 {
-    this->base["game"]["version"] = version->toNode();
-    std::ofstream fout(this->yamlFile.toStdString());
-    fout << this->base;
+    this->loadedYamlFile["game"]["version"] = version->toNode();
+    std::ofstream fout(this->yamlFilePath.toStdString());
+    fout << this->loadedYamlFile;
     return fout.good();
 }
 
@@ -343,8 +343,8 @@ bool Game::setName(const QString &name)
         qDebug() << "Error: Name can not be empty.\n";
         return false;
     }
-    this->name = name;
-    this->base["game"]["name"] = name.toStdString();
+    this->gameName = name;
+    this->loadedYamlFile["game"]["name"] = name.toStdString();
 
     return true;
 }
@@ -356,8 +356,8 @@ bool Game::setArchive(const QString &archive)
         qDebug() << "Error: Archive can not be empty.\n";
         return false;
     }
-    this->archive = archive;
-    this->base["game"]["archive"] = archive.toStdString();
+    this->archiveFilePath = archive;
+    this->loadedYamlFile["game"]["archive"] = archive.toStdString();
 
     return true;
 }
@@ -369,22 +369,22 @@ bool Game::setExecutable(const QString &executable)
         qDebug() << "Error: Executable can not be empty.\n";
         return false;
     }
-    this->executable = executable;
-    this->base["game"]["client"]["executable"] = executable.toStdString();
+    this->clientExecutableFilePath = executable;
+    this->loadedYamlFile["game"]["client"]["executable"] = executable.toStdString();
 
     return true;
 }
 
 void Game::setArgument(const QString &argStart)
 {
-    this->argStart = argStart;
-    this->base["game"]["client"]["argument"] = argStart.toStdString();
+    this->serverCommandLineArgument = argStart;
+    this->loadedYamlFile["game"]["client"]["argument"] = argStart.toStdString();
 }
 
 void Game::setArgumentConnect(const QString &argConnect)
 {
-    this->argConnect = argConnect;
-    this->base["game"]["client"]["connect"] = argConnect.toStdString();
+    this->clientConnectCommandLineArgument = argConnect;
+    this->loadedYamlFile["game"]["client"]["connect"] = argConnect.toStdString();
     if(argConnect.isEmpty())
     {
         connectDirect = false;
@@ -397,16 +397,16 @@ void Game::setArgumentConnect(const QString &argConnect)
 
 void Game::setExecutableServer(const QString &serverExecutable)
 {
-    if(serverExecutable == this->executable)
+    if(serverExecutable == this->clientExecutableFilePath)
     {
-        this->executableServer = QString("");
-        this->base["game"]["server"]["executable"] = "";
+        this->serverExecutableFilePath = QString("");
+        this->loadedYamlFile["game"]["server"]["executable"] = "";
     }
     else
     {
-        this->executableServer = serverExecutable;
-        this->base["game"]["server"]["executable"] = serverExecutable.toStdString();
-        if(serverExecutable.isEmpty() && argServer.isEmpty())
+        this->serverExecutableFilePath = serverExecutable;
+        this->loadedYamlFile["game"]["server"]["executable"] = serverExecutable.toStdString();
+        if(serverExecutable.isEmpty() && serverCommandLineArgument.isEmpty())
         {
             openServer = false;
         }
@@ -419,9 +419,9 @@ void Game::setExecutableServer(const QString &serverExecutable)
 
 void Game::setArgumentServer(const QString &argServer)
 {
-    this->argServer = argServer;
-    this->base["game"]["server"]["argument"] = argServer.toStdString();
-    if(executableServer.isEmpty() && argServer.isEmpty())
+    this->serverCommandLineArgument = argServer;
+    this->loadedYamlFile["game"]["server"]["argument"] = argServer.toStdString();
+    if(serverExecutableFilePath.isEmpty() && argServer.isEmpty())
     {
         openServer = false;
     }
