@@ -1,11 +1,11 @@
-#ifndef GAMELIST_H
-#define GAMELIST_H
+#ifndef GAME_GAMELIST_HPP
+#define GAME_GAMELIST_HPP
 
-#include <QList>
 #include <QAbstractListModel>
+#include <QList>
 
-#include "ltycore_global.h"
-#include "game.h"
+#include "../core/ltycore_global.hpp"
+#include "Game.hpp"
 
 class LTYCORE_EXPORT Gamelist : public QAbstractListModel
 {
@@ -50,4 +50,4 @@ private:
 
 };
 
-#endif // GAMELIST_H
+#endif // GAME_GAMELIST_HPP

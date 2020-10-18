@@ -1,7 +1,6 @@
-#include "setting.h"
+#include "Setting.hpp"
 
 #include <fstream>
-
 #include <QDebug>
 
 Setting::Setting(const QString &yamlFile)

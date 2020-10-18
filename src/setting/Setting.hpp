@@ -1,10 +1,11 @@
-#ifndef SETTING_H
-#define SETTING_H
+#ifndef SETTING_SETTING_HPP
+#define SETTING_SETTING_HPP
 
 #include <QObject>
+
 #include <yaml-cpp/yaml.h>
 
-#include "ltycore_global.h"
+#include "../core/ltycore_global.hpp"
 
 class LTYCORE_EXPORT Setting : public QObject
 {
@@ -28,4 +29,4 @@ private:
 
 };
 
-#endif // SETTING_H
+#endif // SETTING_SETTING_HPP

@@ -2,9 +2,10 @@
 #define VERSION_H
 
 #include <QObject>
+
 #include <yaml-cpp/yaml.h>
 
-#include "ltycore_global.h"
+#include "../core/ltycore_global.hpp"
 
 class LTYCORE_EXPORT Version : public QObject
 {

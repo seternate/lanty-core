@@ -11,17 +11,18 @@ INCLUDEPATH += \
     $$PWD/src/include
 
 SOURCES += \
-    $$PWD/src/game/game.cpp \
-    $$PWD/src/game/gamelist.cpp \
-    $$PWD/src/game/version.cpp \
-    $$PWD/src/setting/setting.cpp
+    $$PWD/src/game/Game.cpp \
+    $$PWD/src/game/GameList.cpp \
+    $$PWD/src/game/GameVersion.cpp \
+    $$PWD/src/setting/Setting.cpp
 	
 HEADERS += \
-    $$PWD/src/include/ltycore.h \
-    $$PWD/src/include/game.h \
-    $$PWD/src/include/gamelist.h \
-    $$PWD/src/include/version.h \
-    $$PWD/src/include/setting.h
+    $$PWD/src/include/ltycore.hpp \
+    $$PWD/src/core/ltycore_global.hpp \
+    $$PWD/src/game/Game.hpp \
+    $$PWD/src/game/GameList.hpp \
+    $$PWD/src/game/GameVersion.hpp \
+    $$PWD/src/setting/Setting.hpp
 
 TRANSLATIONS += \
     $$PWD/resource/translation/core_de_DE.ts
@@ -34,18 +35,20 @@ RC_FILE += \
     $$PWD/resource/core.rc
 
 CONFIG(debug, debug|release) {
+    INCLUDEPATH += $$PWD/library/yaml-cpp/include
+    DEPENDPATH += $$PWD/library/yaml-cpp/include
+
     win32 {
-        LIBS += -L$$PWD/artifact/x86_64 -llibyaml-cpp
-        INCLUDEPATH += $$PWD/library/yaml-cpp/include
-        DEPENDPATH += $$PWD/library/yaml-cpp/include
+        LIBS += -L$$PWD/artifact/x86_64 -llibyaml-cpp 
     }
 }
 
 CONFIG(release, debug|release) {
+    INCLUDEPATH += $$PWD/library/yaml-cpp/include
+    DEPENDPATH += $$PWD/library/yaml-cpp/include
+    
     win32 {
         LIBS += -L$$PWD/artifact/x86_64 -llibyaml-cpp
-        INCLUDEPATH += $$PWD/library/yaml-cpp/include
-        DEPENDPATH += $$PWD/library/yaml-cpp/include
     }
 }
 

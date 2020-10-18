@@ -1,5 +1,5 @@
-#ifndef LTYCORE_GLOBAL_H
-#define LTYCORE_GLOBAL_H
+#ifndef CORE_LTYCORE_GLOBAL_HPP
+#define CORE_LTYCORE_GLOBAL_HPP
 
 #include <QtCore/qglobal.h>
 
@@ -9,4 +9,4 @@
 #  define LTYCORE_EXPORT Q_DECL_IMPORT
 #endif
 
-#endif // LTYCORE_GLOBAL_H
+#endif // CORE_LTYCORE_GLOBAL_HPP

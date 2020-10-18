@@ -1,4 +1,4 @@
-#include "version.h"
+#include "GameVersion.hpp"
 
 #include <QDebug>
 

@@ -1,8 +1,8 @@
-#include "gamelist.h"
+#include "GameList.hpp"
 
-#include <QDir>
-#include <QDebug>
 #include <iostream>
+#include <QDebug>
+#include <QDir>
 
 Gamelist::Gamelist(const QString &yamlPath, const QString &imagePath)
 {

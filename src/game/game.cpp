@@ -1,8 +1,7 @@
-#include "game.h"
+#include "Game.hpp"
 
-#include <iostream>
 #include <fstream>
-
+#include <iostream>
 #include <QDebug>
 #include <QDir>
 

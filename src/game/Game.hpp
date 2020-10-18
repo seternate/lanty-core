@@ -1,12 +1,12 @@
-#ifndef GAME_H
-#define GAME_H
+#ifndef GAME_GAME_HPP
+#define GAME_GAME_HPP
 
 #include <QDir>
 #include <QObject>
 #include <QPixmap>
 
-#include "ltycore_global.h"
-#include "version.h"
+#include "../core/ltycore_global.hpp"
+#include "GameVersion.hpp"
 
 class LTYCORE_EXPORT Game : public QObject
 {
@@ -77,4 +77,4 @@ private:
 
 };
 
-#endif // GAME_H
+#endif // GAME_GAME_HPP
