@@ -6,6 +6,8 @@
 !/library/
 !/library/yaml-cpp/
 !/library/yaml-cpp/**
+!/library/googletest/
+!/library/googletest/**
 !/resource/
 !/resource/font/
 !/resource/image/
