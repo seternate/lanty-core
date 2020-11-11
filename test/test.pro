@@ -13,50 +13,49 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-QT += core gui
+QT += core gui testlib
 
-TEMPLATE = lib
-VERSION = 0.1.0
-DEFINES += LTYCORE_LIBRARY
-DEFINES += QT_DEPRECATED_WARNINGS
+TEMPLATE = app
+
+CONFIG += console
+CONFIG -= app_bundle
+CONFIG += thread
 CONFIG += c++17
-CONFIG += skip_target_version_ext
 
-INCLUDEPATH += $$PWD/include
+INCLUDEPATH += \
+    $$PWD/../library/googletest/googletest \
+    $$PWD/../library/googletest/googletest/include \
+    $$PWD/../library/googletest/googlemock \
+    $$PWD/../library/googletest/googlemock/include \
+    $$PWD/../project/include \
+    $$PWD/include
 
 SOURCES += \
-    $$PWD/src/game/Game.cpp \
-    $$PWD/src/yaml/YamlNode.cpp
-	
-HEADERS += \
-    $$PWD/include/core/ltycore_global.hpp \
-    $$PWD/include/core/version.hpp \
-    $$PWD/include/game/IGame.hpp \
-    $$PWD/include/game/Game.hpp \
-    $$PWD/include/game/GameVersionSource.hpp \
-    $$PWD/include/yaml/IYamlNode.hpp \
-    $$PWD/include/yaml/YamlNode.hpp
-
-TRANSLATIONS += \
-    $$PWD/../resource/translation/core_de_DE.ts
-
-RESOURCES += \
-    $$PWD/../resource/core.qrc \
-    $$PWD/../resource/style.qrc
-
-RC_FILE += \
-    $$PWD/../resource/core.rc
+    $$PWD/../library/googletest/googletest/src/gtest-all.cc \
+    $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
+    $$PWD/src/core/main.cpp \
+    $$PWD/src/game/GameTest.cpp \
+    $$PWD/src/yaml/YamlNodeTest.cpp
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
 LIBS += -L$$PWD/../artifact/x86_64 -llibyaml-cpp
 
+HEADERS += \
+    $$PWD/include/helper/QStringPrintHelper.hpp \
+    $$PWD/include/game/GameTest.hpp \
+    $$PWD/include/yaml/YamlNodeTest.hpp
+
 CONFIG(debug, debug|release) {
-    TARGET = ltycored
     DESTDIR += $$PWD/../artifact/x86_64
+    LIBS += -L$$PWD/../artifact/x86_64 -lltycored
 }
 
 CONFIG(release, debug|release) {
-    TARGET = ltycore
     DESTDIR += $$PWD/../artifact/x86_64
+    LIBS += -L$$PWD/../artifact/x86_64 -lltycore
 }
+
+
+
+
