@@ -61,8 +61,29 @@ T YamlNode::getValue(const YAML::Node &yamlNodeToReturn) const
 template<>
 QString YamlNode::getValue<QString>(const YAML::Node &yamlNodeToReturn) const
 {
-    std::string value = yamlNodeToReturn.as<std::string>();
-    return QString::fromStdString(value);
+    QString result("");
+
+    if(yamlNodeToReturn.IsDefined())
+    {
+        std::string value = yamlNodeToReturn.as<std::string>();
+        result = QString::fromStdString(value);
+    }
+
+    return result;
+}
+
+template<>
+double YamlNode::getValue<double>(const YAML::Node &yamlNodeToReturn) const
+{
+    double result = 0.0;
+
+    if(yamlNodeToReturn.IsDefined())
+    {
+        double value = yamlNodeToReturn.as<double>();
+        result = value;
+    }
+
+    return result;
 }
 
 
