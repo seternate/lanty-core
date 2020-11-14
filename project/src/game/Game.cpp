@@ -33,7 +33,7 @@ void Game::loadGameDataFromNode(const IYamlNode &gameNode)
     this->loadClientDataFromGameNode(*clientNode);
 
     std::shared_ptr<const IYamlNode> serverNode = gameNode.getNode("server");
-
+    this->loadServerDataFromGameNode(*serverNode);
 }
 
 void Game::loadVersionDataFromGameNode(const IYamlNode &versionNode)
