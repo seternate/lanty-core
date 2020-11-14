@@ -35,16 +35,16 @@ class LTYCORE_EXPORT Game : public IGame
 
     Q_OBJECT
 
-public:
-    static bool lintYaml(const IYamlNode &yamlNode);
-
 private:
-    void loadGameNode(const IYamlNode &yamlNode);
+    void loadGameDataFromNode(const IYamlNode &gameNode);
+    void loadVersionDataFromGameNode(const IYamlNode &versionNode);
+    void loadClientDataFromGameNode(const IYamlNode &clientNode);
+    void loadServerDataFromGameNode(const IYamlNode &serverNode);
 
 public:
     Game(void);
     Game(const IYamlNode &yamlNode);
-    virtual ~Game(void);
+    virtual ~Game(void) = default;
 
     Game& operator=(const Game &game);
     bool operator==(const Game &game) const;

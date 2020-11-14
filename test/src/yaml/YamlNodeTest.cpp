@@ -67,3 +67,28 @@ TEST_F(YamlNodeTest, GetNodeWithSequenceInSequence)
     ASSERT_EQ(seqSeq->getQStringFromSequence(0), QString("valueseqseq1"));
     ASSERT_EQ(seqSeq->getQStringFromSequence(1), QString("valueseqseq2"));
 }
+
+TEST_F(YamlNodeTest, GetNotExistingNode)
+{
+    std::shared_ptr<const IYamlNode> keyRoot = this->getNode("notexisting");
+
+    ASSERT_EQ(keyRoot, nullptr);
+}
+
+TEST_F(YamlNodeTest, GetNotExistingQString)
+{
+    QString notExistingMap = this->getQStringFromMap("notexisting");
+    QString notExistingSeq = this->getQStringFromSequence(3);
+
+    ASSERT_EQ(notExistingMap, QString(""));
+    ASSERT_EQ(notExistingSeq, QString(""));
+}
+
+TEST_F(YamlNodeTest, GetNotExistingDouble)
+{
+    double notExistinMap = this->getDoubleFromMap("notexisting");
+    double notExistinSeq = this->getDoubleFromSequence(4);
+
+    ASSERT_EQ(notExistinMap, 0.0);
+    ASSERT_EQ(notExistinSeq, 0.0);
+}

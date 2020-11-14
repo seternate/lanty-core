@@ -21,217 +21,52 @@
 namespace lanty
 {
 
-bool Game::lintYaml(const IYamlNode &yamlNode)
+void Game::loadGameDataFromNode(const IYamlNode &gameNode)
 {
-    /*
-    if(!yamlNode.isDefined("game"))
-    {
-        qDebug() << "Missing 'game' node in file:" << yamlNode.getFileName();
-        return false;
-    }
+    this->name = gameNode.getQStringFromMap("name");
+    this->archiveAbsoluteFilePath = gameNode.getQStringFromMap("archive");
 
-    std::shared_ptr<IYamlNode> gameNode = yamlNode.getNode("game");
+    std::shared_ptr<const IYamlNode> versionNode = gameNode.getNode("version");
+    this->loadVersionDataFromGameNode(*versionNode);
 
-    if(false == gameNode["name"].IsDefined())
-    {
-        qDebug() << "At 'game': Can not find key 'name' in '" << yamlfile << "'.\n";
-        return;
-    }
-    this->setName(QString::fromStdString(gameNode["name"].as<std::string>()));
+    std::shared_ptr<const IYamlNode> clientNode = gameNode.getNode("client");
+    this->loadClientDataFromGameNode(*clientNode);
 
-    //Check for the 'archive' key
-    if(false == gameNode["archive"].IsDefined())
-    {
-        qDebug() << "At 'game': Can not find key 'archive' in '" << yamlfile << "'.\n";
-        return;
-    }
-    this->setArchive(QString::fromStdString(gameNode["archive"].as<std::string>()));
-
-    //Check for the 'version' key to be present
-    if(true == gameNode["version"].IsDefined())
-    {
-        version = new Version(gameNode["version"], yamlfile);
-    }
-    else
-    {
-        version = new Version();
-    }
-
-    //Check for the 'client' key to be present
-    if(false == gameNode["client"].IsDefined())
-    {
-        qDebug() << "At 'game': Can't find key 'client' in '" << yamlfile << "'.\n";
-        return;
-    }
-    YAML::Node gameClientNode = gameNode["client"];
-
-    //Check for the executable key to be present
-    if(false == gameClientNode["executable"].IsDefined())
-    {
-        qDebug() << "At 'client': Can not find key 'executable' in '" << yamlfile <<"'.\n";
-        return;
-    }
-    this->setExecutable(QString::fromStdString(gameClientNode["executable"].as<std::string>()));
-
-    //Check for the argument key to be present
-    if(true == gameClientNode["argument"].IsDefined())
-    {
-        this->setArgument(QString::fromStdString(gameClientNode["argument"].as<std::string>()));
-    }
-    else
-    {
-        this->setArgument("");
-    }
-
-    //Check for the connect key to be present
-    if(true == gameClientNode["connect"].IsDefined())
-    {
-        this->setArgumentConnect(QString::fromStdString(gameClientNode["connect"].as<std::string>()));
-    }
-    else
-    {
-        this->setArgumentConnect("");
-    }
-
-    //Check for the 'server' key to be present
-    if(true == gameNode["server"].IsDefined())
-    {
-        YAML::Node gameServerNode = gameNode["server"];
-        if(true == gameServerNode["executable"].IsDefined())
-        {
-            this->setExecutableServer(QString::fromStdString(gameServerNode["executable"].as<std::string>()));
-        }
-        else
-        {
-            this->setExecutableServer("");
-        }
-        if(true == gameServerNode["argument"].IsDefined())
-        {
-            this->setArgumentServer(QString::fromStdString(gameServerNode["argument"].as<std::string>()));
-        }
-        else
-        {
-            this->setArgumentServer("");
-        }
-    }
-    else
-    {
-        this->serverExecutableFilePath = QString("");
-        this->serverCommandLineArgument = QString("");
-        this->openServer = false;
-    }
-
-    this->yamlFilePath = yamlfile;
-
-    this->setImagePath("");
-    */
+    std::shared_ptr<const IYamlNode> serverNode = gameNode.getNode("server");
+    this->loadServerDataFromGameNode(*serverNode);
 }
 
-
-void Game::loadGameNode(const IYamlNode &yamlNode)
+void Game::loadVersionDataFromGameNode(const IYamlNode &versionNode)
 {
-    /*
-    if(yamlNode.isDefined("game"))
+    this->version = versionNode.getQStringFromMap("info");
+    QString versionFormat = versionNode.getQStringFromMap("format").toLower();
+    if(versionFormat == "file")
     {
-        qDebug() << "Missing 'game' node in '" << yamlfile << "'.";
-        return;
+        this->versionSource = GameVersionSource::FILE;
     }
-    IYamlNode gameNode = yamlNode.getNode("game");
-
-    //Check for the 'name' key
-    if(false == gameNode["name"].IsDefined())
+    else if(versionFormat == "executable")
     {
-        qDebug() << "At 'game': Can not find key 'name' in '" << yamlfile << "'.\n";
-        return;
-    }
-    this->setName(QString::fromStdString(gameNode["name"].as<std::string>()));
-
-    //Check for the 'archive' key
-    if(false == gameNode["archive"].IsDefined())
-    {
-        qDebug() << "At 'game': Can not find key 'archive' in '" << yamlfile << "'.\n";
-        return;
-    }
-    this->setArchive(QString::fromStdString(gameNode["archive"].as<std::string>()));
-
-    //Check for the 'version' key to be present
-    if(true == gameNode["version"].IsDefined())
-    {
-        version = new Version(gameNode["version"], yamlfile);
+        this->versionSource = GameVersionSource::EXECUTABLE;
     }
     else
     {
-        version = new Version();
+        this->versionSource = GameVersionSource::NONE;
     }
+    this->versionRelativeFilePath = versionNode.getQStringFromMap("file");
+    this->versionFileQuery = versionNode.getQStringFromMap("query");
+}
 
-    //Check for the 'client' key to be present
-    if(false == gameNode["client"].IsDefined())
-    {
-        qDebug() << "At 'game': Can't find key 'client' in '" << yamlfile << "'.\n";
-        return;
-    }
-    YAML::Node gameClientNode = gameNode["client"];
+void Game::loadClientDataFromGameNode(const IYamlNode &clientNode)
+{
+    this->clientExecutableRelativeFilePath = clientNode.getQStringFromMap("executable");
+    this->clientArgument = clientNode.getQStringFromMap("argument");
+    this->clientConnectArgument = clientNode.getQStringFromMap("connect");
+}
 
-    //Check for the executable key to be present
-    if(false == gameClientNode["executable"].IsDefined())
-    {
-        qDebug() << "At 'client': Can not find key 'executable' in '" << yamlfile <<"'.\n";
-        return;
-    }
-    this->setExecutable(QString::fromStdString(gameClientNode["executable"].as<std::string>()));
-
-    //Check for the argument key to be present
-    if(true == gameClientNode["argument"].IsDefined())
-    {
-        this->setArgument(QString::fromStdString(gameClientNode["argument"].as<std::string>()));
-    }
-    else
-    {
-        this->setArgument("");
-    }
-
-    //Check for the connect key to be present
-    if(true == gameClientNode["connect"].IsDefined())
-    {
-        this->setArgumentConnect(QString::fromStdString(gameClientNode["connect"].as<std::string>()));
-    }
-    else
-    {
-        this->setArgumentConnect("");
-    }
-
-    //Check for the 'server' key to be present
-    if(true == gameNode["server"].IsDefined())
-    {
-        YAML::Node gameServerNode = gameNode["server"];
-        if(true == gameServerNode["executable"].IsDefined())
-        {
-            this->setExecutableServer(QString::fromStdString(gameServerNode["executable"].as<std::string>()));
-        }
-        else
-        {
-            this->setExecutableServer("");
-        }
-        if(true == gameServerNode["argument"].IsDefined())
-        {
-            this->setArgumentServer(QString::fromStdString(gameServerNode["argument"].as<std::string>()));
-        }
-        else
-        {
-            this->setArgumentServer("");
-        }
-    }
-    else
-    {
-        this->serverExecutableFilePath = QString("");
-        this->serverCommandLineArgument = QString("");
-        this->openServer = false;
-    }
-
-    this->yamlFilePath = yamlfile;
-
-    this->setImagePath("");
-    */
+void Game::loadServerDataFromGameNode(const IYamlNode &serverNode)
+{
+    this->serverExecutableRelativeFilePath = serverNode.getQStringFromMap("executable");
+    this->serverArgument = serverNode.getQStringFromMap("argument");
 }
 
 Game::Game(void) : name(""), archiveAbsoluteFilePath(""), clientExecutableRelativeFilePath(""), clientArgument(""),
@@ -240,9 +75,13 @@ Game::Game(void) : name(""), archiveAbsoluteFilePath(""), clientExecutableRelati
     iconImage(QPixmap())
 { }
 
-Game::Game(const IYamlNode &yamlNode)
+Game::Game(const IYamlNode &yamlNode) : name(""), archiveAbsoluteFilePath(""), clientExecutableRelativeFilePath(""), clientArgument(""),
+    clientConnectArgument(""), serverExecutableRelativeFilePath(""), serverArgument(""), version(""),
+    versionSource(GameVersionSource::NONE), versionRelativeFilePath(""), versionFileQuery(""), coverImage(QPixmap()),
+    iconImage(QPixmap())
 {
-    this->loadGameNode(yamlNode);
+    std::shared_ptr<const IYamlNode> gameNode = yamlNode.getNode("game");
+    this->loadGameDataFromNode(*gameNode);
 }
 
 Game& Game::operator=(const Game &game)
