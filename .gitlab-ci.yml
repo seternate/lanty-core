@@ -1,0 +1,27 @@
+variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+    YAML_CPP_VERSION: 0.6.0
+
+stages:
+    - build
+
+build_debug:
+    image: seternate/qt5-toolchain:3.0.0
+    stage: build
+    before_script:
+        # Setup build environment
+        - rm -f /usr/bin/g++
+        - rm -f /usr/bin/windres
+        - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
+        - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
+        # Move Qt5 windows lib files packed within the container
+        - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
+        - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
+        # Copy library libs from smbshare
+        - mkdir -p ./artifact/x86_64
+        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
+        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}; lcd artifact/x86_64; mget *"
+    script:
+        - cd ./project
+        - qmake ./project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/x86_64-w64-mingw32/lib/"
+        - make

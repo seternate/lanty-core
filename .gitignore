@@ -40,6 +40,7 @@
 !/core-library.pro
 !/LICENSE.md
 !/README.md
+!/.gitlab-ci.yml
 !/project/project.pro
 !/project/include/core/ltycore_global.hpp
 !/project/include/core/version.hpp
