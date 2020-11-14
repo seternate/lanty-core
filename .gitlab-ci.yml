@@ -10,6 +10,7 @@ stages:
 build_debug:
     image: seternate/qt5-toolchain:3.0.0
     stage: build
+    needs: []
     before_script:
         # Setup build environment
         - rm -f /usr/bin/g++
@@ -33,11 +34,12 @@ build_debug:
         expire_in: 30d
         paths:
             - $ARTIFACT_PATH
-        name: "${CI_PROJECT_NAME}_${VERSION}_$CI_COMMIT_SHORT_SHA_DEBUG"
+        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_DEBUG"
 
 build_release:
     image: seternate/qt5-toolchain:3.0.0
     stage: build
+    needs: []
     before_script:
         # Setup build environment
         - rm -f /usr/bin/g++
@@ -61,4 +63,4 @@ build_release:
         expire_in: 30d
         paths:
             - $ARTIFACT_PATH
-        name: "${CI_PROJECT_NAME}_${VERSION}_$CI_COMMIT_SHORT_SHA_RELEASE"
+        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_RELEASE"
