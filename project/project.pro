@@ -49,14 +49,16 @@ RC_FILE += \
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
-LIBS += -L$$PWD/../artifact/x86_64 -llibyaml-cpp
+win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lyaml-cpp
+linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lyaml-cpp
 
 CONFIG(debug, debug|release) {
     TARGET = ltycored
-    DESTDIR += $$PWD/../artifact/x86_64
 }
 
 CONFIG(release, debug|release) {
     TARGET = ltycore
-    DESTDIR += $$PWD/../artifact/x86_64
 }
+
+win32: DESTDIR += $$PWD/../artifact/x86_64/windows
+linux: DESTDIR += $$PWD/../artifact/x86_64/linux
