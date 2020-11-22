@@ -4,9 +4,6 @@ Lanty is a lanpartymanager written in Qt5. It main purpose is to serve games and
 ## Platform
 - Windows: Windows 10 (20H2)
 
-## Build
-To be written.
-
 ## Author
 - Levin Jeck
 
