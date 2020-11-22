@@ -39,7 +39,8 @@ SOURCES += \
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
-LIBS += -L$$PWD/../artifact/x86_64 -llibyaml-cpp
+win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lyaml-cpp
+linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lyaml-cpp
 
 HEADERS += \
     $$PWD/include/helper/QStringPrintHelper.hpp \
@@ -47,15 +48,16 @@ HEADERS += \
     $$PWD/include/yaml/YamlNodeTest.hpp
 
 CONFIG(debug, debug|release) {
-    DESTDIR += $$PWD/../artifact/x86_64
-    LIBS += -L$$PWD/../artifact/x86_64 -lltycored
+    TARGET = ltycored-test
+    win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lltycored
+    linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lltycored
 }
 
 CONFIG(release, debug|release) {
-    DESTDIR += $$PWD/../artifact/x86_64
-    LIBS += -L$$PWD/../artifact/x86_64 -lltycore
+    TARGET = ltycore-test
+    win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lltycore
+    linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lltycore
 }
 
-
-
-
+win32: DESTDIR += $$PWD/../artifact/x86_64/windows
+linux: DESTDIR += $$PWD/../artifact/x86_64/linux
