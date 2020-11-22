@@ -251,7 +251,7 @@ build_windows_unit_test_release:
             - ${ARTIFACT_PATH_WINDOWS}
         name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_windows_unit_test_release"
 
-unit_test:
+unit_test_debug:
     image: seternate/qt5-toolchain:3.0.0
     stage: test
     needs: 
@@ -269,6 +269,29 @@ unit_test:
         - cd ${ARTIFACT_PATH_LINUX}
         - ls
         - ./ltycored-test --gtest_output="xml:report.xml"
+    artifacts:
+        when: always
+        reports:
+            junit: ${ARTIFACT_PATH_LINUX}/report.xml
+
+unit_test_release:
+    image: seternate/qt5-toolchain:3.0.0
+    stage: test
+    needs: 
+        - job: build_linux_unit_test_release
+        - job: build_linux_release
+    before_script:
+        # Copy library libs from smbshare
+        - mkdir -p ${ARTIFACT_PATH_LINUX}
+        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
+        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; mget *"
+        - mv ${ARTIFACT_PATH_LINUX}/lib* /usr/lib/x86_64-linux-gnu/
+        # Needed for headless Qt-App start
+        - export QT_QPA_PLATFORM=offscreen
+    script:
+        - cd ${ARTIFACT_PATH_LINUX}
+        - ls
+        - ./ltycore-test --gtest_output="xml:report.xml"
     artifacts:
         when: always
         reports:
