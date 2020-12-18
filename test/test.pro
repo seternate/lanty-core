@@ -30,22 +30,30 @@ INCLUDEPATH += \
     $$PWD/../project/include \
     $$PWD/include
 
+HEADERS += \
+    $$PWD/include/helper/QStringPrintHelper.hpp \
+    $$PWD/include/game/GamelistFactoryTest.hpp \
+    $$PWD/include/helper/GameHelperTest.hpp \
+    $$PWD/include/mock/MockGame.hpp \
+    $$PWD/include/mock/MockGameHelper.hpp \
+    $$PWD/include/mock/MockQDir.hpp \
+    $$PWD/include/mock/MockQPixmap.hpp \
+    $$PWD/include/mock/MockYamlNode.hpp \
+    $$PWD/include/yaml/YamlNodeTest.hpp
+
 SOURCES += \
     $$PWD/../library/googletest/googletest/src/gtest-all.cc \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
     $$PWD/src/core/main.cpp \
     $$PWD/src/game/GameTest.cpp \
+    $$PWD/src/game/GamelistFactoryTest.cpp \
+    $$PWD/src/helper/GameHelperTest.cpp \
     $$PWD/src/yaml/YamlNodeTest.cpp
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
 win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lyaml-cpp
 linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lyaml-cpp
-
-HEADERS += \
-    $$PWD/include/helper/QStringPrintHelper.hpp \
-    $$PWD/include/game/GameTest.hpp \
-    $$PWD/include/yaml/YamlNodeTest.hpp
 
 CONFIG(debug, debug|release) {
     TARGET = ltycored-test

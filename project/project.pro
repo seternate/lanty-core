@@ -26,15 +26,26 @@ INCLUDEPATH += $$PWD/include
 
 SOURCES += \
     $$PWD/src/game/Game.cpp \
-    $$PWD/src/yaml/YamlNode.cpp
-	
+    $$PWD/src/game/Gamelist.cpp \
+    $$PWD/src/game/GamelistFactory.cpp \
+    $$PWD/src/helper/GameHelper.cpp \
+    $$PWD/src/system/FileExtension.cpp \
+    $$PWD/src/system/QDirAdapter.cpp \
+    $$PWD/src/system/QPixmapAdapter.cpp \
+    $$PWD/src/yaml/YamlNode.cpp \
+
+
 HEADERS += \
     $$PWD/include/core/ltycore_global.hpp \
     $$PWD/include/core/version.hpp \
-    $$PWD/include/game/IGame.hpp \
     $$PWD/include/game/Game.hpp \
+    $$PWD/include/game/Gamelist.hpp \
+    $$PWD/include/game/GamelistFactory.hpp \
     $$PWD/include/game/GameVersionSource.hpp \
-    $$PWD/include/yaml/IYamlNode.hpp \
+    $$PWD/include/helper/GameHelper.hpp \
+    $$PWD/include/system/FileExtension.hpp \
+    $$PWD/include/system/QDirAdapter.hpp \
+    $$PWD/include/system/QPixmapAdapter.hpp \
     $$PWD/include/yaml/YamlNode.hpp
 
 TRANSLATIONS += \

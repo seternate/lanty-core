@@ -14,22 +14,31 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMETEST_HPP
-#define GAME_GAMETEST_HPP
+#include "system/QDirAdapter.hpp"
 
-#include <gtest/gtest.h>
-
-#include <game/Game.hpp>
-
-class GameTest : public ::testing::Test
+namespace lanty
 {
 
-public:
-    GameTest() : game() {}
+QDirAdapter::QDirAdapter(const QString &path) : qDir(path) { }
 
-protected:
-    lanty::Game game;
+QDirAdapter::QDirAdapter(const QString &path,
+                         const QString &nameFilter,
+                         QDir::SortFlags sort,
+                         QDir::Filters filters) : qDir(path, nameFilter, sort, filters) { }
 
-};
+QStringList QDirAdapter::entryList(const QStringList &nameFilters, QDir::Filters filters, QDir::SortFlags sort) const
+{
+    return this->qDir.entryList(nameFilters, filters, sort);
+}
 
-#endif /* GAME_GAMETEST_HPP */
+bool QDirAdapter::isEmpty(QDir::Filters filters) const
+{
+    return this->qDir.isEmpty(filters);
+}
+
+QString QDirAdapter::absoluteFilePath(const QString &fileName) const
+{
+    return this->qDir.absoluteFilePath(fileName);
+}
+
+} /* namespace lanty */

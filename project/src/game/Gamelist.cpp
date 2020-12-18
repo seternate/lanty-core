@@ -14,12 +14,43 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#include "game/Gamelist.hpp"
 
-int main(int argc, char *argv[])
+#include "game/Game.hpp"
+#include "yaml/YamlNode.hpp"
+
+namespace lanty
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+
+Gamelist::Gamelist(const Gamelist &&gamelist) : list()
+{
+    this->list = std::move(gamelist.list);
 }
+
+Gamelist& Gamelist::operator=(const Gamelist &&gamelist)
+{
+    this->list = std::move(gamelist.list);
+    return *this;
+}
+
+Game& Gamelist::operator[](const qint32 index)
+{
+    return *list[index];
+}
+
+const Game &Gamelist::operator[](const qint32 index) const
+{
+    return *list[index];
+}
+
+const Game& Gamelist::at(const qint32 index) const
+{
+    return *list.at(index);
+}
+
+qint32 Gamelist::size(void) const
+{
+    return list.size();
+}
+
+} /* namespace lanty */

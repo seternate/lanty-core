@@ -14,38 +14,38 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <yaml/YamlNodeTest.hpp>
+#include "yaml/YamlNodeTest.hpp"
 
-#include <helper/QStringPrintHelper.hpp>
-#include <yaml/IYamlNode.hpp>
+#include "helper/QStringPrintHelper.hpp"
+#include "yaml/YamlNode.hpp"
 
 TEST_F(YamlNodeTest, GetNodeWithKeyValue)
 {
-    std::shared_ptr<const IYamlNode> keyRoot = this->getNode("key");
+    std::shared_ptr<const YamlNode> keyRoot = this->getNode("key");
 
     ASSERT_EQ(keyRoot->getQString(), QString("value"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithMap)
 {
-    std::shared_ptr<const IYamlNode> mapRoot = this->getNode("map");
-    std::shared_ptr<const IYamlNode> keyMap = mapRoot->getNode("keymap");
+    std::shared_ptr<const YamlNode> mapRoot = this->getNode("map");
+    std::shared_ptr<const YamlNode> keyMap = mapRoot->getNode("keymap");
 
     ASSERT_EQ(keyMap->getQString(), QString("valuemap"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithMapInMap)
 {
-    std::shared_ptr<const IYamlNode> mapRoot = this->getNode("map");
-    std::shared_ptr<const IYamlNode> mapMap = mapRoot->getNode("mapmap");
-    std::shared_ptr<const IYamlNode> keyMapMap = mapMap->getNode("keymapmap");
+    std::shared_ptr<const YamlNode> mapRoot = this->getNode("map");
+    std::shared_ptr<const YamlNode> mapMap = mapRoot->getNode("mapmap");
+    std::shared_ptr<const YamlNode> keyMapMap = mapMap->getNode("keymapmap");
 
     ASSERT_EQ(keyMapMap->getQString(), QString("valuemapmap"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithSequence)
 {
-    std::shared_ptr<const IYamlNode> seqRoot = this->getNode("sequence");
+    std::shared_ptr<const YamlNode> seqRoot = this->getNode("sequence");
 
     ASSERT_EQ(seqRoot->getQStringFromSequence(0), QString("valueseq1"));
     ASSERT_EQ(seqRoot->getQStringFromSequence(2), QString("valueseq2"));
@@ -53,16 +53,16 @@ TEST_F(YamlNodeTest, GetNodeWithSequence)
 
 TEST_F(YamlNodeTest, GetNodeWithMapInSequence)
 {
-    std::shared_ptr<const IYamlNode> seqRoot = this->getNode("sequence");
-    std::shared_ptr<const IYamlNode> keySeq = seqRoot->getNode(1);
+    std::shared_ptr<const YamlNode> seqRoot = this->getNode("sequence");
+    std::shared_ptr<const YamlNode> keySeq = seqRoot->getNode(1);
 
     ASSERT_EQ(keySeq->getQStringFromMap("keyseq"), QString("valuekeyseq"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithSequenceInSequence)
 {
-    std::shared_ptr<const IYamlNode> seqRoot = this->getNode("sequence");
-    std::shared_ptr<const IYamlNode> seqSeq = seqRoot->getNode(3)->getNode("seqseq");
+    std::shared_ptr<const YamlNode> seqRoot = this->getNode("sequence");
+    std::shared_ptr<const YamlNode> seqSeq = seqRoot->getNode(3)->getNode("seqseq");
 
     ASSERT_EQ(seqSeq->getQStringFromSequence(0), QString("valueseqseq1"));
     ASSERT_EQ(seqSeq->getQStringFromSequence(1), QString("valueseqseq2"));
@@ -70,7 +70,7 @@ TEST_F(YamlNodeTest, GetNodeWithSequenceInSequence)
 
 TEST_F(YamlNodeTest, GetNotExistingNode)
 {
-    std::shared_ptr<const IYamlNode> keyRoot = this->getNode("notexisting");
+    std::shared_ptr<const YamlNode> keyRoot = this->getNode("notexisting");
 
     ASSERT_EQ(keyRoot, nullptr);
 }
