@@ -14,12 +14,17 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef MOCK_MOCKQPIXMAP_HPP
+#define MOCK_MOCKQPIXMAP_HPP
 
-int main(int argc, char *argv[])
+#include <gmock/gmock.h>
+
+#include "system/QPixmapAdapter.hpp"
+
+class MockQPixmap : public lanty::QPixmapAdapter
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+public:
+    MOCK_METHOD(bool, load, (const QString &fileName, const char *format, Qt::ImageConversionFlags flags), (override));
+};
+
+#endif /* MOCK_MOCKQPIXMAP_HPP */

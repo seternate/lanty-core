@@ -17,75 +17,87 @@
 #ifndef GAME_GAME_HPP
 #define GAME_GAME_HPP
 
-#include <core/ltycore_global.hpp>
-
 #include <QObject>
 #include <QPixmap>
 #include <QString>
 
-#include <game/GameVersionSource.hpp>
-#include <game/IGame.hpp>
-#include <yaml/IYamlNode.hpp>
+#include "core/ltycore_global.hpp"
+#include "game/GameVersionSource.hpp"
+#include "system/QPixmapAdapter.hpp"
+#include "yaml/YamlNode.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Game : public IGame
+class LTYCORE_EXPORT Game : public QObject
 {
-
     Q_OBJECT
-
-private:
-    void loadGameDataFromNode(const IYamlNode &gameNode);
-    void loadVersionDataFromGameNode(const IYamlNode &versionNode);
-    void loadClientDataFromGameNode(const IYamlNode &clientNode);
-    void loadServerDataFromGameNode(const IYamlNode &serverNode);
+    Q_DISABLE_COPY_MOVE(Game);
 
 public:
     Game(void);
-    Game(const IYamlNode &yamlNode);
+    explicit Game(const YamlNode &yamlNode);
     virtual ~Game(void) = default;
 
-    Game& operator=(const Game &game);
     bool operator==(const Game &game) const;
     bool operator!=(const Game &game) const;
 
-    QString getName() const override;
-    QString getArchiveAbsoluteFilePath() const override;
-    QString getClientExecutableRelativeFilePath() const override;
-    QString getClientArgument() const override;
-    QString getClientConnectArgument() const override;
-    QString getServerExecutableRelativeFilePath() const override;
-    QString getServerArgument() const override;
-    QString getVersion() const override;
-    GameVersionSource getVersionSource() const override;
-    QString getVersionRelativeFilePath() const override;
-    QString getVersionFileQuery() const override;
-    QPixmap getCoverImage() const override;
-    QPixmap getIconImage() const override;
+    virtual QString getName(void) const;
+    virtual QString getArchiveAbsoluteFilePath(void) const;
+    virtual QString getClientExecutableRelativeFilePath(void) const;
+    virtual QString getClientArgument(void) const;
+    virtual QString getClientConnectArgument(void) const;
+    virtual QString getServerExecutableRelativeFilePath(void) const;
+    virtual QString getServerArgument(void) const;
+    virtual QString getVersion(void) const;
+    virtual GameVersionSource getVersionSource(void) const;
+    virtual QString getVersionRelativeFilePath(void) const;
+    virtual QString getVersionFileQuery(void) const;
+    virtual QPixmapAdapter getCoverImage(void) const;
+    virtual QPixmapAdapter getIconImage(void) const;
+    virtual bool isVersion(void) const;
+    virtual bool canJoinServerWithCLI(void) const;
+    virtual bool canOpenDedicatedServer(void) const;
+    virtual bool canOpenServer(void) const;
 
-    bool isVersion() const override;
-
-    bool canJoinServerWithCLI() const override;
-    bool canOpenDedicatedServer() const override;
-    bool canOpenServer() const override;
+    virtual bool loadFromYamlNode(const YamlNode &yamlNode);
 
 public slots:
-    void setName(const QString &name) override;
-    void setArchiveAbsoluteFilePath(const QString &archiveAbsoluteFilePath) override;
-    void setClientExecutableRelativeFilePath(const QString &clientExecutableRelativeFilePath) override;
-    void setClientArgument(const QString &clientArgument) override;
-    void setClientConnectArgument(const QString &clientConnectArgument) override;
-    void setServerExecutableRelativeFilePath(const QString &serverExecutableRelativeFilePath) override;
-    void setServerArgument(const QString &serverArgument) override;
-    void setVersion(const QString &version) override;
-    void setVersionSource(const GameVersionSource &gameVersionSource) override;
-    void setVersionRelativeFilePath(const QString &versionRelativeFilePath) override;
-    void setVersionFileQuery(const QString &versionFileQuery) override;
-    void setCoverImage(const QPixmap &coverImage) override;
-    void setIconImage(const QPixmap &iconImage) override;
+    virtual void setName(const QString &name);
+    virtual void setArchiveAbsoluteFilePath(const QString &archiveAbsoluteFilePath);
+    virtual void setClientExecutableRelativeFilePath(const QString &clientExecutableRelativeFilePath);
+    virtual void setClientArgument(const QString &clientArgument);
+    virtual void setClientConnectArgument(const QString &clientConnectArgument);
+    virtual void setServerExecutableRelativeFilePath(const QString &serverExecutableRelativeFilePath);
+    virtual void setServerArgument(const QString &serverArgument);
+    virtual void setVersion(const QString &version);
+    virtual void setVersionSource(const GameVersionSource &gameVersionSource);
+    virtual void setVersionRelativeFilePath(const QString &versionRelativeFilePath);
+    virtual void setVersionFileQuery(const QString &versionFileQuery);
+    virtual void setCoverImage(const QPixmapAdapter &coverImage);
+    virtual void setIconImage(const QPixmapAdapter &iconImage);
+
+signals:
+    void nameChanged(const QString &newName);
+    void archivePathChanged(const QString &newArchivePath);
+    void clientExecutableChanged(const QString &newClientExecutable);
+    void clientArgumentChanged(const QString& newClientArgument);
+    void clientConnectArgumentChanged(const QString& newClientConnectArgument);
+    void serverExecutableChanged(const QString &newServerExecutable);
+    void serverArgumentChanged(const QString& newServerArgument);
+    void versionChanged(const QString &newVersion);
+    void versionSourceChanged(GameVersionSource newGameVersionSource);
+    void versionFileChanged(const QString &newVersionFile);
+    void versionFileQueryChanged(const QString &newVersionFile);
+    void coverImageChanged(const lanty::QPixmapAdapter &newCoverImage);
+    void iconImageChanged(const lanty::QPixmapAdapter &newIconImage);
 
 private:
+    void loadGameDataFromNode(const YamlNode &gameNode);
+    void loadVersionDataFromGameNode(const YamlNode &versionNode);
+    void loadClientDataFromGameNode(const YamlNode &clientNode);
+    void loadServerDataFromGameNode(const YamlNode &serverNode);
+
     QString name;
     QString archiveAbsoluteFilePath;
     QString clientExecutableRelativeFilePath;
@@ -97,9 +109,8 @@ private:
     GameVersionSource versionSource;
     QString versionRelativeFilePath;
     QString versionFileQuery;
-    QPixmap coverImage;
-    QPixmap iconImage;
-
+    QPixmapAdapter coverImage;
+    QPixmapAdapter iconImage;
 };
 
 } /* namespace lanty */

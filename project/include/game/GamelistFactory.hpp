@@ -14,12 +14,43 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef GAME_GAMELISTFACTORY_HPP
+#define GAME_GAMELISTFACTORY_HPP
 
-int main(int argc, char *argv[])
+#include <memory>
+
+#include "core/ltycore_global.hpp"
+#include "game/Gamelist.hpp"
+#include "helper/GameHelper.hpp"
+#include "system/QDirAdapter.hpp"
+#include "system/QPixmapAdapter.hpp"
+#include "yaml/YamlNode.hpp"
+
+namespace lanty
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+
+class LTYCORE_EXPORT GamelistFactory
+{
+public:
+    GamelistFactory(void);
+    virtual ~GamelistFactory(void) = default;
+
+    virtual Gamelist* makeGamelist(const QDirAdapter &gameYamlFileDirectory, const QDirAdapter &gameImageFileDirectory);
+    void setGameDependency(Game *game);
+    void setYamlNodeDependency(YamlNode *yamlNode);
+    void setGameHelperDependency(GameHelper *gameHelper);
+    void setQPixmapDependency(QPixmapAdapter *QPixmap);
+    void resetDependencies(void);
+
+private:
+    std::shared_ptr<Game> game;
+    std::shared_ptr<YamlNode> yamlNode;
+    std::shared_ptr<GameHelper> gameHelper;
+    std::shared_ptr<QPixmapAdapter> pixmap;
+
+    void initDependencies(void);
+};
+
+} /* namespace lanty */
+
+#endif /* GAME_GAMELISTFACTORY_HPP */

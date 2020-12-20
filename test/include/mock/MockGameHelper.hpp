@@ -14,12 +14,26 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef MOCK_MOCKGAMEHELPER_HPP
+#define MOCK_MOCKGAMEHELPER_HPP
 
-int main(int argc, char *argv[])
+#include <gmock/gmock.h>
+
+#include "helper/GameHelper.hpp"
+
+class MockGameHelper : public lanty::GameHelper
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+public:
+    MOCK_METHOD(QString,
+                getCoverImagePathFromDirectory,
+                (const lanty::Game &game, const lanty::QDirAdapter &gameImageFileDirectory),
+                (override));
+    MOCK_METHOD(QString,
+                getIconImagePathFromDirectory,
+                (const lanty::Game &game, const lanty::QDirAdapter &gameImageFileDirectory),
+                (override));
+    MOCK_METHOD(QString, formatNameToCoverImageFileName, (const lanty::Game &game), (override));
+    MOCK_METHOD(QString, formatNameToIconImageFileName, (const lanty::Game &game), (override));
+};
+
+#endif /* MOCK_MOCKGAMEHELPER_HPP */

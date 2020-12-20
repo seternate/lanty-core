@@ -14,7 +14,7 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <yaml/YamlNode.hpp>
+#include "yaml/YamlNode.hpp"
 
 #include <QFile>
 #include <QFileInfo>
@@ -22,41 +22,6 @@
 
 namespace lanty
 {
-
-std::shared_ptr<IYamlNode> YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
-{
-    std::shared_ptr<IYamlNode> result(nullptr);
-
-    if(!yamlNodeToReturn.IsNull() && yamlNodeToReturn.IsDefined())
-    {
-        for(std::shared_ptr<YamlNode> childNode : this->childNodes)
-        {
-            if(childNode->node == yamlNodeToReturn)
-            {
-                result = childNode;
-                break;
-            }
-        }
-
-        if(result == nullptr)
-        {
-            std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
-            yamlChildNode->node = yamlNodeToReturn;
-            yamlChildNode->absoluteFilePath = this->absoluteFilePath;
-            childNodes.push_back(yamlChildNode);
-            result = yamlChildNode;
-        }
-    }
-
-    return result;
-}
-
-template<typename T>
-T YamlNode::getValue(const YAML::Node &yamlNodeToReturn) const
-{
-    T value = yamlNodeToReturn.as<T>();
-    return value;
-}
 
 template<>
 QString YamlNode::getValue<QString>(const YAML::Node &yamlNodeToReturn) const
@@ -87,16 +52,10 @@ double YamlNode::getValue<double>(const YAML::Node &yamlNodeToReturn) const
 }
 
 
-YamlNode::YamlNode() : node(), absoluteFilePath(""), childNodes()
-{ }
-
 YamlNode::YamlNode(const QString &absoluteFilePath) : node(), absoluteFilePath(absoluteFilePath), childNodes()
 {
     this->node = YAML::LoadFile(absoluteFilePath.toStdString());
 }
-
-YamlNode::~YamlNode()
-{ }
 
 
 QString YamlNode::getFileName() const
@@ -107,25 +66,25 @@ QString YamlNode::getFileName() const
     return fileInfo.fileName();
 }
 
-std::shared_ptr<const IYamlNode> YamlNode::getNode(const QString &key) const
+std::shared_ptr<const YamlNode> YamlNode::getNode(const QString &key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
     return this->getNode(yamlNodeToReturn);
 }
 
-std::shared_ptr<const IYamlNode> YamlNode::getNode(const int index) const
+std::shared_ptr<const YamlNode> YamlNode::getNode(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
     return this->getNode(yamlNodeToReturn);
 }
 
-std::shared_ptr<IYamlNode> YamlNode::getNode(const QString &key)
+std::shared_ptr<YamlNode> YamlNode::getNode(const QString &key)
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
     return this->getNode(yamlNodeToReturn);
 }
 
-std::shared_ptr<IYamlNode> YamlNode::getNode(const int index)
+std::shared_ptr<YamlNode> YamlNode::getNode(const int index)
 {
     YAML::Node yamlNodeToReturn = this->node[index];
     return this->getNode(yamlNodeToReturn);
@@ -170,7 +129,6 @@ int YamlNode::getSize() const
     return this->node.size();
 }
 
-
 bool YamlNode::isDefined(const QString &key) const
 {
     return this->node[key.toStdString()].IsDefined();
@@ -214,6 +172,51 @@ bool YamlNode::isSequence() const
 bool YamlNode::isMap() const
 {
     return this->node.IsMap();
+}
+
+
+bool YamlNode::loadFromFile(const QString &absoluteFilePath)
+{
+    this->absoluteFilePath = absoluteFilePath;
+    this->node = YAML::LoadFile(absoluteFilePath.toStdString());
+    this->childNodes = std::vector<std::shared_ptr<YamlNode>>();
+    return true;
+}
+
+
+std::shared_ptr<YamlNode> YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
+{
+    std::shared_ptr<YamlNode> result(nullptr);
+
+    if(!yamlNodeToReturn.IsNull() && yamlNodeToReturn.IsDefined())
+    {
+        for(std::shared_ptr<YamlNode> childNode : this->childNodes)
+        {
+            if(childNode->node == yamlNodeToReturn)
+            {
+                result = childNode;
+                break;
+            }
+        }
+
+        if(result == nullptr)
+        {
+            std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
+            yamlChildNode->node = yamlNodeToReturn;
+            yamlChildNode->absoluteFilePath = this->absoluteFilePath;
+            childNodes.push_back(yamlChildNode);
+            result = yamlChildNode;
+        }
+    }
+
+    return result;
+}
+
+template<typename T>
+T YamlNode::getValue(const YAML::Node &yamlNodeToReturn) const
+{
+    T value = yamlNodeToReturn.as<T>();
+    return value;
 }
 
 } /* namespace lanty */

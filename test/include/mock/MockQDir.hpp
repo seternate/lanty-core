@@ -14,12 +14,20 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef MOCK_MOCKQDIR_HPP
+#define MOCK_MOCKQDIR_HPP
 
-int main(int argc, char *argv[])
+#include <gmock/gmock.h>
+
+#include "system/QDirAdapter.hpp"
+
+class MockQDir : public lanty::QDirAdapter
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+public:
+    MOCK_METHOD(QStringList, entryList, (const QStringList &, QDir::Filters, QDir::SortFlags), (const, override));
+    MOCK_METHOD(bool, isEmpty, (QDir::Filters filters), (const, override));
+    MOCK_METHOD(QString, absoluteFilePath, (const QString&), (const, override));
+};
+
+
+#endif /* MOCK_MOCKQDIR_HPP */

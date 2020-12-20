@@ -14,12 +14,17 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#include "system/FileExtension.hpp"
 
-int main(int argc, char *argv[])
+namespace lanty
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+
+const QString FileExtension::YAML = "yaml";
+const QString FileExtension::YML = "yml";
+const QString FileExtension::PNG = "png";
+const QString FileExtension::JPG = "jpg";
+const QString FileExtension::JPEG = "jpeg";
+const QString FileExtension::BMP = "bmp";
+
+} /* namespace lanty */
+

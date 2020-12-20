@@ -17,63 +17,59 @@
 #ifndef YAML_YAMLNODE_HPP
 #define YAML_YAMLNODE_HPP
 
-#include <core/ltycore_global.hpp>
-
 #include <memory>
-#include <QObject>
 #include <QString>
 #include <vector>
 #include <yaml-cpp/yaml.h>
 
-#include <yaml/IYamlNode.hpp>
+#include "core/ltycore_global.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT YamlNode : public IYamlNode
+class LTYCORE_EXPORT YamlNode
 {
-
-    Q_OBJECT
-
-private:
-    std::shared_ptr<IYamlNode> getNode(YAML::Node &yamlNodeToReturn) const;
-    template<typename T>
-    T getValue(const YAML::Node &yamlNodeToReturn) const;
+    Q_DISABLE_COPY_MOVE(YamlNode);
 
 public:
-    YamlNode(void);
+    YamlNode(void) = default;
     YamlNode(const QString &absoluteFilePath);
-    virtual ~YamlNode(void);
+    virtual ~YamlNode(void) = default;
 
-    QString getFileName() const override;
-    std::shared_ptr<const IYamlNode> getNode(const QString &key) const override;
-    std::shared_ptr<const IYamlNode> getNode(const int index) const override;
-    std::shared_ptr<IYamlNode> getNode(const QString &key) override;
-    std::shared_ptr<IYamlNode> getNode(const int index) override;
-    QString getQStringFromMap(const QString &key) const override;
-    QString getQStringFromSequence(const int index) const override;
-    QString getQString(void) const override;
-    double getDoubleFromMap(const QString &key) const override;
-    double getDoubleFromSequence(const int index) const override;
-    double getDouble(void) const override;
-    int getSize(void) const override;
+    virtual QString getFileName(void) const;
+    virtual std::shared_ptr<const YamlNode> getNode(const QString &key) const;
+    virtual std::shared_ptr<const YamlNode> getNode(const int index) const;
+    virtual std::shared_ptr<YamlNode> getNode(const QString &key);
+    virtual std::shared_ptr<YamlNode> getNode(const int index);
+    virtual QString getQStringFromMap(const QString &key) const;
+    virtual QString getQStringFromSequence(const int index) const;
+    virtual QString getQString(void) const;
+    virtual double getDoubleFromMap(const QString &key) const;
+    virtual double getDoubleFromSequence(const int index) const;
+    virtual double getDouble(void) const;
+    virtual int getSize(void) const;
+    virtual bool isDefined(const QString &key) const;
+    virtual bool isNull(const QString &key) const;
+    virtual bool isValue(const QString &key) const;
+    virtual bool isSequence(const QString &key) const;
+    virtual bool isMap(const QString &key) const;
+    virtual bool isNull(void) const;
+    virtual bool isValue(void) const;
+    virtual bool isSequence(void) const;
+    virtual bool isMap(void) const;
 
-    bool isDefined(const QString &key) const override;
-    bool isNull(const QString &key) const override;
-    bool isValue(const QString &key) const override;
-    bool isSequence(const QString &key) const override;
-    bool isMap(const QString &key) const override;
-    bool isNull(void) const override;
-    bool isValue(void) const override;
-    bool isSequence(void) const override;
-    bool isMap(void) const override;
+    virtual bool loadFromFile(const QString &absoluteFilePath);
 
 protected:
     YAML::Node node;
     QString absoluteFilePath;
-private:
-    mutable std::vector<std::shared_ptr<YamlNode>> childNodes;
 
+private:    
+    std::shared_ptr<YamlNode> getNode(YAML::Node &yamlNodeToReturn) const;
+    template<typename T>
+    T getValue(const YAML::Node &yamlNodeToReturn) const;
+
+    mutable std::vector<std::shared_ptr<YamlNode>> childNodes;
 };
 
 } /* namespace lanty */

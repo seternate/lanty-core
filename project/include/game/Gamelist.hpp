@@ -14,12 +14,40 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef GAME_GAMELIST_HPP
+#define GAME_GAMELIST_HPP
 
-int main(int argc, char *argv[])
+#include <memory>
+#include <QVector>
+
+#include "core/ltycore_global.hpp"
+#include "game/Game.hpp"
+
+namespace lanty
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+
+class LTYCORE_EXPORT Gamelist
+{
+    friend class GamelistFactory;
+
+public:
+    Gamelist(void) = default;
+    explicit Gamelist(const Gamelist &list) = delete;
+    explicit Gamelist(const Gamelist &&list);
+    virtual ~Gamelist(void) = default;
+
+    Gamelist& operator=(const Gamelist &list) = delete;
+    Gamelist& operator=(const Gamelist &&list);
+    Game& operator[](const qint32 index);
+    const Game& operator[](const qint32 index) const;
+
+    virtual const Game& at(const qint32 index) const;
+    virtual qint32 size(void) const;
+
+private:
+    QVector<std::shared_ptr<Game>> list;
+};
+
+} /* namespace lanty */
+
+#endif /* GAME_GAMELIST_HPP */

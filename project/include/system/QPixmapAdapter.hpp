@@ -14,12 +14,39 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef SYSTEM_QPIXMAPADAPTER_HPP
+#define SYSTEM_QPIXMAPADAPTER_HPP
 
-int main(int argc, char *argv[])
+#include <Qt>
+#include <QPixmap>
+#include <QSize>
+#include <QString>
+
+#include "core/ltycore_global.hpp"
+
+namespace lanty
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+
+class LTYCORE_EXPORT QPixmapAdapter
+{
+public:
+    QPixmapAdapter(void) = default;
+    QPixmapAdapter(const QSize &size);
+    QPixmapAdapter(const QString &fileName,
+                   const char *format = nullptr,
+                   Qt::ImageConversionFlags flags = Qt::AutoColor);
+
+    virtual bool load(const QString &fileName,
+                      const char *format = nullptr,
+                      Qt::ImageConversionFlags flags = Qt::AutoColor);
+    virtual bool isNull(void) const;
+    virtual QSize size(void) const;
+    QPixmap& getQPixmap(void);
+
+private:
+    QPixmap pixmap;
+};
+
+} /* namespace lanty */
+
+#endif /* SYSTEM_QPIXMAPADAPTER_HPP */

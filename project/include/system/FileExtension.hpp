@@ -14,12 +14,27 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include <gtest/gtest.h>
-#include <QGuiApplication>
+#ifndef SYSTEM_FILEEXTENSION_HPP
+#define SYSTEM_FILEEXTENSION_HPP
 
-int main(int argc, char *argv[])
+#include <QString>
+
+#include "core/ltycore_global.hpp"
+
+namespace lanty
 {
-    QGuiApplication app(argc, argv);
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
-}
+
+class LTYCORE_EXPORT FileExtension
+{
+public:
+    static const QString YAML;
+    static const QString YML;
+    static const QString PNG;
+    static const QString JPG;
+    static const QString JPEG;
+    static const QString BMP;
+};
+
+} /* namespace lanty */
+
+#endif /* SYSTEM_FILEEXTENSION_HPP */

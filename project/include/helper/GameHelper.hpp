@@ -14,24 +14,38 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef YAML_YAMLNODETEST_HPP
-#define YAML_YAMLNODETEST_HPP
+#ifndef GAME_GAMEHELPER_HPP
+#define GAME_GAMEHELPER_HPP
 
-#include <gtest/gtest.h>
-#include <yaml-cpp/yaml.h>
+#include <QString>
 
-#include "yaml/YamlNode.hpp"
+#include "core/ltycore_global.hpp"
+#include "game/Game.hpp"
+#include "system/QDirAdapter.hpp"
 
-class YamlNodeTest : public ::testing::Test, public lanty::YamlNode
+namespace lanty
+{
+
+class LTYCORE_EXPORT GameHelper
 {
 public:
-    YamlNodeTest() : YamlNode()
-    {
-        this->node = YAML::Load("{map: {keymap: 'valuemap', mapmap: {keymapmap: 'valuemapmap'}}, key: 'value', \
-                                sequence: ['valueseq1', keyseq: 'valuekeyseq', 'valueseq2', \
-                                seqseq: ['valueseqseq1', 'valueseqseq2']]}");
-    };
+    const static QString YAML_TEMPLATE_FILE;
+
+    GameHelper(void) = default;
+    virtual ~GameHelper(void) = default;
+
+    virtual QString getCoverImagePathFromDirectory(const Game &game, const QDirAdapter &gameImageFileDirectory);
+    virtual QString getIconImagePathFromDirectory(const Game &game, const QDirAdapter &gameImageFileDirectory);
+    virtual QString formatNameToCoverImageFileName(const Game &game);
+    virtual QString formatNameToIconImageFileName(const Game &game);
+
+protected:
+    QString getImagePathFromDirectory(const Game &game,
+                                      const QDirAdapter &gameImageFileDirectory,
+                                      const QString &imageFileNameSuffix = QString(""));
+    QString formatNameToImageFileName(const Game &game, const QString &imageFileNameSuffix = QString(""));
 };
 
+} /* namespace lanty */
 
-#endif /* YAML_YAMLNODETEST_HPP */
+#endif /* GAME_GAMEHELPER_HPP */
