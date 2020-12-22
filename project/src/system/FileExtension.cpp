@@ -19,12 +19,12 @@
 namespace lanty
 {
 
-const QString FileExtension::YAML = "yaml";
-const QString FileExtension::YML = "yml";
-const QString FileExtension::PNG = "png";
-const QString FileExtension::JPG = "jpg";
-const QString FileExtension::JPEG = "jpeg";
-const QString FileExtension::BMP = "bmp";
+const QString FileExtension::YAML = "*.yaml";
+const QString FileExtension::YML = "*.yml";
+const QString FileExtension::PNG = "*.png";
+const QString FileExtension::JPG = "*.jpg";
+const QString FileExtension::JPEG = "*.jpeg";
+const QString FileExtension::BMP = "*.bmp";
 
 } /* namespace lanty */
 
