@@ -188,7 +188,7 @@ std::shared_ptr<YamlNode> YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
 {
     std::shared_ptr<YamlNode> result(nullptr);
 
-    if(!yamlNodeToReturn.IsNull() && yamlNodeToReturn.IsDefined())
+    if(yamlNodeToReturn.IsDefined() && !yamlNodeToReturn.IsNull())
     {
         for(std::shared_ptr<YamlNode> childNode : this->childNodes)
         {
