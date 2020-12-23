@@ -250,7 +250,10 @@ void Game::loadGameDataFromNode(const YamlNode &gameNode)
     this->archiveAbsoluteFilePath = gameNode.getQStringFromMap("archive");
 
     std::shared_ptr<const YamlNode> versionNode = gameNode.getNode("version");
-    this->loadVersionDataFromGameNode(*versionNode);
+    if(versionNode != nullptr)
+    {
+        this->loadVersionDataFromGameNode(*versionNode);
+    }
 
     std::shared_ptr<const YamlNode> clientNode = gameNode.getNode("client");
     this->loadClientDataFromGameNode(*clientNode);
