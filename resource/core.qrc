@@ -1,11 +1,12 @@
 <RCC>
     <qresource prefix="/">
-        <file>image/logo_256x256.png</file>
-        <file>image/add_plus_128x128.png</file>
-        <file>image/trash_delete_128x128.png</file>
-        <file>image/ban_128x128.png</file>
-        <file>image/dummycover.jpg</file>
-        <file>image/dummyicon.png</file>
-        <file>image/logo_font_256x320.png</file>
+        <file alias="logo_256x256.png">image/logo_256x256.png</file>
+        <file alias="add_plus_128x128.png">image/add_plus_128x128.png</file>
+        <file alias="trash_delete_128x128.png">image/trash_delete_128x128.png</file>
+        <file alias="ban_128x128.png">image/ban_128x128.png</file>
+        <file alias="dummycover.jpg">image/dummycover.jpg</file>
+        <file alias="dummyicon.png">image/dummyicon.png</file>
+        <file alias="logo_font_256x320.png">image/logo_font_256x320.png</file>
+        <file alias="icon.ico">image/icon.ico</file>
     </qresource>
 </RCC>

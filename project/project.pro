@@ -48,15 +48,18 @@ HEADERS += \
     $$PWD/include/system/QPixmapAdapter.hpp \
     $$PWD/include/yaml/YamlNode.hpp
 
-TRANSLATIONS += \
-    $$PWD/../resource/translation/core_de_DE.ts
+TRANSLATIONS += $$PWD/../resource/translation/core_de_DE.ts
 
 RESOURCES += \
     $$PWD/../resource/core.qrc \
     $$PWD/../resource/style.qrc
 
-RC_FILE += \
-    $$PWD/../resource/core.rc
+win32 {
+    RC_ICONS = $$PWD/../resource/image/icon.ico
+    QMAKE_TARGET_DESCRIPTION = "Core library for the Lanty suite applications."
+    QMAKE_TARGET_COPYRIGHT = "MIT <2020> <Levin Jeck>"
+}
+
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
