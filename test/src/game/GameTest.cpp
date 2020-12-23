@@ -20,6 +20,9 @@
 
 #include "game/Game.hpp"
 #include "helper/QStringPrintHelper.hpp"
+#include "mock/MockYamlNode.hpp"
+
+using ::testing::Return;
 
 TEST(GameTest, EqualOperator)
 {

@@ -256,7 +256,10 @@ void Game::loadGameDataFromNode(const YamlNode &gameNode)
     this->loadClientDataFromGameNode(*clientNode);
 
     std::shared_ptr<const YamlNode> serverNode = gameNode.getNode("server");
-    this->loadServerDataFromGameNode(*serverNode);
+    if(serverNode != nullptr)
+    {
+        this->loadServerDataFromGameNode(*serverNode);
+    }
 }
 
 void Game::loadVersionDataFromGameNode(const YamlNode &versionNode)
