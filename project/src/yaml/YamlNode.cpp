@@ -20,6 +20,9 @@
 #include <QFileInfo>
 #include <string>
 
+#include <logging/Logger.hpp>
+#include <logging/LogLevel.hpp>
+
 namespace lanty
 {
 
@@ -54,51 +57,105 @@ double YamlNode::getValue<double>(const YAML::Node &yamlNodeToReturn) const
 
 YamlNode::YamlNode(const QString &absoluteFilePath) : node(), absoluteFilePath(absoluteFilePath), childNodes()
 {
-    this->node = YAML::LoadFile(absoluteFilePath.toStdString());
+    QFile file(this->absoluteFilePath);
+    if(file.exists() == true)
+    {
+        Logger(LogLevel::TRACE) << "Loading YAML-file '" << this->getFileName() << "'.";
+        this->node = YAML::LoadFile(absoluteFilePath.toStdString());
+        Logger() << "Loaded YAML-file '" << this->getFileName() << "'.";
+    }
+    else
+    {
+        Logger(LogLevel::ERROR) << "Can not load the YAML-file '"
+                                << this->getFileName()
+                                << "'. The file does not exist.";
+    }
 }
 
 
-QString YamlNode::getFileName() const
+QString YamlNode::getFileName(void) const
 {
-    QFile file(this->absoluteFilePath);
-    QFileInfo fileInfo(file);
+    QString result;
 
-    return fileInfo.fileName();
+    QFile file(this->absoluteFilePath);
+    if(file.exists() == true)
+    {
+        QFileInfo fileInfo(file);
+        result = fileInfo.fileName();
+    }
+    else
+    {
+        Logger(LogLevel::WARNING) << "YAML-file '" << this->absoluteFilePath << "' does not longer exist.";
+    }
+
+
+    return result;
 }
 
 std::shared_ptr<const YamlNode> YamlNode::getNode(const QString &key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No YAML-Node with key '" << key << "' in file '" << this->getFileName() << "'.";
+    }
     return this->getNode(yamlNodeToReturn);
 }
 
 std::shared_ptr<const YamlNode> YamlNode::getNode(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No YAML-Node at index '"
+                 << QString::number(index)
+                 << "' in file '" << this->getFileName() << "'.";
+    }
     return this->getNode(yamlNodeToReturn);
 }
 
 std::shared_ptr<YamlNode> YamlNode::getNode(const QString &key)
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No YAML-Node with key '" << key << "' in file '" << this->getFileName() << "'.";
+    }
     return this->getNode(yamlNodeToReturn);
 }
 
 std::shared_ptr<YamlNode> YamlNode::getNode(const int index)
 {
     YAML::Node yamlNodeToReturn = this->node[index];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No YAML-Node at index '"
+                 << QString::number(index) << "' in file '"
+                 << this->getFileName() << "'.";
+    }
     return this->getNode(yamlNodeToReturn);
 }
 
 QString YamlNode::getQStringFromMap(const QString &key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No map with key '" << key << "' at YAML-file '" << this->getFileName() << "'.";
+    }
     return this->getValue<QString>(yamlNodeToReturn);
 }
 
 QString YamlNode::getQStringFromSequence(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No item at sequence with index '"
+                 << QString::number(index)
+                 << "' at YAML-file '"
+                 << this->getFileName() << "'.";
+    }
     return this->getValue<QString>(yamlNodeToReturn);
 }
 
@@ -110,12 +167,23 @@ QString YamlNode::getQString() const
 double YamlNode::getDoubleFromMap(const QString &key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No map with key '" << key << "' at YAML-file '" << this->getFileName() << "'.";
+    }
     return this->getValue<double>(yamlNodeToReturn);
 }
 
 double YamlNode::getDoubleFromSequence(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
+    if(yamlNodeToReturn.IsDefined() == false)
+    {
+        Logger() << "No item at sequence with index '"
+                 << QString::number(index)
+                 << "' at YAML-file '"
+                 << this->getFileName() << "'.";
+    }
     return this->getValue<double>(yamlNodeToReturn);
 }
 
@@ -177,10 +245,27 @@ bool YamlNode::isMap() const
 
 bool YamlNode::loadFromFile(const QString &absoluteFilePath)
 {
+    bool result = false;
     this->absoluteFilePath = absoluteFilePath;
-    this->node = YAML::LoadFile(absoluteFilePath.toStdString());
-    this->childNodes = std::vector<std::shared_ptr<YamlNode>>();
-    return true;
+
+    QFile file(this->absoluteFilePath);
+    if(file.exists() == true)
+    {
+        Logger(LogLevel::TRACE) << "Loading YAML-file '" << absoluteFilePath << "'.";
+        this->node = YAML::LoadFile(absoluteFilePath.toStdString());
+        Logger() << "Loaded YAML-file '" << absoluteFilePath << "'.";
+        this->childNodes = std::vector<std::shared_ptr<YamlNode>>();
+        Logger(LogLevel::TRACE) << "Reseted child YAML-Nodes for YAML-file '" << absoluteFilePath << "'.";
+        result = true;
+    }
+    else
+    {
+        Logger(LogLevel::ERROR) << "Can not load the YAML-file '"
+                                << this->getFileName()
+                                << "'. The file does not exist.";
+    }
+
+    return result;
 }
 
 
@@ -188,23 +273,32 @@ std::shared_ptr<YamlNode> YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
 {
     std::shared_ptr<YamlNode> result(nullptr);
 
-    if(yamlNodeToReturn.IsDefined() && !yamlNodeToReturn.IsNull())
+    if(yamlNodeToReturn.IsDefined() == true && yamlNodeToReturn.IsNull() == false)
     {
         for(std::shared_ptr<YamlNode> childNode : this->childNodes)
         {
             if(childNode->node == yamlNodeToReturn)
             {
                 result = childNode;
+                Logger(LogLevel::TRACE) << "Return Node exists as child node already for YAML-file '"
+                                        << this->getFileName()
+                                        << "'.";
                 break;
             }
         }
 
         if(result == nullptr)
         {
+            Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '"
+                                    << this->getFileName()
+                                    << "'. Creating child node.";
             std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
             yamlChildNode->node = yamlNodeToReturn;
             yamlChildNode->absoluteFilePath = this->absoluteFilePath;
             childNodes.push_back(yamlChildNode);
+            Logger(LogLevel::TRACE) << "Created child node for YAML-file '"
+                                    << this->getFileName()
+                                    << "'.";
             result = yamlChildNode;
         }
     }

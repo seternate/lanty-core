@@ -14,41 +14,43 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMELISTFACTORY_HPP
-#define GAME_GAMELISTFACTORY_HPP
+#include "logging/Logger.hpp"
 
-#include <memory>
-
-#include "core/ltycore_global.hpp"
-#include "game/Gamelist.hpp"
-#include "helper/GameHelper.hpp"
-#include "system/QDirAdapter.hpp"
-#include "system/QPixmapAdapter.hpp"
-#include "yaml/YamlNode.hpp"
+#include <QDebug>
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT GamelistFactory
+LogLevel Logger::GLOBAL_LOG_LEVEL = LogLevel::DEBUG;
+
+
+void Logger::logLevel(const LogLevel loglevel)
 {
-public:
-    GamelistFactory(void);
-    virtual ~GamelistFactory(void) = default;
+    Logger::GLOBAL_LOG_LEVEL = loglevel;
+}
 
-    virtual Gamelist* makeGamelist(const QDirAdapter &gameYamlFileDirectory, const QDirAdapter &gameImageFileDirectory);
-    void setGameDependency(Game *game);
-    void setYamlNodeDependency(YamlNode *yamlNode);
-    void setGameHelperDependency(GameHelper *gameHelper);
-    void setQPixmapDependency(QPixmapAdapter *QPixmap);
-    void resetDependencies(void);
 
-private:
-    std::shared_ptr<Game> game;
-    std::shared_ptr<YamlNode> yamlNode;
-    std::shared_ptr<GameHelper> gameHelper;
-    std::shared_ptr<QPixmapAdapter> pixmap;
-};
+Logger::Logger(LogLevel loglevel) : loglevel(loglevel) { }
+
+
+const Logger& Logger::operator<<(const QString &message) const
+{
+    this->log(message);
+    return *this;
+}
+
+
+void Logger::log(const QString &message) const
+{
+    QString logMessage;
+
+    if(this->loglevel >= Logger::GLOBAL_LOG_LEVEL)
+    {
+        logMessage.append(message);
+
+        qDebug() << logMessage;
+    }
+}
 
 } /* namespace lanty */
 
-#endif /* GAME_GAMELISTFACTORY_HPP */

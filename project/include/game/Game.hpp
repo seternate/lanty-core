@@ -18,7 +18,6 @@
 #define GAME_GAME_HPP
 
 #include <QObject>
-#include <QPixmap>
 #include <QString>
 
 #include "core/ltycore_global.hpp"
@@ -35,7 +34,7 @@ class LTYCORE_EXPORT Game : public QObject
     Q_DISABLE_COPY_MOVE(Game);
 
 public:
-    Game(void);
+    Game(QObject *parent = nullptr);
     explicit Game(const YamlNode &yamlNode);
     virtual ~Game(void) = default;
 
@@ -43,7 +42,7 @@ public:
     bool operator!=(const Game &game) const;
 
     virtual QString getName(void) const;
-    virtual QString getArchiveAbsoluteFilePath(void) const;
+    virtual QString getArchiveFileName(void) const;
     virtual QString getClientExecutableRelativeFilePath(void) const;
     virtual QString getClientArgument(void) const;
     virtual QString getClientConnectArgument(void) const;
@@ -64,7 +63,7 @@ public:
 
 public slots:
     virtual void setName(const QString &name);
-    virtual void setArchiveAbsoluteFilePath(const QString &archiveAbsoluteFilePath);
+    virtual void setArchiveFileName(const QString &archiveFileName);
     virtual void setClientExecutableRelativeFilePath(const QString &clientExecutableRelativeFilePath);
     virtual void setClientArgument(const QString &clientArgument);
     virtual void setClientConnectArgument(const QString &clientConnectArgument);
@@ -79,7 +78,7 @@ public slots:
 
 signals:
     void nameChanged(const QString &newName);
-    void archivePathChanged(const QString &newArchivePath);
+    void archiveFileNameChanged(const QString &newArchiveFileName);
     void clientExecutableChanged(const QString &newClientExecutable);
     void clientArgumentChanged(const QString& newClientArgument);
     void clientConnectArgumentChanged(const QString& newClientConnectArgument);
@@ -99,7 +98,7 @@ private:
     void loadServerDataFromGameNode(const YamlNode &serverNode);
 
     QString name;
-    QString archiveAbsoluteFilePath;
+    QString archiveFileName;
     QString clientExecutableRelativeFilePath;
     QString clientArgument;
     QString clientConnectArgument;

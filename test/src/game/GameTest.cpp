@@ -23,6 +23,7 @@
 #include "mock/MockYamlNode.hpp"
 
 using ::testing::Return;
+using ::testing::NiceMock;
 
 TEST(GameTest, EqualOperator)
 {
@@ -35,9 +36,9 @@ TEST(GameTest, EqualOperator)
     game.setName("TEST");
     ASSERT_EQ(game, gameTest);
 
-    gameTest.setArchiveAbsoluteFilePath("TEST");
+    gameTest.setArchiveFileName("TEST");
     ASSERT_NE(game, gameTest);
-    game.setArchiveAbsoluteFilePath("TEST");
+    game.setArchiveFileName("TEST");
     ASSERT_EQ(game, gameTest);
 
     gameTest.setClientExecutableRelativeFilePath("TEST");
@@ -55,9 +56,9 @@ TEST(GameTest, EqualOperator)
     game.setClientConnectArgument("TEST");
     ASSERT_EQ(game, gameTest);
 
-    gameTest.setServerExecutableRelativeFilePath("TEST");
+    gameTest.setServerExecutableRelativeFilePath("TEST_SERVER");
     ASSERT_NE(game, gameTest);
-    game.setServerExecutableRelativeFilePath("TEST");
+    game.setServerExecutableRelativeFilePath("TEST_SERVER");
     ASSERT_EQ(game, gameTest);
 
     gameTest.setServerArgument("TEST");
@@ -107,16 +108,16 @@ TEST(GameTest, GetterArchiveFile)
 {
     lanty::Game game;
     QString archiveFilePath("TEST");
-    game.setArchiveAbsoluteFilePath(archiveFilePath);
-    ASSERT_EQ(game.getArchiveAbsoluteFilePath(), archiveFilePath);
+    game.setArchiveFileName(archiveFilePath);
+    ASSERT_EQ(game.getArchiveFileName(), archiveFilePath);
 }
 
 TEST(GameTest, ArchiveFileChangeSignal)
 {
     lanty::Game game;
-    QSignalSpy spy(&game, SIGNAL(archivePathChanged(QString)));
+    QSignalSpy spy(&game, SIGNAL(archiveFileNameChanged(QString)));
     QString archiveFilePath("TEST");
-    game.setArchiveAbsoluteFilePath(archiveFilePath);
+    game.setArchiveFileName(archiveFilePath);
     ASSERT_EQ(1, spy.count());
 }
 

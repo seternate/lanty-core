@@ -18,7 +18,7 @@
 #define GAME_GAMELIST_HPP
 
 #include <memory>
-#include <QVector>
+#include <vector>
 
 #include "core/ltycore_global.hpp"
 #include "game/Game.hpp"
@@ -28,24 +28,22 @@ namespace lanty
 
 class LTYCORE_EXPORT Gamelist
 {
+    Q_DISABLE_COPY_MOVE(Gamelist)
+
     friend class GamelistFactory;
 
 public:
     Gamelist(void) = default;
-    explicit Gamelist(const Gamelist &list) = delete;
-    explicit Gamelist(const Gamelist &&list);
     virtual ~Gamelist(void) = default;
 
-    Gamelist& operator=(const Gamelist &list) = delete;
-    Gamelist& operator=(const Gamelist &&list);
     Game& operator[](const qint32 index);
     const Game& operator[](const qint32 index) const;
 
     virtual const Game& at(const qint32 index) const;
-    virtual qint32 size(void) const;
+    virtual quint32 size(void) const;
 
 private:
-    QVector<std::shared_ptr<Game>> list;
+    std::vector<std::shared_ptr<Game>> list;
 };
 
 } /* namespace lanty */

@@ -40,6 +40,7 @@ public:
                                   QDir::SortFlags sort = QDir::NoSort) const;
     virtual bool isEmpty(QDir::Filters filters = QDir::Filters(QDir::AllEntries | QDir::NoDotAndDotDot)) const;
     virtual QString absoluteFilePath(const QString &fileName) const;
+    virtual QString absolutePath(void) const;
 
 private:
     QDir qDir;

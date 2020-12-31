@@ -25,7 +25,7 @@ class MockGame : public lanty::Game
 {
 public:
     MOCK_METHOD(QString, getName, (), (const, override));
-    MOCK_METHOD(QString, getArchiveAbsoluteFilePath, (), (const, override));
+    MOCK_METHOD(QString, getArchiveFileName, (), (const, override));
     MOCK_METHOD(QString, getClientExecutableRelativeFilePath, (), (const, override));
     MOCK_METHOD(QString, getClientArgument, (), (const, override));
     MOCK_METHOD(QString, getClientConnectArgument, (), (const, override));
@@ -46,7 +46,7 @@ public:
 
 public slots:
     MOCK_METHOD(void, setName, (const QString &name), (override));
-    MOCK_METHOD(void, setArchiveAbsoluteFilePath, (const QString &archiveAbsoluteFilePath), (override));
+    MOCK_METHOD(void, setArchiveFileName, (const QString &archiveAbsoluteFilePath), (override));
     MOCK_METHOD(void, setClientExecutableRelativeFilePath, (const QString &clientExecutableRelativeFilePath), (override));
     MOCK_METHOD(void, setClientArgument, (const QString &clientArgument), (override));
     MOCK_METHOD(void, setClientConnectArgument, (const QString &clientConnectArgument), (override));

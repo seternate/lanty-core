@@ -13,11 +13,13 @@
 !/project/include/core/
 !/project/include/game/
 !/project/include/helper/
+!/project/include/logging/
 !/project/include/system/
 !/project/include/yaml/
 !/project/src/
 !/project/src/game/
 !/project/src/helper/
+!/project/src/logging/
 !/project/src/system/
 !/project/src/yaml/
 !/resource/
@@ -51,10 +53,12 @@
 !/project/include/core/*.hpp
 !/project/include/game/*.hpp
 !/project/include/helper/*.hpp
+!/project/include/logging/*.hpp
 !/project/include/system/*.hpp
 !/project/include/yaml/*.hpp
 !/project/src/game/*.cpp
 !/project/src/helper/*.cpp
+!/project/src/logging/*.cpp
 !/project/src/system/*.cpp
 !/project/src/yaml/*.cpp
 !/resource/core.qrc

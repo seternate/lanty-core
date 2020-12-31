@@ -20,6 +20,7 @@
 #include <QRegularExpression>
 #include <QStringList>
 
+#include "logging/Logger.hpp"
 #include "system/FileExtension.hpp"
 
 namespace lanty
@@ -61,22 +62,37 @@ QString GameHelper::getImagePathFromDirectory(const Game &game,
     QString gameImageAbsoluteFilePath("");
 
     gameImageExtensionFilter << FileExtension::PNG
-                        << FileExtension::JPG
-                        << FileExtension::JPEG
-                        << FileExtension::BMP;
+                             << FileExtension::JPG
+                             << FileExtension::JPEG
+                             << FileExtension::BMP;
     gameImageFiles = gameImageFileDirectory.entryList(gameImageExtensionFilter, QDir::Files);
 
-    for(int32_t i = 0; i < gameImageFiles.size(); i++)
+    if(gameImageFiles.isEmpty() == false)
     {
-        gameImageFile = gameImageFiles.at(i);
-        gameImageFileNameWithoutExtension = gameImageFile.split(".")[0];
-        gameNameFormatedToGameImageFileName = formatNameToImageFileName(game, imageFileNameSuffix);
-
-        if(gameImageFileNameWithoutExtension == gameNameFormatedToGameImageFileName)
+        Logger() << "Found "
+                 << QString::number(gameImageFiles.size())
+                 << " game images at '"
+                 << gameImageFileDirectory.absolutePath()
+                 << "'.";
+        for(int32_t i = 0; i < gameImageFiles.size(); i++)
         {
-            gameImageAbsoluteFilePath = gameImageFileDirectory.absoluteFilePath(gameImageFile);
-            break;
+            gameImageFile = gameImageFiles.at(i);
+            gameImageFileNameWithoutExtension = gameImageFile.split(".")[0];
+            gameNameFormatedToGameImageFileName = formatNameToImageFileName(game, imageFileNameSuffix);
+
+            if(gameImageFileNameWithoutExtension == gameNameFormatedToGameImageFileName)
+            {
+                gameImageAbsoluteFilePath = gameImageFileDirectory.absoluteFilePath(gameImageFile);
+                break;
+            }
         }
+    }
+    else
+    {
+        Logger() << "Can not return image path from game '"
+                 << game.getName()
+                 << "'. No image file at directory '"
+                 << gameImageFileDirectory.absolutePath() << "'.";
     }
 
     return gameImageAbsoluteFilePath;

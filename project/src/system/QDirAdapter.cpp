@@ -41,4 +41,9 @@ QString QDirAdapter::absoluteFilePath(const QString &fileName) const
     return this->qDir.absoluteFilePath(fileName);
 }
 
+QString QDirAdapter::absolutePath(void) const
+{
+    return qDir.absolutePath();
+}
+
 } /* namespace lanty */

@@ -48,6 +48,7 @@ SOURCES += \
     $$PWD/src/game/GameTest.cpp \
     $$PWD/src/game/GamelistFactoryTest.cpp \
     $$PWD/src/helper/GameHelperTest.cpp \
+    $$PWD/src/logging/LoggerTest.cpp \
     $$PWD/src/yaml/YamlNodeTest.cpp
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
