@@ -62,7 +62,6 @@
 !/project/src/system/*.cpp
 !/project/src/yaml/*.cpp
 !/resource/core.qrc
-!/resource/core.rc
 !/resource/style.qrc
 !/resource/style.qss
 !/resource/font/Retro-Stereo-Wide.ttf

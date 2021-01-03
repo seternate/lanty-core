@@ -32,12 +32,15 @@ build_windows_debug:
     script:
         - cd ./project
         # Build shared
-        - qmake ./project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" 
+        - qmake ./project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/lib/x86_64-linux-gnu/"
+        - ls
+        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Debug
         - make
         # Rename shared output .a to .dll.a
         - mv ../${ARTIFACT_PATH_WINDOWS}/libltycored.a ../${ARTIFACT_PATH_WINDOWS}/libltycored.dll.a 
         # Build static
         - qmake ./project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" "CONFIG+=staticlib"
+        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Debug
         - make
     after_script:
         - rm -f ${ARTIFACT_PATH_WINDOWS}/core_res.o
@@ -71,11 +74,13 @@ build_windows_release:
         - cd ./project
         # Build shared
         - qmake ./project.pro -spec win32-g++ "CONFIG+=release" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" 
+        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Release
         - make
         # Rename shared output .a to .dll.a
         - mv ../${ARTIFACT_PATH_WINDOWS}/libltycore.a ../${ARTIFACT_PATH_WINDOWS}/libltycore.dll.a 
         # Build static
         - qmake ./project.pro -spec win32-g++ "CONFIG+=release" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" "CONFIG+=staticlib"
+        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Release
         - make
     after_script:
         - rm -f ${ARTIFACT_PATH_WINDOWS}/core_res.o
