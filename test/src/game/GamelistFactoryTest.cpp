@@ -41,6 +41,10 @@ TEST_F(GamelistFactoryTest, MakeGamelist)
 
     EXPECT_CALL(*game, getName())
             .WillOnce(Return(QString("Call of Duty 2")))
+            .WillOnce(Return(QString("Call of Duty 2")))
+            .WillOnce(Return(QString("Call of Duty 2")))
+            .WillOnce(Return(QString("Call of Duty 2")))
+            .WillOnce(Return(QString("Call of Duty 2")))
             .WillOnce(Return(QString("Call of Duty 4")))
             .WillOnce(Return(QString("Warcraft 3 - Frozen Throne")))
             .WillOnce(Return(QString("Counter Strike 1.6")));
