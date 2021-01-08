@@ -193,11 +193,9 @@ bool Game::canOpenServer(void) const
     return !this->serverExecutableRelativeFilePath.isEmpty() || !this->serverArgument.isEmpty();
 }
 
-bool Game::loadFromYamlNode(const YamlNode &yamlNode)
+bool Game::load(const YamlNode &yamlNode)
 {
-    std::shared_ptr<const YamlNode> gameNode = yamlNode.getNode("game");
-    this->loadGameDataFromNode(*gameNode);
-    Logger() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
+    loadFromYamlNode(yamlNode);
     return true;
 }
 
@@ -330,6 +328,14 @@ void Game::setIconImage(const QPixmapAdapter &iconImage)
     emit iconImageChanged(this->iconImage);
 }
 
+
+void Game::loadFromYamlNode(const YamlNode &yamlNode)
+{
+    std::shared_ptr<const YamlNode> gameNode = yamlNode.getNode("game");
+
+    this->loadGameDataFromNode(*gameNode);
+    Logger() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
+}
 
 void Game::loadGameDataFromNode(const YamlNode &gameNode)
 {
