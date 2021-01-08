@@ -34,7 +34,7 @@ class LTYCORE_EXPORT Game : public QObject
     Q_DISABLE_COPY_MOVE(Game);
 
 public:
-    Game(QObject *parent = nullptr);
+    explicit Game(QObject *parent = nullptr);
     explicit Game(const YamlNode &yamlNode);
     virtual ~Game(void) = default;
 
@@ -59,7 +59,7 @@ public:
     virtual bool canOpenDedicatedServer(void) const;
     virtual bool canOpenServer(void) const;
 
-    virtual bool loadFromYamlNode(const YamlNode &yamlNode);
+    virtual bool load(const YamlNode &yamlNode);
 
 public slots:
     virtual void setName(const QString &name);
@@ -92,6 +92,7 @@ signals:
     void iconImageChanged(const lanty::QPixmapAdapter &newIconImage);
 
 private:
+    void loadFromYamlNode(const YamlNode &yamlNode);
     void loadGameDataFromNode(const YamlNode &gameNode);
     void loadVersionDataFromGameNode(const YamlNode &versionNode);
     void loadClientDataFromGameNode(const YamlNode &clientNode);

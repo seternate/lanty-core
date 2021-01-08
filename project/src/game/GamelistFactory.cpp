@@ -61,7 +61,7 @@ Gamelist* GamelistFactory::makeGamelist(const QDirAdapter &gameYamlFileDirectory
         {
             gameYamlAbsoluteFilePath = gameYamlFileDirectory.absoluteFilePath(gameYamlFiles.at(i));
             this->yamlNode->loadFromFile(gameYamlAbsoluteFilePath);
-            this->game->loadFromYamlNode(*this->yamlNode);
+            this->game->load(*this->yamlNode);
             Logger() << "Create game from yaml-file '" << gameYamlAbsoluteFilePath << "'.";
 
             if(gameImageFileDirectory.isEmpty() == false)
