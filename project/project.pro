@@ -60,14 +60,15 @@ RESOURCES += \
 win32 {
     RC_ICONS = $$PWD/../resource/image/icon.ico
     QMAKE_TARGET_DESCRIPTION = "Core library for the Lanty suite applications."
-    QMAKE_TARGET_COPYRIGHT = "MIT <2020> <Levin Jeck>"
+    QMAKE_TARGET_COPYRIGHT = "MIT <2021> <Levin Jeck>"
 }
 
+win32: DESTDIR += $$PWD/../artifact/x86_64/windows
+linux: DESTDIR += $$PWD/../artifact/x86_64/linux
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
-win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lyaml-cpp
-linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lyaml-cpp
+LIBS += -L$$DESTDIR -lyaml-cpp
 
 CONFIG(debug, debug|release) {
     TARGET = ltycored
@@ -76,6 +77,3 @@ CONFIG(debug, debug|release) {
 CONFIG(release, debug|release) {
     TARGET = ltycore
 }
-
-win32: DESTDIR += $$PWD/../artifact/x86_64/windows
-linux: DESTDIR += $$PWD/../artifact/x86_64/linux

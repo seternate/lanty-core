@@ -31,7 +31,6 @@
 !/resource/xcf/
 !/test/
 !/test/include/
-!/test/include/game/
 !/test/include/helper/
 !/test/include/mock/
 !/test/include/yaml/
@@ -82,7 +81,6 @@
 !/resource/xcf/search_glass_128x128.xcf
 !/resource/xcf/trash_delete_128x128.xcf
 !/test/test.pro
-!/test/include/game/*.hpp
 !/test/include/helper/*.hpp
 !/test/include/mock/*.hpp
 !/test/include/yaml/*.hpp
