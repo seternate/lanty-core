@@ -32,7 +32,6 @@ INCLUDEPATH += \
 
 HEADERS += \
     $$PWD/include/helper/QStringPrintHelper.hpp \
-    $$PWD/include/game/GamelistFactoryTest.hpp \
     $$PWD/include/helper/GameHelperTest.hpp \
     $$PWD/include/mock/MockGame.hpp \
     $$PWD/include/mock/MockGameHelper.hpp \
@@ -46,7 +45,6 @@ SOURCES += \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
     $$PWD/src/core/main.cpp \
     $$PWD/src/game/GameTest.cpp \
-    $$PWD/src/game/GamelistFactoryTest.cpp \
     $$PWD/src/helper/GameHelperTest.cpp \
     $$PWD/src/yaml/YamlNodeTest.cpp
 

@@ -17,98 +17,14 @@
 #include "game/GamelistFactory.hpp"
 
 #include "game/Game.hpp"
-#include "logging/Logger.hpp"
-#include "system/FileExtension.hpp"
 
 namespace lanty
 {
 
-GamelistFactory::GamelistFactory() : game(new Game()),
-                                     yamlNode(new YamlNode()),
-                                     gameHelper(new GameHelper()),
-                                     pixmap(new QPixmapAdapter()) { }
+GamelistFactory::GamelistFactory() : yamlNode(std::make_shared<YamlNode>()),
+                                        gameHelper(std::make_shared<GameHelper>()),
+                                        pixmap(std::make_shared<QPixmapAdapter>()) { }
 
-Gamelist* GamelistFactory::makeGamelist(const QDirAdapter &gameYamlFileDirectory,
-                                        const QDirAdapter &gameImageFileDirectory)
-{
-    Gamelist* gamelist = new Gamelist();
-    QStringList gameFileExtensionFilter;
-    QStringList gameYamlFiles;
-    QString gameYamlAbsoluteFilePath("");
-    QString gameCoverImageAbsoluteFilePath("");
-    QString gameIconImageAbsoluteFilePath("");
-
-    Logger() << "Create gamelist with yaml-files from '"
-             << gameYamlFileDirectory.absolutePath()
-             << "' and image-files from '"
-             << gameImageFileDirectory.absolutePath()
-             << "'.";
-
-    gameFileExtensionFilter << FileExtension::YAML << FileExtension::YML;
-    Logger(LogLevel::TRACE) << "Extensions to filter files: ";
-    for(int i = 0; i < gameFileExtensionFilter.size() - 1; i++)
-    {
-         Logger(LogLevel::TRACE) << gameFileExtensionFilter.at(i) << ", ";
-    }
-    Logger(LogLevel::TRACE) << gameFileExtensionFilter.last();
-
-    gameYamlFiles = gameYamlFileDirectory.entryList(gameFileExtensionFilter, QDir::Files);
-    gameYamlFiles.removeOne(GameHelper::YAML_TEMPLATE_FILE);
-
-    if(!gameYamlFileDirectory.isEmpty())
-    {
-        for(int32_t i = 0; i < gameYamlFiles.size(); i++)
-        {
-            gameYamlAbsoluteFilePath = gameYamlFileDirectory.absoluteFilePath(gameYamlFiles.at(i));
-            this->yamlNode->loadFromFile(gameYamlAbsoluteFilePath);
-            this->game->load(*this->yamlNode);
-            Logger() << "Create game from yaml-file '" << gameYamlAbsoluteFilePath << "'.";
-
-            if(gameImageFileDirectory.isEmpty() == false)
-            {
-                gameCoverImageAbsoluteFilePath
-                    = this->gameHelper->getCoverImagePathFromDirectory(*this->game,
-                                                                       gameImageFileDirectory);
-                if(pixmap->load(gameCoverImageAbsoluteFilePath) == false)
-                {
-                    Logger(LogLevel::WARNING) << "Can not load gamecover from '" << gameCoverImageAbsoluteFilePath << "'.";
-                }
-                this->game->setCoverImage(*pixmap);
-
-                gameIconImageAbsoluteFilePath
-                    = this->gameHelper->getIconImagePathFromDirectory(*this->game,
-                                                                      gameImageFileDirectory);
-                if(pixmap->load(gameIconImageAbsoluteFilePath) == false)
-                {
-                    Logger(LogLevel::WARNING) << "Can not load gameicon from '" << gameIconImageAbsoluteFilePath << "'.";
-                }
-                this->game->setIconImage(*pixmap);
-            }
-            else
-            {
-                Logger(LogLevel::WARNING) << "No gameimage files found at '" << gameImageFileDirectory.absolutePath() << "'.";
-            }
-
-            gamelist->list.push_back(this->game);
-            Logger() << "Added game '" << game->getName() << "' to gamelist.";
-        }
-    }
-    else
-    {
-        Logger(LogLevel::WARNING) << "Can not create gamelist. No yaml-files at '" << gameYamlFileDirectory.absolutePath() << "'.";
-    }
-
-    return gamelist;
-}
-
-void GamelistFactory::setGameDependency(Game *game)
-{
-    if(game != nullptr)
-    {
-        this->game.reset(game);
-        Logger(LogLevel::TRACE) << "Set game dependency for gamelistfactory.";
-    }
-}
 
 void GamelistFactory::setYamlNodeDependency(YamlNode *yamlNode)
 {
@@ -139,7 +55,6 @@ void GamelistFactory::setQPixmapDependency(QPixmapAdapter *qpixmap)
 
 void GamelistFactory::resetDependencies(void)
 {
-    this->game.reset(new Game());
     this->yamlNode.reset(new YamlNode());
     this->gameHelper.reset(new GameHelper());
     this->pixmap.reset(new QPixmapAdapter());

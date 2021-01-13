@@ -18,7 +18,7 @@
 #define GAME_GAMELIST_HPP
 
 #include <memory>
-#include <vector>
+#include <QVector>
 
 #include "core/ltycore_global.hpp"
 #include "game/Game.hpp"
@@ -43,7 +43,7 @@ public:
     virtual quint32 size(void) const;
 
 private:
-    std::vector<std::shared_ptr<Game>> list;
+    QVector<std::shared_ptr<Game>> list;
 };
 
 } /* namespace lanty */

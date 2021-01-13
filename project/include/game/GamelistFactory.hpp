@@ -22,6 +22,8 @@
 #include "core/ltycore_global.hpp"
 #include "game/Gamelist.hpp"
 #include "helper/GameHelper.hpp"
+#include "logging/Logger.hpp"
+#include "system/FileExtension.hpp"
 #include "system/QDirAdapter.hpp"
 #include "system/QPixmapAdapter.hpp"
 #include "yaml/YamlNode.hpp"
@@ -35,15 +37,84 @@ public:
     GamelistFactory(void);
     virtual ~GamelistFactory(void) = default;
 
-    virtual Gamelist* makeGamelist(const QDirAdapter &gameYamlFileDirectory, const QDirAdapter &gameImageFileDirectory);
-    void setGameDependency(Game *game);
+    template<typename T>
+    Gamelist* makeGamelist(const QDirAdapter &gameYamlFileDirectory, const QDirAdapter &gameImageFileDirectory)
+    {
+        Gamelist* gamelist = new Gamelist();
+        std::shared_ptr<Game> game = nullptr;
+        QStringList gameFileExtensionFilter;
+        QStringList gameYamlFiles;
+        QString gameYamlAbsoluteFilePath("");
+        QString gameCoverImageAbsoluteFilePath("");
+        QString gameIconImageAbsoluteFilePath("");
+
+        Logger() << "Create gamelist with yaml-files from '"
+                 << gameYamlFileDirectory.absolutePath()
+                 << "' and image-files from '"
+                 << gameImageFileDirectory.absolutePath()
+                 << "'.";
+
+        gameFileExtensionFilter << FileExtension::YAML << FileExtension::YML;
+        Logger(LogLevel::TRACE) << "Extensions to filter files: ";
+        for(int i = 0; i < gameFileExtensionFilter.size() - 1; i++)
+        {
+             Logger(LogLevel::TRACE) << gameFileExtensionFilter.at(i) << ", ";
+        }
+        Logger(LogLevel::TRACE) << gameFileExtensionFilter.last();
+
+        gameYamlFiles = gameYamlFileDirectory.entryList(gameFileExtensionFilter, QDir::Files);
+        gameYamlFiles.removeOne(GameHelper::YAML_TEMPLATE_FILE);
+
+        if(!gameYamlFileDirectory.isEmpty())
+        {
+            for(int32_t i = 0; i < gameYamlFiles.size(); i++)
+            {
+                game = std::make_shared<T>();
+                gameYamlAbsoluteFilePath = gameYamlFileDirectory.absoluteFilePath(gameYamlFiles.at(i));
+                this->yamlNode->loadFromFile(gameYamlAbsoluteFilePath);
+                game->load(*this->yamlNode);
+                Logger() << "Create game from yaml-file '" << gameYamlAbsoluteFilePath << "'.";
+
+                if(gameImageFileDirectory.isEmpty() == false)
+                {
+                    gameCoverImageAbsoluteFilePath
+                        = this->gameHelper->getCoverImagePathFromDirectory(*game, gameImageFileDirectory);
+                    if(pixmap->load(gameCoverImageAbsoluteFilePath) == false)
+                    {
+                        Logger(LogLevel::WARNING) << "Can not load gamecover from '" << gameCoverImageAbsoluteFilePath << "'.";
+                    }
+                    game->setCoverImage(*pixmap);
+
+                    gameIconImageAbsoluteFilePath
+                        = this->gameHelper->getIconImagePathFromDirectory(*game, gameImageFileDirectory);
+                    if(pixmap->load(gameIconImageAbsoluteFilePath) == false)
+                    {
+                        Logger(LogLevel::WARNING) << "Can not load gameicon from '" << gameIconImageAbsoluteFilePath << "'.";
+                    }
+                    game->setIconImage(*pixmap);
+                }
+                else
+                {
+                    Logger(LogLevel::WARNING) << "No gameimage files found at '" << gameImageFileDirectory.absolutePath() << "'.";
+                }
+
+                gamelist->list.push_back(game);
+                Logger() << "Added game '" << game->getName() << "' to gamelist.";
+            }
+        }
+        else
+        {
+            Logger(LogLevel::WARNING) << "Can not create gamelist. No yaml-files at '" << gameYamlFileDirectory.absolutePath() << "'.";
+        }
+
+        return gamelist;
+    }
     void setYamlNodeDependency(YamlNode *yamlNode);
     void setGameHelperDependency(GameHelper *gameHelper);
     void setQPixmapDependency(QPixmapAdapter *QPixmap);
     void resetDependencies(void);
 
 private:
-    std::shared_ptr<Game> game;
     std::shared_ptr<YamlNode> yamlNode;
     std::shared_ptr<GameHelper> gameHelper;
     std::shared_ptr<QPixmapAdapter> pixmap;
