@@ -32,6 +32,7 @@ const Game &Gamelist::operator[](const qint32 index) const
     return *list[index];
 }
 
+
 const Game& Gamelist::at(const qint32 index) const
 {
     return *list.at(index);
@@ -40,6 +41,32 @@ const Game& Gamelist::at(const qint32 index) const
 quint32 Gamelist::size(void) const
 {
     return list.size();
+}
+
+
+int Gamelist::rowCount(const QModelIndex &parent) const
+{
+    Q_UNUSED(parent)
+    return this->list.size();
+}
+
+QVariant Gamelist::data(const QModelIndex &index, int role) const
+{
+    if(!index.isValid())
+    {
+        return QVariant();
+    }
+    if(index.row() >= this->list.size())
+    {
+        return QVariant();
+    }
+    if(role == Qt::DisplayRole)
+    {
+        QString gameName = this->list.at(index.row())->getName();
+        return QVariant::fromValue(gameName);
+    }
+
+    return QVariant();
 }
 
 } /* namespace lanty */

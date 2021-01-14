@@ -18,6 +18,7 @@
 #define GAME_GAMELIST_HPP
 
 #include <memory>
+#include <QAbstractListModel>
 #include <QVector>
 
 #include "core/ltycore_global.hpp"
@@ -26,7 +27,7 @@
 namespace lanty
 {
 
-class LTYCORE_EXPORT Gamelist
+class LTYCORE_EXPORT Gamelist : public QAbstractListModel
 {
     Q_DISABLE_COPY_MOVE(Gamelist)
 
@@ -41,6 +42,9 @@ public:
 
     virtual const Game& at(const qint32 index) const;
     virtual quint32 size(void) const;
+
+    int rowCount(const QModelIndex &parent) const override;
+    QVariant data(const QModelIndex &index, int role) const override;
 
 private:
     QVector<std::shared_ptr<Game>> list;
