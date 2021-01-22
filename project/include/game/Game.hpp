@@ -76,6 +76,8 @@ public slots:
     virtual void setCoverImage(const QPixmapAdapter &coverImage);
     virtual void setIconImage(const QPixmapAdapter &iconImage);
 
+    virtual bool save(void);
+
 signals:
     void nameChanged(const QString &newName);
     void archiveFileNameChanged(const QString &newArchiveFileName);
@@ -98,6 +100,11 @@ private:
     void loadClientDataFromGameNode(const YamlNode &clientNode);
     void loadServerDataFromGameNode(const YamlNode &serverNode);
 
+    void saveToYamlNode(YamlNode &yamlNode);
+    void saveGameDataToNode(YamlNode &gameNode);
+    void saveVersionDataToNode(YamlNode &versionNode);
+
+    QString yamlFilePath;
     QString name;
     QString archiveFileName;
     QString clientExecutableRelativeFilePath;

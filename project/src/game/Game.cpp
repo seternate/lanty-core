@@ -23,6 +23,7 @@ namespace lanty
 {
 
 Game::Game(QObject *parent) : QObject(parent),
+                              yamlFilePath(""),
                               name(""),
                               archiveFileName(""),
                               clientExecutableRelativeFilePath(""),
@@ -38,6 +39,7 @@ Game::Game(QObject *parent) : QObject(parent),
                               iconImage(QPixmapAdapter()) { }
 
 Game::Game(const YamlNode &yamlNode) : QObject(nullptr),
+                                       yamlFilePath(""),
                                        name(""),
                                        archiveFileName(""),
                                        clientExecutableRelativeFilePath(""),
@@ -193,9 +195,11 @@ bool Game::canOpenServer(void) const
     return !this->serverExecutableRelativeFilePath.isEmpty() || !this->serverArgument.isEmpty();
 }
 
+
 bool Game::load(const YamlNode &yamlNode)
 {
     loadFromYamlNode(yamlNode);
+    this->yamlFilePath = yamlNode.getFilePath();
     return true;
 }
 
@@ -329,9 +333,19 @@ void Game::setIconImage(const QPixmapAdapter &iconImage)
 }
 
 
+bool Game::save(void)
+{
+    YamlNode rootnode(this->yamlFilePath, false);
+
+    this->saveToYamlNode(rootnode);
+
+    return rootnode.saveToFile(rootnode.getFilePath());
+}
+
+
 void Game::loadFromYamlNode(const YamlNode &yamlNode)
 {
-    std::shared_ptr<const YamlNode> gameNode = yamlNode.getNode("game");
+    const YamlNode* gameNode = yamlNode.getNode("game");
 
     this->loadGameDataFromNode(*gameNode);
     Logger() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
@@ -344,7 +358,7 @@ void Game::loadGameDataFromNode(const YamlNode &gameNode)
     this->archiveFileName = gameNode.getQStringFromMap("archive");
     Logger() << "Loaded gamearchive '" << this->archiveFileName << "' from YAML-file '" << gameNode.getFileName() << "'.";
 
-    std::shared_ptr<const YamlNode> versionNode = gameNode.getNode("version");
+    const YamlNode* versionNode = gameNode.getNode("version");
     if(versionNode != nullptr)
     {
         this->loadVersionDataFromGameNode(*versionNode);
@@ -355,11 +369,11 @@ void Game::loadGameDataFromNode(const YamlNode &gameNode)
         Logger() << "No gameversion info available from YAML-file '" << gameNode.getFileName() << "'.";
     }
 
-    std::shared_ptr<const YamlNode> clientNode = gameNode.getNode("client");
+    const YamlNode* clientNode = gameNode.getNode("client");
     this->loadClientDataFromGameNode(*clientNode);
     Logger() << "Loaded gameclient info from YAML-file '" << gameNode.getFileName() << "'.";
 
-    std::shared_ptr<const YamlNode> serverNode = gameNode.getNode("server");
+    const YamlNode* serverNode = gameNode.getNode("server");
     if(serverNode != nullptr)
     {
         this->loadServerDataFromGameNode(*serverNode);
@@ -438,6 +452,35 @@ void Game::loadServerDataFromGameNode(const YamlNode &serverNode)
              << "' from YAML-file '"
              << serverNode.getFileName()
              << "'.";
+}
+
+
+void Game::saveToYamlNode(YamlNode &yamlNode)
+{
+    YamlNode* gamenode = yamlNode.getNode("game");
+    this->saveGameDataToNode(*gamenode);
+}
+
+void Game::saveGameDataToNode(YamlNode &gameNode)
+{
+    gameNode.setString("name", this->name);
+    gameNode.setString("archive", this->archiveFileName);
+
+    YamlNode *versionNode = gameNode.getNode("version");
+    this->saveVersionDataToNode(*versionNode);
+}
+
+void Game::saveVersionDataToNode(YamlNode &versionNode)
+{
+    versionNode.setString("info", this->version);
+    if(this->versionSource == GameVersionSource::EXECUTABLE)
+    {
+        versionNode.setString("format", "executable");
+    }
+    else if(this->versionSource == GameVersionSource::FILE)
+    {
+        versionNode.setString("format", "file");
+    }
 }
 
 } /* namespace lanty */
