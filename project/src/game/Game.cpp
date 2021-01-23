@@ -467,7 +467,7 @@ void Game::saveGameDataToNode(YamlNode &gameNode)
     gameNode.setString("archive", this->archiveFileName);
 
     YamlNode *versionNode = gameNode.getNode("version");
-    this->saveVersionDataToNode(*versionNode);
+    //this->saveVersionDataToNode(*versionNode);
 }
 
 void Game::saveVersionDataToNode(YamlNode &versionNode)
