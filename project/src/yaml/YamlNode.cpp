@@ -322,21 +322,21 @@ YamlNode* YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
                 break;
             }
         }
-    }
 
-    if(result == nullptr)
-    {
-        Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '"
-                                << this->getFileName()
-                                << "'. Creating child node.";
-        std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
-        yamlChildNode->node = yamlNodeToReturn;
-        yamlChildNode->absoluteFilePath = this->absoluteFilePath;
-        childNodes.push_back(yamlChildNode);
-        Logger(LogLevel::TRACE) << "Created child node for YAML-file '"
-                                << this->getFileName()
-                                << "'.";
-        result = yamlChildNode.get();
+        if(result == nullptr)
+        {
+            Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '"
+                                    << this->getFileName()
+                                    << "'. Creating child node.";
+            std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
+            yamlChildNode->node = yamlNodeToReturn;
+            yamlChildNode->absoluteFilePath = this->absoluteFilePath;
+            childNodes.push_back(yamlChildNode);
+            Logger(LogLevel::TRACE) << "Created child node for YAML-file '"
+                                    << this->getFileName()
+                                    << "'.";
+            result = yamlChildNode.get();
+        }
     }
 
     return result;
