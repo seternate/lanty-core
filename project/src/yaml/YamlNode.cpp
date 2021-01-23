@@ -309,8 +309,8 @@ YamlNode* YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
 {
     YamlNode* result = nullptr;
 
-    if(yamlNodeToReturn.IsDefined() == true && yamlNodeToReturn.IsNull() == false)
-    {
+    //if(yamlNodeToReturn.IsDefined() == true && yamlNodeToReturn.IsNull() == false)
+    //{
         for(std::shared_ptr<YamlNode> childNode : this->childNodes)
         {
             if(childNode->node == yamlNodeToReturn)
@@ -337,7 +337,7 @@ YamlNode* YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
                                     << "'.";
             result = yamlChildNode.get();
         }
-    }
+    //}
 
     return result;
 }
