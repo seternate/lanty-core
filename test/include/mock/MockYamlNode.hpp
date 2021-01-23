@@ -25,10 +25,10 @@ class MockYamlNode : public lanty::YamlNode
 {
 public:
     MOCK_METHOD(QString, getFileName, (), (const, override));
-    MOCK_METHOD(std::shared_ptr<const lanty::YamlNode>, getNode, (const QString &key), (const, override));
-    MOCK_METHOD(std::shared_ptr<const lanty::YamlNode>, getNode, (const int index), (const, override));
-    MOCK_METHOD(std::shared_ptr<lanty::YamlNode>, getNode, (const QString &key), (override));
-    MOCK_METHOD(std::shared_ptr<lanty::YamlNode>, getNode, (const int index), (override));
+    MOCK_METHOD(const lanty::YamlNode*, getNode, (const QString &key), (const, override));
+    MOCK_METHOD(const lanty::YamlNode*, getNode, (const int index), (const, override));
+    MOCK_METHOD(lanty::YamlNode*, getNode, (const QString &key), (override));
+    MOCK_METHOD(lanty::YamlNode*, getNode, (const int index), (override));
     MOCK_METHOD(QString, getQStringFromMap, (const QString &key), (const, override));
     MOCK_METHOD(QString, getQStringFromSequence, (const int index), (const, override));
     MOCK_METHOD(QString, getQString,(), (const, override));

@@ -21,31 +21,31 @@
 
 TEST_F(YamlNodeTest, GetNodeWithKeyValue)
 {
-    std::shared_ptr<const YamlNode> keyRoot = this->getNode("key");
+    YamlNode* keyRoot = this->getNode("key");
 
     ASSERT_EQ(keyRoot->getQString(), QString("value"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithMap)
 {
-    std::shared_ptr<const YamlNode> mapRoot = this->getNode("map");
-    std::shared_ptr<const YamlNode> keyMap = mapRoot->getNode("keymap");
+    YamlNode* mapRoot = this->getNode("map");
+    YamlNode* keyMap = mapRoot->getNode("keymap");
 
     ASSERT_EQ(keyMap->getQString(), QString("valuemap"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithMapInMap)
 {
-    std::shared_ptr<const YamlNode> mapRoot = this->getNode("map");
-    std::shared_ptr<const YamlNode> mapMap = mapRoot->getNode("mapmap");
-    std::shared_ptr<const YamlNode> keyMapMap = mapMap->getNode("keymapmap");
+    YamlNode* mapRoot = this->getNode("map");
+    YamlNode* mapMap = mapRoot->getNode("mapmap");
+    YamlNode* keyMapMap = mapMap->getNode("keymapmap");
 
     ASSERT_EQ(keyMapMap->getQString(), QString("valuemapmap"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithSequence)
 {
-    std::shared_ptr<const YamlNode> seqRoot = this->getNode("sequence");
+    YamlNode* seqRoot = this->getNode("sequence");
 
     ASSERT_EQ(seqRoot->getQStringFromSequence(0), QString("valueseq1"));
     ASSERT_EQ(seqRoot->getQStringFromSequence(2), QString("valueseq2"));
@@ -53,16 +53,16 @@ TEST_F(YamlNodeTest, GetNodeWithSequence)
 
 TEST_F(YamlNodeTest, GetNodeWithMapInSequence)
 {
-    std::shared_ptr<const YamlNode> seqRoot = this->getNode("sequence");
-    std::shared_ptr<const YamlNode> keySeq = seqRoot->getNode(1);
+    YamlNode* seqRoot = this->getNode("sequence");
+    YamlNode* keySeq = seqRoot->getNode(1);
 
     ASSERT_EQ(keySeq->getQStringFromMap("keyseq"), QString("valuekeyseq"));
 }
 
 TEST_F(YamlNodeTest, GetNodeWithSequenceInSequence)
 {
-    std::shared_ptr<const YamlNode> seqRoot = this->getNode("sequence");
-    std::shared_ptr<const YamlNode> seqSeq = seqRoot->getNode(3)->getNode("seqseq");
+    YamlNode* seqRoot = this->getNode("sequence");
+    YamlNode* seqSeq = seqRoot->getNode(3)->getNode("seqseq");
 
     ASSERT_EQ(seqSeq->getQStringFromSequence(0), QString("valueseqseq1"));
     ASSERT_EQ(seqSeq->getQStringFromSequence(1), QString("valueseqseq2"));
@@ -70,7 +70,7 @@ TEST_F(YamlNodeTest, GetNodeWithSequenceInSequence)
 
 TEST_F(YamlNodeTest, GetNotExistingNode)
 {
-    std::shared_ptr<const YamlNode> keyRoot = this->getNode("notexisting");
+    YamlNode* keyRoot = this->getNode("notexisting");
 
     ASSERT_EQ(keyRoot, nullptr);
 }
@@ -91,4 +91,56 @@ TEST_F(YamlNodeTest, GetNotExistingDouble)
 
     ASSERT_EQ(notExistinMap, 0.0);
     ASSERT_EQ(notExistinSeq, 0.0);
+}
+
+TEST_F(YamlNodeTest, SetKeyValueString)
+{
+    YamlNode* keyRoot = this->getNode("key");
+    this->setString("key", "test");
+    ASSERT_EQ(keyRoot->getQString(), QString("test"));
+    keyRoot->setString("anothertest");
+    ASSERT_EQ(keyRoot->getQString(), QString("anothertest"));
+
+    YamlNode* map = this->getNode("map");
+    YamlNode* mapKeyMap = map->getNode("keymap");
+    map->setString("keymap", "test");
+    ASSERT_EQ(mapKeyMap->getQString(), QString("test"));
+    mapKeyMap->setString("anothertest");
+    ASSERT_EQ(mapKeyMap->getQString(), QString("anothertest"));
+
+    YamlNode* sequence = this->getNode("sequence");
+    YamlNode* keyseq = sequence->getNode(1);
+    YamlNode* seqseq = sequence->getNode(3);
+    sequence->setString(0, "test");
+    ASSERT_EQ(sequence->getQStringFromSequence(0), QString("test"));
+    keyseq->setString("keyseq", "test");
+    ASSERT_EQ(keyseq->getQStringFromMap("keyseq"), QString("test"));
+    seqseq->setString(0, "test");
+    ASSERT_EQ(seqseq->getQStringFromSequence(0), QString("test"));
+}
+
+TEST_F(YamlNodeTest, SetKeyValueDouble)
+{
+    YamlNode* keyRoot = this->getNode("key");
+    this->setDouble("key", 0);
+    ASSERT_EQ(keyRoot->getDouble(), 0);
+    keyRoot->setDouble(1);
+    ASSERT_EQ(keyRoot->getDouble(), 1);
+
+    YamlNode* map = this->getNode("map");
+    YamlNode* mapKeyMap = map->getNode("keymap");
+    map->setDouble("keymap", 0);
+    ASSERT_EQ(mapKeyMap->getDouble(), 0);
+    mapKeyMap->setDouble(1);
+    ASSERT_EQ(mapKeyMap->getDouble(), 1);
+
+    YamlNode* sequence = this->getNode("sequence");
+    YamlNode* keyseq = sequence->getNode(1);
+    YamlNode* seqseq = sequence->getNode(3);
+    sequence->setDouble(0, 0);
+    ASSERT_EQ(sequence->getDoubleFromSequence(0), 0);
+    keyseq->setDouble("keyseq", 0);
+    ASSERT_EQ(keyseq->getDoubleFromMap("keyseq"), 0);
+    seqseq->setDouble(0, 0);
+    ASSERT_EQ(seqseq->getDoubleFromSequence(0), 0);
 }
