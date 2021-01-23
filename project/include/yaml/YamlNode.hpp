@@ -59,6 +59,7 @@ public:
     virtual bool isSequence(void) const;
     virtual bool isMap(void) const;
 
+    virtual YamlNode* setNode(const QString &key);
     virtual void setString(const QString &value);
     virtual void setString(const QString &key, const QString &value);
     virtual void setString(const int index, const QString &value);

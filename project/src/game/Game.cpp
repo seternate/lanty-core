@@ -457,7 +457,7 @@ void Game::loadServerDataFromGameNode(const YamlNode &serverNode)
 
 void Game::saveToYamlNode(YamlNode &yamlNode)
 {
-    YamlNode* gamenode = yamlNode.getNode("game");
+    YamlNode* gamenode = yamlNode.setNode("game");
     this->saveGameDataToNode(*gamenode);
 }
 

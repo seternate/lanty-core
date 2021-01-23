@@ -241,6 +241,16 @@ bool YamlNode::isMap(void) const
     return this->node.IsMap();
 }
 
+YamlNode* YamlNode::setNode(const QString &key)
+{
+    YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
+    std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
+    yamlChildNode->node = yamlNodeToReturn;
+    yamlChildNode->absoluteFilePath = this->absoluteFilePath;
+    childNodes.push_back(yamlChildNode);
+    return yamlChildNode.get();
+}
+
 void YamlNode::setString(const QString &value)
 {
     this->node = value.toStdString();
