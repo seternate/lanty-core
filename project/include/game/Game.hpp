@@ -95,14 +95,16 @@ signals:
 
 private:
     void loadFromYamlNode(const YamlNode &yamlNode);
-    void loadGameDataFromNode(const YamlNode &gameNode);
+    void loadGameDataFromGameNode(const YamlNode &gameNode);
     void loadVersionDataFromGameNode(const YamlNode &versionNode);
     void loadClientDataFromGameNode(const YamlNode &clientNode);
     void loadServerDataFromGameNode(const YamlNode &serverNode);
 
     void saveToYamlNode(YamlNode &yamlNode);
-    void saveGameDataToNode(YamlNode &gameNode);
-    void saveVersionDataToNode(YamlNode &versionNode);
+    void saveGameDataToGameNode(YamlNode &gameNode);
+    void saveVersionDataToGameNode(YamlNode &versionNode);
+    void saveClientDataToGameNode(YamlNode &clientNode);
+    void saveServerDataToGameNode(YamlNode &serverNode);
 
     QString yamlFilePath;
     QString name;

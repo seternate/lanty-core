@@ -347,11 +347,11 @@ void Game::loadFromYamlNode(const YamlNode &yamlNode)
 {
     const YamlNode* gameNode = yamlNode.getNode("game");
 
-    this->loadGameDataFromNode(*gameNode);
+    this->loadGameDataFromGameNode(*gameNode);
     Logger() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
 }
 
-void Game::loadGameDataFromNode(const YamlNode &gameNode)
+void Game::loadGameDataFromGameNode(const YamlNode &gameNode)
 {
     this->name = gameNode.getQStringFromMap("name");
     Logger() << "Loaded gamename '" << this->name << "' from YAML-file '" << gameNode.getFileName() << "'.";
@@ -457,22 +457,32 @@ void Game::loadServerDataFromGameNode(const YamlNode &serverNode)
 
 void Game::saveToYamlNode(YamlNode &yamlNode)
 {
-    YamlNode* gamenode = yamlNode.getNode("game");
-    this->saveGameDataToNode(*gamenode);
+    YamlNode* gamenode = yamlNode.setNode("game");
+    this->saveGameDataToGameNode(*gamenode);
 }
 
-void Game::saveGameDataToNode(YamlNode &gameNode)
+void Game::saveGameDataToGameNode(YamlNode &gameNode)
 {
     gameNode.setString("name", this->name);
     gameNode.setString("archive", this->archiveFileName);
 
-    YamlNode *versionNode = gameNode.getNode("version");
-    //this->saveVersionDataToNode(*versionNode);
+    YamlNode *versionNode = gameNode.setNode("version");
+    this->saveVersionDataToGameNode(*versionNode);
+
+    YamlNode *clientNode = gameNode.setNode("client");
+    this->saveClientDataToGameNode(*clientNode);
+
+    YamlNode *serverNode = gameNode.setNode("server");
+    this->saveServerDataToGameNode(*serverNode);
 }
 
-void Game::saveVersionDataToNode(YamlNode &versionNode)
+void Game::saveVersionDataToGameNode(YamlNode &versionNode)
 {
-    versionNode.setString("info", this->version);
+    if(this->version.isEmpty() == false)
+    {
+        versionNode.setString("info", this->version);
+    }
+
     if(this->versionSource == GameVersionSource::EXECUTABLE)
     {
         versionNode.setString("format", "executable");
@@ -480,6 +490,48 @@ void Game::saveVersionDataToNode(YamlNode &versionNode)
     else if(this->versionSource == GameVersionSource::FILE)
     {
         versionNode.setString("format", "file");
+    }
+    else
+    {
+        versionNode.setString("format", "none");
+    }
+
+    if(this->versionRelativeFilePath.isEmpty() == false)
+    {
+        versionNode.setString("file", this->versionRelativeFilePath);
+    }
+
+    if(this->versionFileQuery.isEmpty() == false)
+    {
+        versionNode.setString("query", this->versionFileQuery);
+    }
+}
+
+void Game::saveClientDataToGameNode(YamlNode &clientNode)
+{
+    clientNode.setString("executable", this->clientExecutableRelativeFilePath);
+
+    if(this->clientArgument.isEmpty() == false)
+    {
+        clientNode.setString("argument", this->clientArgument);
+    }
+
+    if(this->clientConnectArgument.isEmpty() == false)
+    {
+        clientNode.setString("connect", this->clientConnectArgument);
+    }
+}
+
+void Game::saveServerDataToGameNode(YamlNode &serverNode)
+{
+    if(this->serverExecutableRelativeFilePath.isEmpty() == false)
+    {
+        serverNode.setString("executable", this->serverExecutableRelativeFilePath);
+    }
+
+    if(this->serverArgument.isEmpty() == false)
+    {
+        serverNode.setString("argument", this->serverArgument);
     }
 }
 

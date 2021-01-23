@@ -243,12 +243,16 @@ bool YamlNode::isMap(void) const
 
 YamlNode* YamlNode::setNode(const QString &key)
 {
-    YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
-    std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
-    yamlChildNode->node = yamlNodeToReturn;
-    yamlChildNode->absoluteFilePath = this->absoluteFilePath;
-    childNodes.push_back(yamlChildNode);
-    return yamlChildNode.get();
+    YamlNode *result = nullptr;
+
+    YAML::Node newNode = this->node[key.toStdString()];
+    std::shared_ptr<YamlNode> newChildNode(new YamlNode());
+    newChildNode->node = newNode;
+    newChildNode->absoluteFilePath = this->absoluteFilePath;
+    this->childNodes.push_back(newChildNode);
+    result = newChildNode.get();
+
+    return result;
 }
 
 void YamlNode::setString(const QString &value)
@@ -333,22 +337,20 @@ YamlNode* YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
             }
         }
 
-
-    }
-
-    if(result == nullptr)
-    {
-        Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '"
-                                << this->getFileName()
-                                << "'. Creating child node.";
-        std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
-        yamlChildNode->node = yamlNodeToReturn;
-        yamlChildNode->absoluteFilePath = this->absoluteFilePath;
-        childNodes.push_back(yamlChildNode);
-        Logger(LogLevel::TRACE) << "Created child node for YAML-file '"
-                                << this->getFileName()
-                                << "'.";
-        result = yamlChildNode.get();
+        if(result == nullptr)
+        {
+            Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '"
+                                    << this->getFileName()
+                                    << "'. Creating child node.";
+            std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
+            yamlChildNode->node = yamlNodeToReturn;
+            yamlChildNode->absoluteFilePath = this->absoluteFilePath;
+            this->childNodes.push_back(yamlChildNode);
+            Logger(LogLevel::TRACE) << "Created child node for YAML-file '"
+                                    << this->getFileName()
+                                    << "'.";
+            result = yamlChildNode.get();
+        }
     }
 
     return result;
