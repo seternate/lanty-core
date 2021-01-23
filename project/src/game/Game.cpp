@@ -457,7 +457,7 @@ void Game::loadServerDataFromGameNode(const YamlNode &serverNode)
 
 void Game::saveToYamlNode(YamlNode &yamlNode)
 {
-    YamlNode* gamenode = yamlNode.setNode("game");
+    YamlNode* gamenode = yamlNode.getNode("game");
     this->saveGameDataToNode(*gamenode);
 }
 
@@ -466,7 +466,7 @@ void Game::saveGameDataToNode(YamlNode &gameNode)
     gameNode.setString("name", this->name);
     gameNode.setString("archive", this->archiveFileName);
 
-    YamlNode *versionNode = gameNode.setNode("version");
+    YamlNode *versionNode = gameNode.getNode("version");
     //this->saveVersionDataToNode(*versionNode);
 }
 
