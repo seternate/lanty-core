@@ -67,7 +67,9 @@ public:
     virtual void setDouble(const QString &key, const double value);
     virtual void setDouble(const int index, const double value);
 
+    virtual bool loadFromFile(void);
     virtual bool loadFromFile(const QString &absoluteFilePath);
+    virtual bool saveToFile(void);
     virtual bool saveToFile(const QString &absoluteFilePath);
 
 protected:

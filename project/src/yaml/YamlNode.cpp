@@ -285,6 +285,11 @@ void YamlNode::setDouble(const int index, const double value)
     this->node[index] = value;
 }
 
+bool YamlNode::loadFromFile(void)
+{
+    return this->loadFromFile(this->absoluteFilePath);
+}
+
 
 bool YamlNode::loadFromFile(const QString &absoluteFilePath)
 {
@@ -309,6 +314,11 @@ bool YamlNode::loadFromFile(const QString &absoluteFilePath)
     }
 
     return result;
+}
+
+bool YamlNode::saveToFile(void)
+{
+    return this->saveToFile(this->absoluteFilePath);
 }
 
 bool YamlNode::saveToFile(const QString &absoluteFilePath)

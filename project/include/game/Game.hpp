@@ -77,6 +77,7 @@ public slots:
     virtual void setIconImage(const QPixmapAdapter &iconImage);
 
     virtual bool save(void);
+    virtual bool save(const QString &yamlFilePath);
 
 signals:
     void nameChanged(const QString &newName);

@@ -199,7 +199,6 @@ bool Game::canOpenServer(void) const
 bool Game::load(const YamlNode &yamlNode)
 {
     loadFromYamlNode(yamlNode);
-    this->yamlFilePath = yamlNode.getFilePath();
     return true;
 }
 
@@ -335,11 +334,17 @@ void Game::setIconImage(const QPixmapAdapter &iconImage)
 
 bool Game::save(void)
 {
-    YamlNode rootnode(this->yamlFilePath, false);
+    return this->save(this->yamlFilePath);
+}
 
-    this->saveToYamlNode(rootnode);
+bool Game::save(const QString &yamlFilePath)
+{
+    YamlNode rootNode(yamlFilePath, false);
+    this->yamlFilePath = yamlFilePath;
 
-    return rootnode.saveToFile(rootnode.getFilePath());
+    this->saveToYamlNode(rootNode);
+
+    return rootNode.saveToFile();
 }
 
 
@@ -348,6 +353,7 @@ void Game::loadFromYamlNode(const YamlNode &yamlNode)
     const YamlNode* gameNode = yamlNode.getNode("game");
 
     this->loadGameDataFromGameNode(*gameNode);
+    this->yamlFilePath = yamlNode.getFilePath();
     Logger() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
 }
 
