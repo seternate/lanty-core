@@ -16,6 +16,8 @@
 
 #include "game/Game.hpp"
 
+#include <QFile>
+
 #include "logging/Logger.hpp"
 #include "logging/LogLevel.hpp"
 
@@ -331,6 +333,13 @@ void Game::setIconImage(const QPixmapAdapter &iconImage)
     emit iconImageChanged(this->iconImage);
 }
 
+
+bool Game::deleteYamlFile(void)
+{
+    QFile yamlFile(this->yamlFilePath);
+
+    return yamlFile.remove();
+}
 
 bool Game::save(void)
 {

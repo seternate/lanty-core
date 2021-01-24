@@ -76,6 +76,7 @@ public slots:
     virtual void setCoverImage(const QPixmapAdapter &coverImage);
     virtual void setIconImage(const QPixmapAdapter &iconImage);
 
+    virtual bool deleteYamlFile(void);
     virtual bool save(void);
     virtual bool save(const QString &yamlFilePath);
 

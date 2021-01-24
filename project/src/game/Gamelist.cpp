@@ -47,6 +47,18 @@ const Game& Gamelist::append(Game *game)
     return *newGame;
 }
 
+void Gamelist::remove(const Game *game)
+{
+    for(qint32 i = 0; i < this->list.size(); i++)
+    {
+        Game *listgame = this->list.at(i).get();
+        if(game == listgame)
+        {
+            this->list.remove(i);
+        }
+    }
+}
+
 quint32 Gamelist::size(void) const
 {
     return list.size();
