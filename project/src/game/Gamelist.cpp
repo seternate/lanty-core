@@ -54,7 +54,9 @@ void Gamelist::remove(const Game *game)
         Game *listgame = this->list.at(i).get();
         if(game == listgame)
         {
+            beginRemoveRows(QModelIndex(), i, i);
             this->list.remove(i);
+            endRemoveRows();
         }
     }
 }
