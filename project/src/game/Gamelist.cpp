@@ -38,6 +38,15 @@ const Game& Gamelist::at(const qint32 index) const
     return *list.at(index);
 }
 
+const Game& Gamelist::append(Game *game)
+{
+    std::shared_ptr<Game> newGame(game);
+    beginInsertRows(QModelIndex(), this->size(), this->size());
+    this->list.append(newGame);
+    endInsertRows();
+    return *newGame;
+}
+
 quint32 Gamelist::size(void) const
 {
     return list.size();

@@ -41,6 +41,7 @@ public:
     const Game& operator[](const qint32 index) const;
 
     virtual const Game& at(const qint32 index) const;
+    virtual const Game& append(Game* game);
     virtual quint32 size(void) const;
 
     int rowCount(const QModelIndex &parent) const override;
