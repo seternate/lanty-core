@@ -42,6 +42,7 @@ public:
 
     virtual const Game& at(const qint32 index) const;
     virtual const Game& append(Game* game);
+    virtual void load(Gamelist *gamelist);
     virtual void remove(const Game* game);
     virtual quint32 size(void) const;
 

@@ -47,6 +47,23 @@ const Game& Gamelist::append(Game *game)
     return *newGame;
 }
 
+void Gamelist::load(Gamelist *gamelist)
+{
+    beginResetModel();
+    this->list.clear();
+    endResetModel();
+
+    for(std::shared_ptr<Game> game : gamelist->list)
+    {
+        beginInsertRows(QModelIndex(), this->size(), this->size());
+        this->list.append(game);
+        endInsertRows();
+        gamelist->beginRemoveRows(QModelIndex(), 0, 0);
+        gamelist->list.removeFirst();
+        gamelist->endRemoveRows();
+    }
+}
+
 void Gamelist::remove(const Game *game)
 {
     for(qint32 i = 0; i < this->list.size(); i++)
