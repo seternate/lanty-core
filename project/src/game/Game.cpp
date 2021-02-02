@@ -38,7 +38,22 @@ Game::Game(QObject *parent) : QObject(parent),
                               versionRelativeFilePath(""),
                               versionFileQuery(""),
                               coverImage(QPixmapAdapter()),
-                              iconImage(QPixmapAdapter()) { }
+                              iconImage(QPixmapAdapter())
+{
+    QObject::connect(this, SIGNAL(nameChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(archiveFileNameChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(clientExecutableChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(clientArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(clientConnectArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(serverExecutableChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(serverArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionSourceChanged(GameVersionSource)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionFileChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionFileQueryChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(coverImageChanged(const lanty::QPixmapAdapter&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(iconImageChanged(const lanty::QPixmapAdapter&)), this, SIGNAL(changed(void)));
+}
 
 Game::Game(const YamlNode &yamlNode) : QObject(nullptr),
                                        yamlFilePath(""),

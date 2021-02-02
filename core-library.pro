@@ -18,3 +18,5 @@ TEMPLATE = subdirs
 SUBDIRS = \
     project \
     test
+
+test.depends = project

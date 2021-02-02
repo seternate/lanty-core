@@ -81,6 +81,7 @@ public slots:
     virtual bool save(const QString &yamlFilePath);
 
 signals:
+    void changed(void);
     void nameChanged(const QString &newName);
     void archiveFileNameChanged(const QString &newArchiveFileName);
     void clientExecutableChanged(const QString &newClientExecutable);
