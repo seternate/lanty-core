@@ -33,6 +33,7 @@ public:
     static const QString JPG;
     static const QString JPEG;
     static const QString BMP;
+    static const QString ZIP;
 };
 
 } /* namespace lanty */

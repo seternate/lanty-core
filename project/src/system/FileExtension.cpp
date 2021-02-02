@@ -25,6 +25,7 @@ const QString FileExtension::PNG = "*.png";
 const QString FileExtension::JPG = "*.jpg";
 const QString FileExtension::JPEG = "*.jpeg";
 const QString FileExtension::BMP = "*.bmp";
+const QString FileExtension::ZIP = "*.zip";
 
 } /* namespace lanty */
 
