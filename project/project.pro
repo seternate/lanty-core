@@ -22,6 +22,9 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 CONFIG += skip_target_version_ext
 
+QMAKE_CXXFLAGS += --coverage
+LIBS += -lgcov
+
 INCLUDEPATH += $$PWD/include
 
 SOURCES += \

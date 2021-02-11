@@ -1,303 +1,241 @@
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
+
+
+
 variables:
-    GIT_SUBMODULE_STRATEGY: recursive
-    VERSION: 0.1.0
-    YAML_CPP_VERSION: 0.6.3
-    ARTIFACT_PATH: artifact/x86_64
-    ARTIFACT_PATH_WINDOWS: artifact/x86_64/windows
-    ARTIFACT_PATH_LINUX: artifact/x86_64/linux
+  GIT_SUBMODULE_STRATEGY: recursive
+  ARTIFACT_NAME: ${CI_PROJECT_NAME}-${VERSION}-${CI_COMMIT_SHORT_SHA}-${CI_JOB_NAME}
+
+  YAML_CPP_VERSION: 0.6.3
+
+  VERSION: 0.1.0
+
+
 
 stages:
-    - build
-    - build_test
-    - test
+  - setup
+  - build
+  - build-unit-test
+  - codequality
+  - static-analysis
+  - unit-test
+  - deploy
 
-build_windows_debug:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build
-    needs: []
-    before_script:
-        # Setup build environment
-        - rm -f /usr/bin/g++
-        - rm -f /usr/bin/windres
-        - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
-        - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
-        # Move Qt5 windows lib files packed within the container
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
-        - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_WINDOWS}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/windows; lcd ${ARTIFACT_PATH_WINDOWS}; get libyaml-cpp.dll"
-    script:
-        - cd ./project
-        # Build shared
-        - qmake ./project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/lib/x86_64-linux-gnu/"
-        - ls
-        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Debug
-        - make
-        # Rename shared output .a to .dll.a
-        - mv ../${ARTIFACT_PATH_WINDOWS}/libltycored.a ../${ARTIFACT_PATH_WINDOWS}/libltycored.dll.a 
-        # Build static
-        - qmake ./project.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" "CONFIG+=staticlib"
-        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Debug
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_WINDOWS}/core_res.o
-        - rm -f ${ARTIFACT_PATH_WINDOWS}/libyaml-cpp.dll
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_WINDOWS}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_windows_debug"
 
-build_windows_release:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build
-    needs: []
-    before_script:
-        # Setup build environment
-        - rm -f /usr/bin/g++
-        - rm -f /usr/bin/windres
-        - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
-        - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
-        # Move Qt5 windows lib files packed within the container
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
-        - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_WINDOWS}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/windows; lcd ${ARTIFACT_PATH_WINDOWS}; get libyaml-cpp.dll"
-    script:
-        - cd ./project
-        # Build shared
-        - qmake ./project.pro -spec win32-g++ "CONFIG+=release" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" 
-        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Release
-        - make
-        # Rename shared output .a to .dll.a
-        - mv ../${ARTIFACT_PATH_WINDOWS}/libltycore.a ../${ARTIFACT_PATH_WINDOWS}/libltycore.dll.a 
-        # Build static
-        - qmake ./project.pro -spec win32-g++ "CONFIG+=release" "LIBS+=-L/usr/lib/x86_64-linux-gnu/" "CONFIG+=staticlib"
-        - sed -i s/windres/x86_64-w64-mingw32-windres/g Makefile.Release
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_WINDOWS}/core_res.o
-        - rm -f ${ARTIFACT_PATH_WINDOWS}/libyaml-cpp.dll
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_WINDOWS}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_windows_release"
 
-build_linux_debug:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build
-    needs: []
-    before_script:
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_LINUX}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; get libyaml-cpp.so"
-    script:
-        - cd ./project
-        # Build shared
-        - qmake ./project.pro "CONFIG+=debug" "CONFIG+=qml_debug"
-        - make
-        # Build static
-        - qmake ./project.pro "CONFIG+=debug" "CONFIG+=qml_debug" "CONFIG+=staticlib"
-        - make 
-    after_script:
-        - rm -f ${ARTIFACT_PATH_LINUX}/libyaml-cpp.so
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_LINUX}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_linux_debug"
+include:
+  - project: 'template/ci-cd'
+    ref: 2-add-new-templates
+    file: 
+      - '/sast.gitlab-ci.yml'
+      - '/codequality.gitlab-ci.yml'
+      - '/deploy.gitlab-ci.yml'
 
-build_linux_release:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build
-    needs: []
-    before_script:
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_LINUX}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; get libyaml-cpp.so"
-    script:
-        - cd ./project
-        # Build shared
-        - qmake ./project.pro "CONFIG+=release"
-        - make
-        # Build static
-        - qmake ./project.pro "CONFIG+=release" "CONFIG+=staticlib"
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_LINUX}/libyaml-cpp.so
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_LINUX}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_linux_release"
 
-build_linux_unit_test_debug:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build_test
-    needs: [build_linux_debug]
-    before_script:
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_LINUX}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; get libyaml-cpp.so"
-    script:
-        - cd ./test
-        - qmake ./test.pro "CONFIG+=debug" "CONFIG+=qml_debug"
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_LINUX}/lib*
-        - chmod +x ${ARTIFACT_PATH_LINUX}/ltycored-test
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_LINUX}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_linux_unit_test_debug"
 
-build_linux_unit_test_release:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build_test
-    needs: [build_linux_release]
-    before_script:
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_LINUX}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; get libyaml-cpp.so"
-    script:
-        - cd ./test
-        - qmake ./test.pro "CONFIG+=release"
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_LINUX}/lib*
-        - chmod +x ${ARTIFACT_PATH_LINUX}/ltycore-test
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_LINUX}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_linux_unit_test_release"
+.build:
+  image: seternate/qt5-toolchain:3.0.0
+  stage: build
+  needs: []
+  artifacts:
+    when: on_success
+    expire_in: 30d
+    paths:
+      - ${BUILD_DIR}
+      - ${ARTIFACT_DIR}
+    name: ${ARTIFACT_NAME}
 
-build_windows_unit_test_debug:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build_test
-    needs: [build_windows_debug]
-    before_script:
-        # Setup build environment
-        - rm -f /usr/bin/g++
-        - rm -f /usr/bin/windres
-        - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
-        - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
-        # Move Qt5 windows lib files packed within the container
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Test.a /usr/lib/x86_64-linux-gnu/libQt5Test.a
-        - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_WINDOWS}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/windows; lcd ${ARTIFACT_PATH_WINDOWS}; get libyaml-cpp.dll"
-    script:
-        - cd ./test
-        - qmake ./test.pro -spec win32-g++ "CONFIG+=debug" "CONFIG+=qml_debug" "LIBS+=-L/usr/lib/x86_64-linux-gnu/"
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_WINDOWS}/lib*
-        - chmod +x ${ARTIFACT_PATH_WINDOWS}/ltycored-test.exe
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_WINDOWS}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_windows_unit_test_debug"
+.build-windows:
+  extends: .build
+  variables:
+    ARTIFACT_DIR: artifact/x86_64/windows
+  before_script:
+    # Setup build environment
+    - rm -f /usr/bin/g++
+    - rm -f /usr/bin/windres
+    - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
+    - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
+    # Move Qt5 windows lib files packed within the container
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
+    - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
+    # Copy library libs from smbshare
+    - mkdir -p ${ARTIFACT_DIR}
+    - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:library/yaml-cpp | cut -c1-8)
+    - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/windows; lcd ${ARTIFACT_DIR}; mget *"
+  script:
+    - cd project
+    # Build shared
+    - eval "qmake project.pro -spec win32-g++ "LIBS+=-L/usr/lib/x86_64-linux-gnu/" ${QMAKE_ARGUMENTS}"
+    - sed -i s/windres/x86_64-w64-mingw32-windres/g ${MAKEFILE}
+    - make -j$(nproc)
+    # Build static
+    - eval "qmake project.pro -spec win32-g++ "LIBS+=-L/usr/lib/x86_64-linux-gnu/" "CONFIG+=staticlib" ${QMAKE_ARGUMENTS}"
+    - sed -i s/windres/x86_64-w64-mingw32-windres/g ${MAKEFILE}
+    - make -j$(nproc)
 
-build_windows_unit_test_release:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: build_test
-    needs: [build_windows_release]
-    before_script:
-        # Setup build environment
-        - rm -f /usr/bin/g++
-        - rm -f /usr/bin/windres
-        - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
-        - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
-        # Move Qt5 windows lib files packed within the container
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
-        - cp /usr/x86_64-w64-mingw32/lib/libQt5Test.a /usr/lib/x86_64-linux-gnu/libQt5Test.a
-        - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_WINDOWS}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/windows; lcd ${ARTIFACT_PATH_WINDOWS}; get libyaml-cpp.dll"
-    script:
-        - cd ./test
-        - qmake ./test.pro -spec win32-g++ "CONFIG+=release" "LIBS+=-L/usr/lib/x86_64-linux-gnu/"
-        - make
-    after_script:
-        - rm -f ${ARTIFACT_PATH_WINDOWS}/lib*
-        - chmod +x ${ARTIFACT_PATH_WINDOWS}/ltycore-test.exe
-    artifacts:
-        when: on_success
-        expire_in: 30d
-        paths:
-            - ${ARTIFACT_PATH_WINDOWS}
-        name: "${CI_PROJECT_NAME}_${VERSION}_${CI_COMMIT_SHORT_SHA}_windows_unit_test_release"
+build-windows-release:
+  extends: .build-windows
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=release"'
+    MAKEFILE: Makefile.Release
 
-unit_test_debug:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: test
-    needs: 
-        - job: build_linux_unit_test_debug
-        - job: build_linux_debug
-    before_script:
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_LINUX}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; mget *"
-        - mv ${ARTIFACT_PATH_LINUX}/lib* /usr/lib/x86_64-linux-gnu/
-        # Needed for headless Qt-App start
-        - export QT_QPA_PLATFORM=offscreen
-    script:
-        - cd ${ARTIFACT_PATH_LINUX}
-        - ls
-        - ./ltycored-test --gtest_output="xml:report.xml"
-    artifacts:
-        when: always
-        reports:
-            junit: ${ARTIFACT_PATH_LINUX}/report.xml
+build-windows-debug:
+  extends: .build-windows
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=debug" "CONFIG+=qml_debug"'
+    MAKEFILE: Makefile.Debug
 
-unit_test_release:
-    image: seternate/qt5-toolchain:3.0.0
-    stage: test
-    needs: 
-        - job: build_linux_unit_test_release
-        - job: build_linux_release
-    before_script:
-        # Copy library libs from smbshare
-        - mkdir -p ${ARTIFACT_PATH_LINUX}
-        - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:./library/yaml-cpp | cut -c1-8)
-        - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_PATH_LINUX}; mget *"
-        - mv ${ARTIFACT_PATH_LINUX}/lib* /usr/lib/x86_64-linux-gnu/
-        # Needed for headless Qt-App start
-        - export QT_QPA_PLATFORM=offscreen
-    script:
-        - cd ${ARTIFACT_PATH_LINUX}
-        - ls
-        - ./ltycore-test --gtest_output="xml:report.xml"
-    artifacts:
-        when: always
-        reports:
-            junit: ${ARTIFACT_PATH_LINUX}/report.xml
+.build-linux:
+  extends: .build
+  variables:
+    ARTIFACT_DIR: artifact/x86_64/linux
+    BUILD_DIR: project   
+  before_script:
+    # Copy library libs from smbshare
+    - mkdir -p ${ARTIFACT_DIR}
+    - YAML_CPP_COMMIT_SHORT_SHA=$(git rev-parse @:library/yaml-cpp | cut -c1-8)
+    - echo ${SMBPASSWORD} | smbclient -U ${SMBUSER} ${SMBSHARE} -c "prompt OFF; recurse ON; cd yaml-cpp/${YAML_CPP_VERSION}/${YAML_CPP_COMMIT_SHORT_SHA}/x86_64/linux; lcd ${ARTIFACT_DIR}; mget *"
+  script:
+    - cd project
+    # Build shared
+    - eval "qmake project.pro ${QMAKE_ARGUMENTS}"
+    - make -j$(nproc)
+    # Build static
+    - eval "qmake ./project.pro "CONFIG+=staticlib" ${QMAKE_ARGUMENTS}"
+    - make -j$(nproc) 
+  
+build-linux-release:
+  extends: .build-linux
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=release"'
+
+build-linux-debug:
+  extends: .build-linux
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=debug" "CONFIG+=qml_debug"'
+
+
+
+.build-unit-test-windows:
+  extends: .build
+  stage: build-unit-test
+  variables:
+    ARTIFACT_DIR: artifact/x86_64/windows
+  before_script:
+    # Setup build environment
+    - rm -f /usr/bin/g++
+    - rm -f /usr/bin/windres
+    - ln -s /usr/bin/x86_64-w64-mingw32-g++ /usr/bin/g++
+    - ln -s /usr/bin/x86_64-w64-mingw32-windres /usr/bin/windres
+    # Move Qt5 windows lib files packed within the container
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Test.a /usr/lib/x86_64-linux-gnu/libQt5Test.a
+    - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
+  script:
+    - cd test
+    - eval "qmake test.pro -spec win32-g++ "LIBS+=-L/usr/lib/x86_64-linux-gnu/" ${QMAKE_ARGUMENTS}"
+    - make -j$(nproc) 
+
+build-unit-test-windows-release:
+  extends: .build-unit-test-windows
+  needs: [build-windows-release]
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=release"'
+
+build-unit-test-windows-debug:
+  extends: .build-unit-test-windows
+  needs: [build-windows-debug]
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=debug" "CONFIG+=qml_debug"'
+
+.build-unit-test-linux:
+  extends: .build
+  stage: build-unit-test
+  variables:
+    ARTIFACT_DIR: artifact/x86_64/linux
+  script:
+    - cd test
+    - eval "qmake test.pro ${QMAKE_ARGUMENTS}"
+    - make -j$(nproc)
+
+build-unit-test-linux-release:
+  extends: .build-unit-test-linux
+  needs: [build-linux-release]
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=release"'
+
+build-unit-test-linux-debug:
+  extends: .build-unit-test-linux
+  needs: [build-linux-debug]
+  variables:
+    QMAKE_ARGUMENTS: '"CONFIG+=debug" "CONFIG+=qml_debug"'
+
+
+
+.unit-test:
+  image: seternate/qt5-toolchain:3.0.0
+  stage: unit-test
+  variables:
+    ARTIFACT_DIR: artifact/x86_64/linux
+  before_script:
+    - apt-get update -q
+    - apt-get install -yq --no-install-recommends gcovr
+    - mv ${ARTIFACT_DIR}/lib* /usr/lib/x86_64-linux-gnu/
+    # Needed for headless Qt-App start
+    - export QT_QPA_PLATFORM=offscreen
+  script:
+    - cd ${ARTIFACT_DIR}
+    - ./${UNIT_TEST_EXECUTABLE} --gtest_output="xml:${ARTIFACT_NAME}-report.xml"
+    - cd ${CI_PROJECT_DIR}
+    - gcovr -f project --xml-pretty -o ${ARTIFACT_NAME}-coverage.xml
+    - gcovr -f project
+  after_script:
+    - cp ${ARTIFACT_DIR}/${ARTIFACT_NAME}-report.xml .
+  artifacts:
+    when: always
+    expire_in: 30d
+    paths:
+      - ${ARTIFACT_NAME}-report.xml
+      - ${ARTIFACT_NAME}-coverage.xml
+    name: ${ARTIFACT_NAME}
+    reports:
+      junit: ${ARTIFACT_NAME}-report.xml
+      cobertura: ${ARTIFACT_NAME}-coverage.xml
+  
+unit-test-release:
+  extends: .unit-test
+  needs: [build-unit-test-linux-release, build-linux-release]
+  variables:
+    UNIT_TEST_EXECUTABLE: ltycore-test
+  
+
+unit-test-debug:
+  extends: .unit-test
+  needs: [build-unit-test-linux-debug, build-linux-debug]
+  variables:
+    UNIT_TEST_EXECUTABLE: ltycored-test
+
+eslint-sast:
+  rules:
+    - when: never
+
+.cppcheck:
+  variables:
+    SUPPRESS: '--suppress=useStlAlgorithm:project/src/yaml/YamlNode.cpp'
+
+deploy-windows:
+  extends: .deploy
+  dependencies: 
+    - build-windows-release
+    - build-windows-debug
+
+deploy-linux:
+  extends: .deploy
+  dependencies: 
+    - build-linux-release
+    - build-linux-debug
