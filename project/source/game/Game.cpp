@@ -18,27 +18,28 @@
 
 #include <QFile>
 
-#include "logging/Logger.hpp"
 #include "logging/LogLevel.hpp"
+#include "logging/Logger.hpp"
 
 namespace lanty
 {
 
-Game::Game(QObject *parent) : QObject(parent),
-                              yamlFilePath(""),
-                              name(""),
-                              archiveFileName(""),
-                              clientExecutableRelativeFilePath(""),
-                              clientArgument(""),
-                              clientConnectArgument(""),
-                              serverExecutableRelativeFilePath(""),
-                              serverArgument(""),
-                              version(""),
-                              versionSource(GameVersionSource::NONE),
-                              versionRelativeFilePath(""),
-                              versionFileQuery(""),
-                              coverImage(QPixmapAdapter()),
-                              iconImage(QPixmapAdapter())
+Game::Game(QObject* parent) :
+    QObject(parent),
+    yamlFilePath(""),
+    name(""),
+    archiveFileName(""),
+    clientExecutableRelativeFilePath(""),
+    clientArgument(""),
+    clientConnectArgument(""),
+    serverExecutableRelativeFilePath(""),
+    serverArgument(""),
+    version(""),
+    versionSource(GameVersionSource::NONE),
+    versionRelativeFilePath(""),
+    versionFileQuery(""),
+    coverImage(QPixmapAdapter()),
+    iconImage(QPixmapAdapter())
 {
     QObject::connect(this, SIGNAL(nameChanged(const QString&)), this, SIGNAL(changed(void)));
     QObject::connect(this, SIGNAL(archiveFileNameChanged(const QString&)), this, SIGNAL(changed(void)));
@@ -55,42 +56,41 @@ Game::Game(QObject *parent) : QObject(parent),
     QObject::connect(this, SIGNAL(iconImageChanged(const lanty::QPixmapAdapter&)), this, SIGNAL(changed(void)));
 }
 
-Game::Game(const YamlNode &yamlNode) : QObject(nullptr),
-                                       yamlFilePath(""),
-                                       name(""),
-                                       archiveFileName(""),
-                                       clientExecutableRelativeFilePath(""),
-                                       clientArgument(""),
-                                       clientConnectArgument(""),
-                                       serverExecutableRelativeFilePath(""),
-                                       serverArgument(""),
-                                       version(""),
-                                       versionSource(GameVersionSource::NONE),
-                                       versionRelativeFilePath(""),
-                                       versionFileQuery(""),
-                                       coverImage(QPixmapAdapter()),
-                                       iconImage(QPixmapAdapter())
+Game::Game(const YamlNode& yamlNode) :
+    QObject(nullptr),
+    yamlFilePath(""),
+    name(""),
+    archiveFileName(""),
+    clientExecutableRelativeFilePath(""),
+    clientArgument(""),
+    clientConnectArgument(""),
+    serverExecutableRelativeFilePath(""),
+    serverArgument(""),
+    version(""),
+    versionSource(GameVersionSource::NONE),
+    versionRelativeFilePath(""),
+    versionFileQuery(""),
+    coverImage(QPixmapAdapter()),
+    iconImage(QPixmapAdapter())
 {
     this->loadFromYamlNode(yamlNode);
 }
 
 
-bool Game::operator==(const Game &game) const
+bool Game::operator==(const Game& game) const
 {
-    return this->getName() == game.getName()
-           && this->getArchiveFileName() == game.getArchiveFileName()
+    return this->getName() == game.getName() && this->getArchiveFileName() == game.getArchiveFileName()
            && this->getClientExecutableRelativeFilePath() == game.getClientExecutableRelativeFilePath()
            && this->getClientArgument() == game.getClientArgument()
            && this->getClientConnectArgument() == game.getClientConnectArgument()
            && this->getServerExecutableRelativeFilePath() == game.getServerExecutableRelativeFilePath()
-           && this->getServerArgument() == game.getServerArgument()
-           && this->getVersion() == game.getVersion()
+           && this->getServerArgument() == game.getServerArgument() && this->getVersion() == game.getVersion()
            && this->getVersionSource() == game.getVersionSource()
            && this->getVersionRelativeFilePath() == game.getVersionRelativeFilePath()
            && this->getVersionFileQuery() == game.getVersionFileQuery();
 }
 
-bool Game::operator!=(const Game &game) const
+bool Game::operator!=(const Game& game) const
 {
     return !(*this == game);
 }
@@ -125,7 +125,7 @@ QString Game::getServerExecutableRelativeFilePath(void) const
 {
     QString result;
 
-    if(this->serverExecutableRelativeFilePath == QString(""))
+    if (this->serverExecutableRelativeFilePath == QString(""))
     {
         result = this->clientExecutableRelativeFilePath;
     }
@@ -174,176 +174,135 @@ QPixmapAdapter Game::getIconImage(void) const
 
 bool Game::isVersion(void) const
 {
-    Logger(LogLevel::TRACE) << "isVersion: "
-                            << this->getName()
-                            << ": version ("
-                            << QString(version.isEmpty())
-                            << ") = "
-                            << this->getVersion();
+    Logger(LogLevel::TRACE) << "isVersion: " << this->getName() << ": version (" << QString(version.isEmpty())
+                            << ") = " << this->getVersion();
     return !version.isEmpty() && versionSource != GameVersionSource::NONE;
 }
 
 bool Game::canJoinServerWithCLI(void) const
 {
-    Logger(LogLevel::TRACE) << "canJoinServerWithCLI: "
-                            << this->getName()
-                            << ": Connect Argument = "
-                            << this->getClientConnectArgument();
+    Logger(LogLevel::TRACE) << "canJoinServerWithCLI: " << this->getName()
+                            << ": Connect Argument = " << this->getClientConnectArgument();
     return !(this->clientConnectArgument.isEmpty());
 }
 
 bool Game::canOpenDedicatedServer(void) const
 {
-    Logger(LogLevel::TRACE) << "canOpenDedicatedServer: "
-                            << this->getName()
-                            << ": Serverexecutable = "
-                            << this->getServerExecutableRelativeFilePath();
+    Logger(LogLevel::TRACE) << "canOpenDedicatedServer: " << this->getName()
+                            << ": Serverexecutable = " << this->getServerExecutableRelativeFilePath();
     return !this->serverExecutableRelativeFilePath.isEmpty();
 }
 
 bool Game::canOpenServer(void) const
 {
-    Logger(LogLevel::TRACE) << "canOpenServer: "
-                            << this->getName()
-                            << ": Serverexecutable = "
-                            << this->getServerExecutableRelativeFilePath()
-                            << ": Server Argument = "
-                            << this->getServerArgument();
+    Logger(LogLevel::TRACE) << "canOpenServer: " << this->getName()
+                            << ": Serverexecutable = " << this->getServerExecutableRelativeFilePath()
+                            << ": Server Argument = " << this->getServerArgument();
     return !this->serverExecutableRelativeFilePath.isEmpty() || !this->serverArgument.isEmpty();
 }
 
 
-bool Game::load(const YamlNode &yamlNode)
+bool Game::load(const YamlNode& yamlNode)
 {
     loadFromYamlNode(yamlNode);
     return true;
 }
 
 
-void Game::setName(const QString &name)
+void Game::setName(const QString& name)
 {
     Logger(LogLevel::TRACE) << this->name << " changed to " << name;
     this->name = name;
     emit nameChanged(this->name);
 }
 
-void Game::setArchiveFileName(const QString &archiveFileName)
+void Game::setArchiveFileName(const QString& archiveFileName)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed path from '"
-                            << this->archiveFileName
-                            << "' to '" << archiveFileName
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed path from '" << this->archiveFileName << "' to '"
+                            << archiveFileName << "'.";
     this->archiveFileName = archiveFileName;
     emit archiveFileNameChanged(this->archiveFileName);
 }
 
-void Game::setClientExecutableRelativeFilePath(const QString &clientExecutableRelativeFilePath)
+void Game::setClientExecutableRelativeFilePath(const QString& clientExecutableRelativeFilePath)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed clientexecutable from '"
-                            << this->clientExecutableRelativeFilePath
-                            << "' to '" << clientExecutableRelativeFilePath
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed clientexecutable from '" << this->clientExecutableRelativeFilePath
+                            << "' to '" << clientExecutableRelativeFilePath << "'.";
     this->clientExecutableRelativeFilePath = clientExecutableRelativeFilePath;
     emit clientExecutableChanged(this->clientExecutableRelativeFilePath);
 }
 
-void Game::setClientArgument(const QString &clientArgument)
+void Game::setClientArgument(const QString& clientArgument)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed client argument from '"
-                            << this->clientArgument
-                            << "' to '" << clientArgument
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed client argument from '" << this->clientArgument << "' to '"
+                            << clientArgument << "'.";
     this->clientArgument = clientArgument;
     emit clientArgumentChanged(this->clientArgument);
 }
 
-void Game::setClientConnectArgument(const QString &clientConnectArgument)
+void Game::setClientConnectArgument(const QString& clientConnectArgument)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed client connect argument from '"
-                            << this->clientConnectArgument
-                            << "' to '" << clientConnectArgument
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed client connect argument from '" << this->clientConnectArgument
+                            << "' to '" << clientConnectArgument << "'.";
     this->clientConnectArgument = clientConnectArgument;
     emit clientConnectArgumentChanged(this->clientConnectArgument);
 }
 
-void Game::setServerExecutableRelativeFilePath(const QString &serverExecutableRelativeFilePath)
+void Game::setServerExecutableRelativeFilePath(const QString& serverExecutableRelativeFilePath)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed serverexecutable from '"
-                            << this->serverExecutableRelativeFilePath
-                            << "' to '" << serverExecutableRelativeFilePath
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed serverexecutable from '" << this->serverExecutableRelativeFilePath
+                            << "' to '" << serverExecutableRelativeFilePath << "'.";
     this->serverExecutableRelativeFilePath = serverExecutableRelativeFilePath;
     emit serverExecutableChanged(this->serverExecutableRelativeFilePath);
 }
 
-void Game::setServerArgument(const QString &serverArgument)
+void Game::setServerArgument(const QString& serverArgument)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed server argument from '"
-                            << this->serverArgument
-                            << "' to '" << serverArgument
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed server argument from '" << this->serverArgument << "' to '"
+                            << serverArgument << "'.";
     this->serverArgument = serverArgument;
     emit serverArgumentChanged(this->serverArgument);
 }
 
-void Game::setVersion(const QString &version)
+void Game::setVersion(const QString& version)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed version from '"
-                            << this->version
-                            << "' to '" << version
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed version from '" << this->version << "' to '" << version << "'.";
     this->version = version;
     emit versionChanged(this->version);
 }
 
-void Game::setVersionSource(const GameVersionSource &gameVersionSource)
+void Game::setVersionSource(const GameVersionSource& gameVersionSource)
 {
     this->versionSource = gameVersionSource;
     emit versionSourceChanged(this->versionSource);
 }
 
-void Game::setVersionRelativeFilePath(const QString &versionRelativeFilePath)
+void Game::setVersionRelativeFilePath(const QString& versionRelativeFilePath)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed version file from '"
-                            << this->versionRelativeFilePath
-                            << "' to '" << versionRelativeFilePath
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed version file from '" << this->versionRelativeFilePath << "' to '"
+                            << versionRelativeFilePath << "'.";
     this->versionRelativeFilePath = versionRelativeFilePath;
     emit versionFileChanged(this->versionRelativeFilePath);
 }
 
-void Game::setVersionFileQuery(const QString &versionFileQuery)
+void Game::setVersionFileQuery(const QString& versionFileQuery)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed versionfile query from '"
-                            << this->versionFileQuery
-                            << "' to '" << versionFileQuery
-                            << "'.";
+    Logger(LogLevel::TRACE) << this->name << " changed versionfile query from '" << this->versionFileQuery << "' to '"
+                            << versionFileQuery << "'.";
     this->versionFileQuery = versionFileQuery;
     emit versionFileQueryChanged(this->versionFileQuery);
 }
 
-void Game::setCoverImage(const QPixmapAdapter &coverImage)
+void Game::setCoverImage(const QPixmapAdapter& coverImage)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed coverimage.";
+    Logger(LogLevel::TRACE) << this->name << " changed coverimage.";
     this->coverImage = coverImage;
     emit coverImageChanged(this->coverImage);
 }
 
-void Game::setIconImage(const QPixmapAdapter &iconImage)
+void Game::setIconImage(const QPixmapAdapter& iconImage)
 {
-    Logger(LogLevel::TRACE) << this->name
-                            << " changed iconimage.";
+    Logger(LogLevel::TRACE) << this->name << " changed iconimage.";
     this->iconImage = iconImage;
     emit iconImageChanged(this->iconImage);
 }
@@ -361,7 +320,7 @@ bool Game::save(void)
     return this->save(this->yamlFilePath);
 }
 
-bool Game::save(const QString &yamlFilePath)
+bool Game::save(const QString& yamlFilePath)
 {
     YamlNode rootNode(yamlFilePath, false);
     this->yamlFilePath = yamlFilePath;
@@ -372,7 +331,7 @@ bool Game::save(const QString &yamlFilePath)
 }
 
 
-void Game::loadFromYamlNode(const YamlNode &yamlNode)
+void Game::loadFromYamlNode(const YamlNode& yamlNode)
 {
     const YamlNode* gameNode = yamlNode.getNode("game");
 
@@ -381,7 +340,7 @@ void Game::loadFromYamlNode(const YamlNode &yamlNode)
     Logger() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
 }
 
-void Game::loadGameDataFromGameNode(const YamlNode &gameNode)
+void Game::loadGameDataFromGameNode(const YamlNode& gameNode)
 {
     this->name = gameNode.getQStringFromMap("name");
     Logger() << "Loaded gamename '" << this->name << "' from YAML-file '" << gameNode.getFileName() << "'.";
@@ -389,7 +348,7 @@ void Game::loadGameDataFromGameNode(const YamlNode &gameNode)
     Logger() << "Loaded gamearchive '" << this->archiveFileName << "' from YAML-file '" << gameNode.getFileName() << "'.";
 
     const YamlNode* versionNode = gameNode.getNode("version");
-    if(versionNode != nullptr)
+    if (versionNode != nullptr)
     {
         this->loadVersionDataFromGameNode(*versionNode);
         Logger() << "Loaded gameversion info from YAML-file '" << gameNode.getFileName() << "'.";
@@ -404,7 +363,7 @@ void Game::loadGameDataFromGameNode(const YamlNode &gameNode)
     Logger() << "Loaded gameclient info from YAML-file '" << gameNode.getFileName() << "'.";
 
     const YamlNode* serverNode = gameNode.getNode("server");
-    if(serverNode != nullptr)
+    if (serverNode != nullptr)
     {
         this->loadServerDataFromGameNode(*serverNode);
         Logger() << "Loaded gameserver info from YAML-file '" << gameNode.getFileName() << "'.";
@@ -415,16 +374,16 @@ void Game::loadGameDataFromGameNode(const YamlNode &gameNode)
     }
 }
 
-void Game::loadVersionDataFromGameNode(const YamlNode &versionNode)
+void Game::loadVersionDataFromGameNode(const YamlNode& versionNode)
 {
     this->version = versionNode.getQStringFromMap("info");
     Logger() << "Loaded gameversion-info '" << this->version << "' from YAML-file '" << versionNode.getFileName() << "'.";
     QString versionFormat = versionNode.getQStringFromMap("format").toLower();
-    if(versionFormat == "file")
+    if (versionFormat == "file")
     {
         this->versionSource = GameVersionSource::FILE;
     }
-    else if(versionFormat == "executable")
+    else if (versionFormat == "executable")
     {
         this->versionSource = GameVersionSource::EXECUTABLE;
     }
@@ -433,91 +392,70 @@ void Game::loadVersionDataFromGameNode(const YamlNode &versionNode)
         this->versionSource = GameVersionSource::NONE;
     }
     this->versionRelativeFilePath = versionNode.getQStringFromMap("file");
-    Logger() << "Loaded gameversion-file '"
-             << this->versionRelativeFilePath
-             << "' from YAML-file '"
-             << versionNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameversion-file '" << this->versionRelativeFilePath << "' from YAML-file '"
+             << versionNode.getFileName() << "'.";
     this->versionFileQuery = versionNode.getQStringFromMap("query");
-    Logger() << "Loaded gameversion-query '"
-             << this->versionFileQuery
-             << "' from YAML-file '"
-             << versionNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameversion-query '" << this->versionFileQuery << "' from YAML-file '"
+             << versionNode.getFileName() << "'.";
 }
 
-void Game::loadClientDataFromGameNode(const YamlNode &clientNode)
+void Game::loadClientDataFromGameNode(const YamlNode& clientNode)
 {
     this->clientExecutableRelativeFilePath = clientNode.getQStringFromMap("executable");
-    Logger() << "Loaded gameclient-executable '"
-             << this->clientExecutableRelativeFilePath
-             << "' from YAML-file '"
-             << clientNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameclient-executable '" << this->clientExecutableRelativeFilePath << "' from YAML-file '"
+             << clientNode.getFileName() << "'.";
     this->clientArgument = clientNode.getQStringFromMap("argument");
-    Logger() << "Loaded gameclient-argument '"
-             << this->clientArgument
-             << "' from YAML-file '"
-             << clientNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameclient-argument '" << this->clientArgument << "' from YAML-file '"
+             << clientNode.getFileName() << "'.";
     this->clientConnectArgument = clientNode.getQStringFromMap("connect");
-    Logger() << "Loaded gameclient-connect '"
-             << this->clientConnectArgument
-             << "' from YAML-file '"
-             << clientNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameclient-connect '" << this->clientConnectArgument << "' from YAML-file '"
+             << clientNode.getFileName() << "'.";
 }
 
-void Game::loadServerDataFromGameNode(const YamlNode &serverNode)
+void Game::loadServerDataFromGameNode(const YamlNode& serverNode)
 {
     this->serverExecutableRelativeFilePath = serverNode.getQStringFromMap("executable");
-    Logger() << "Loaded gameclient-executable '"
-             << this->serverExecutableRelativeFilePath
-             << "' from YAML-file '"
-             << serverNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameclient-executable '" << this->serverExecutableRelativeFilePath << "' from YAML-file '"
+             << serverNode.getFileName() << "'.";
     this->serverArgument = serverNode.getQStringFromMap("argument");
-    Logger() << "Loaded gameclient-argument '"
-             << this->serverArgument
-             << "' from YAML-file '"
-             << serverNode.getFileName()
-             << "'.";
+    Logger() << "Loaded gameclient-argument '" << this->serverArgument << "' from YAML-file '"
+             << serverNode.getFileName() << "'.";
 }
 
 
-void Game::saveToYamlNode(YamlNode &yamlNode)
+void Game::saveToYamlNode(YamlNode& yamlNode)
 {
     YamlNode* gamenode = yamlNode.setNode("game");
     this->saveGameDataToGameNode(*gamenode);
 }
 
-void Game::saveGameDataToGameNode(YamlNode &gameNode)
+void Game::saveGameDataToGameNode(YamlNode& gameNode)
 {
     gameNode.setString("name", this->name);
     gameNode.setString("archive", this->archiveFileName);
 
-    YamlNode *versionNode = gameNode.setNode("version");
+    YamlNode* versionNode = gameNode.setNode("version");
     this->saveVersionDataToGameNode(*versionNode);
 
-    YamlNode *clientNode = gameNode.setNode("client");
+    YamlNode* clientNode = gameNode.setNode("client");
     this->saveClientDataToGameNode(*clientNode);
 
-    YamlNode *serverNode = gameNode.setNode("server");
+    YamlNode* serverNode = gameNode.setNode("server");
     this->saveServerDataToGameNode(*serverNode);
 }
 
-void Game::saveVersionDataToGameNode(YamlNode &versionNode)
+void Game::saveVersionDataToGameNode(YamlNode& versionNode)
 {
-    if(this->version.isEmpty() == false)
+    if (this->version.isEmpty() == false)
     {
         versionNode.setString("info", this->version);
     }
 
-    if(this->versionSource == GameVersionSource::EXECUTABLE)
+    if (this->versionSource == GameVersionSource::EXECUTABLE)
     {
         versionNode.setString("format", "executable");
     }
-    else if(this->versionSource == GameVersionSource::FILE)
+    else if (this->versionSource == GameVersionSource::FILE)
     {
         versionNode.setString("format", "file");
     }
@@ -526,40 +464,40 @@ void Game::saveVersionDataToGameNode(YamlNode &versionNode)
         versionNode.setString("format", "none");
     }
 
-    if(this->versionRelativeFilePath.isEmpty() == false)
+    if (this->versionRelativeFilePath.isEmpty() == false)
     {
         versionNode.setString("file", this->versionRelativeFilePath);
     }
 
-    if(this->versionFileQuery.isEmpty() == false)
+    if (this->versionFileQuery.isEmpty() == false)
     {
         versionNode.setString("query", this->versionFileQuery);
     }
 }
 
-void Game::saveClientDataToGameNode(YamlNode &clientNode)
+void Game::saveClientDataToGameNode(YamlNode& clientNode)
 {
     clientNode.setString("executable", this->clientExecutableRelativeFilePath);
 
-    if(this->clientArgument.isEmpty() == false)
+    if (this->clientArgument.isEmpty() == false)
     {
         clientNode.setString("argument", this->clientArgument);
     }
 
-    if(this->clientConnectArgument.isEmpty() == false)
+    if (this->clientConnectArgument.isEmpty() == false)
     {
         clientNode.setString("connect", this->clientConnectArgument);
     }
 }
 
-void Game::saveServerDataToGameNode(YamlNode &serverNode)
+void Game::saveServerDataToGameNode(YamlNode& serverNode)
 {
-    if(this->serverExecutableRelativeFilePath.isEmpty() == false)
+    if (this->serverExecutableRelativeFilePath.isEmpty() == false)
     {
         serverNode.setString("executable", this->serverExecutableRelativeFilePath);
     }
 
-    if(this->serverArgument.isEmpty() == false)
+    if (this->serverArgument.isEmpty() == false)
     {
         serverNode.setString("argument", this->serverArgument);
     }

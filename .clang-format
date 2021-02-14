@@ -65,7 +65,7 @@ IndentGotoLabels: 'true'
 IndentPPDirectives: BeforeHash
 IndentWidth: '4'
 IndentWrappedFunctionNames: 'true'
-KeepEmptyLinesAtTheStartOfBlocks: 'false'
+KeepEmptyLinesAtTheStartOfBlocks: 'true'
 Language: Cpp
 MaxEmptyLinesToKeep: '2'
 NamespaceIndentation: None
@@ -77,7 +77,7 @@ PenaltyBreakFirstLessLess: '50'
 #PenaltyBreakTemplateDeclaration: '0' 
 PenaltyExcessCharacter: '5'
 PenaltyReturnTypeOnItsOwnLine: '50'
-PointerAlignment: Right
+PointerAlignment: Left
 ReflowComments: 'true'
 SortIncludes: 'true'
 SortUsingDeclarations: 'true'

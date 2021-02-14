@@ -22,6 +22,7 @@ stages:
   - codequality
   - static-analysis
   - unit-test
+  - documentation
   - deploy
 
 
@@ -33,6 +34,7 @@ include:
       - '/sast.gitlab-ci.yml'
       - '/codequality.gitlab-ci.yml'
       - '/deploy.gitlab-ci.yml'
+      - 'documentation.gitlab-ci.yml'
 
 
 
@@ -226,7 +228,7 @@ eslint-sast:
 
 .cppcheck:
   variables:
-    SUPPRESS: '--suppress=useStlAlgorithm:project/src/yaml/YamlNode.cpp'
+    SUPPRESS: '--suppress=useStlAlgorithm:project/source/yaml/YamlNode.cpp'
 
 deploy-windows:
   extends: .deploy

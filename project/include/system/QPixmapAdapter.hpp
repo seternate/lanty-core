@@ -17,10 +17,10 @@
 #ifndef SYSTEM_QPIXMAPADAPTER_HPP
 #define SYSTEM_QPIXMAPADAPTER_HPP
 
-#include <Qt>
 #include <QPixmap>
 #include <QSize>
 #include <QString>
+#include <Qt>
 
 #include "core/ltycore_global.hpp"
 
@@ -31,14 +31,10 @@ class LTYCORE_EXPORT QPixmapAdapter
 {
 public:
     QPixmapAdapter(void) = default;
-    QPixmapAdapter(const QSize &size);
-    QPixmapAdapter(const QString &fileName,
-                   const char *format = nullptr,
-                   Qt::ImageConversionFlags flags = Qt::AutoColor);
+    QPixmapAdapter(const QSize& size);
+    QPixmapAdapter(const QString& fileName, const char* format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
 
-    virtual bool load(const QString &fileName,
-                      const char *format = nullptr,
-                      Qt::ImageConversionFlags flags = Qt::AutoColor);
+    virtual bool load(const QString& fileName, const char* format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
     virtual bool isNull(void) const;
     virtual QSize size(void) const;
     QPixmap& getQPixmap(void);

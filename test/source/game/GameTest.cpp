@@ -25,9 +25,9 @@
 #include "helper/QStringPrintHelper.hpp"
 #include "mock/MockYamlNode.hpp"
 
-using ::testing::Return;
 using ::testing::A;
 using ::testing::NiceMock;
+using ::testing::Return;
 
 TEST(GameTest, EqualOperator)
 {

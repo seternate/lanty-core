@@ -21,32 +21,34 @@
 namespace lanty
 {
 
-GamelistFactory::GamelistFactory() : yamlNode(std::make_shared<YamlNode>()),
-                                        gameHelper(std::make_shared<GameHelper>()),
-                                        pixmap(std::make_shared<QPixmapAdapter>()) { }
+GamelistFactory::GamelistFactory() :
+    yamlNode(std::make_shared<YamlNode>()),
+    gameHelper(std::make_shared<GameHelper>()),
+    pixmap(std::make_shared<QPixmapAdapter>())
+{ }
 
 
-void GamelistFactory::setYamlNodeDependency(YamlNode *yamlNode)
+void GamelistFactory::setYamlNodeDependency(YamlNode* yamlNode)
 {
-    if(yamlNode != nullptr)
+    if (yamlNode != nullptr)
     {
         this->yamlNode.reset(yamlNode);
         Logger(LogLevel::TRACE) << "Set yamlNode dependency for gamelistfactory.";
     }
 }
 
-void GamelistFactory::setGameHelperDependency(GameHelper *gameHelper)
+void GamelistFactory::setGameHelperDependency(GameHelper* gameHelper)
 {
-    if(gameHelper != nullptr)
+    if (gameHelper != nullptr)
     {
         this->gameHelper.reset(gameHelper);
         Logger(LogLevel::TRACE) << "Set gameHelper dependency for gamelistfactory.";
     }
 }
 
-void GamelistFactory::setQPixmapDependency(QPixmapAdapter *qpixmap)
+void GamelistFactory::setQPixmapDependency(QPixmapAdapter* qpixmap)
 {
-    if(qpixmap != nullptr)
+    if (qpixmap != nullptr)
     {
         this->pixmap.reset(qpixmap);
         Logger(LogLevel::TRACE) << "Set qpixmap dependency for gamelistfactory.";

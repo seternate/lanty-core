@@ -33,9 +33,9 @@ public:
     Logger(const LogLevel loglevel = LogLevel::DEBUG);
     virtual ~Logger(void) = default;
 
-    const Logger& operator<<(const QString &message) const;
+    const Logger& operator<<(const QString& message) const;
 
-    virtual void log(const QString &message) const;
+    virtual void log(const QString& message) const;
 
 private:
     static LogLevel GLOBAL_LOG_LEVEL;

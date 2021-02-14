@@ -16,9 +16,9 @@
 
 #include "helper/GameHelper.hpp"
 
-#include <cstdint>
 #include <QRegularExpression>
 #include <QStringList>
+#include <cstdint>
 
 #include "logging/Logger.hpp"
 #include "system/FileExtension.hpp"
@@ -29,30 +29,30 @@ namespace lanty
 const QString GameHelper::YAML_TEMPLATE_FILE("template.yaml");
 
 
-QString GameHelper::getCoverImagePathFromDirectory(const Game &game, const QDirAdapter &gameImageFileDirectory)
+QString GameHelper::getCoverImagePathFromDirectory(const Game& game, const QDirAdapter& gameImageFileDirectory)
 {
     return getImagePathFromDirectory(game, gameImageFileDirectory);
 }
 
-QString GameHelper::getIconImagePathFromDirectory(const Game &game, const QDirAdapter &gameImageFileDirectory)
+QString GameHelper::getIconImagePathFromDirectory(const Game& game, const QDirAdapter& gameImageFileDirectory)
 {
     return getImagePathFromDirectory(game, gameImageFileDirectory, QString("_icon"));
 }
 
-QString GameHelper::formatNameToCoverImageFileName(const Game &game)
+QString GameHelper::formatNameToCoverImageFileName(const Game& game)
 {
     return formatNameToImageFileName(game);
 }
 
-QString GameHelper::formatNameToIconImageFileName(const Game &game)
+QString GameHelper::formatNameToIconImageFileName(const Game& game)
 {
     return formatNameToImageFileName(game, QString("_icon"));
 }
 
 
-QString GameHelper::getImagePathFromDirectory(const Game &game,
-                                              const QDirAdapter &gameImageFileDirectory,
-                                              const QString &imageFileNameSuffix)
+QString GameHelper::getImagePathFromDirectory(const Game& game,
+                                              const QDirAdapter& gameImageFileDirectory,
+                                              const QString& imageFileNameSuffix)
 {
     QStringList gameImageExtensionFilter;
     QStringList gameImageFiles;
@@ -61,26 +61,20 @@ QString GameHelper::getImagePathFromDirectory(const Game &game,
     QString gameNameFormatedToGameImageFileName("");
     QString gameImageAbsoluteFilePath("");
 
-    gameImageExtensionFilter << FileExtension::PNG
-                             << FileExtension::JPG
-                             << FileExtension::JPEG
-                             << FileExtension::BMP;
+    gameImageExtensionFilter << FileExtension::PNG << FileExtension::JPG << FileExtension::JPEG << FileExtension::BMP;
     gameImageFiles = gameImageFileDirectory.entryList(gameImageExtensionFilter, QDir::Files);
 
-    if(gameImageFiles.isEmpty() == false)
+    if (gameImageFiles.isEmpty() == false)
     {
-        Logger() << "Found "
-                 << QString::number(gameImageFiles.size())
-                 << " game images at '"
-                 << gameImageFileDirectory.absolutePath()
-                 << "'.";
-        for(int32_t i = 0; i < gameImageFiles.size(); i++)
+        Logger() << "Found " << QString::number(gameImageFiles.size()) << " game images at '"
+                 << gameImageFileDirectory.absolutePath() << "'.";
+        for (int32_t i = 0; i < gameImageFiles.size(); i++)
         {
             gameImageFile = gameImageFiles.at(i);
             gameImageFileNameWithoutExtension = gameImageFile.split(".")[0];
             gameNameFormatedToGameImageFileName = formatNameToImageFileName(game, imageFileNameSuffix);
 
-            if(gameImageFileNameWithoutExtension == gameNameFormatedToGameImageFileName)
+            if (gameImageFileNameWithoutExtension == gameNameFormatedToGameImageFileName)
             {
                 gameImageAbsoluteFilePath = gameImageFileDirectory.absoluteFilePath(gameImageFile);
                 break;
@@ -89,16 +83,14 @@ QString GameHelper::getImagePathFromDirectory(const Game &game,
     }
     else
     {
-        Logger() << "Can not return image path from game '"
-                 << game.getName()
-                 << "'. No image file at directory '"
+        Logger() << "Can not return image path from game '" << game.getName() << "'. No image file at directory '"
                  << gameImageFileDirectory.absolutePath() << "'.";
     }
 
     return gameImageAbsoluteFilePath;
 }
 
-QString GameHelper::formatNameToImageFileName(const Game &game, const QString &imageFileNameSuffix)
+QString GameHelper::formatNameToImageFileName(const Game& game, const QString& imageFileNameSuffix)
 {
     QString name("");
     QString lowerName("");

@@ -17,9 +17,9 @@
 #ifndef GAME_GAMELIST_HPP
 #define GAME_GAMELIST_HPP
 
-#include <memory>
 #include <QAbstractListModel>
 #include <QVector>
+#include <memory>
 
 #include "core/ltycore_global.hpp"
 #include "game/Game.hpp"
@@ -42,12 +42,12 @@ public:
 
     virtual const Game& at(const qint32 index) const;
     virtual const Game& append(Game* game);
-    virtual void load(Gamelist *gamelist);
+    virtual void load(Gamelist* gamelist);
     virtual void remove(const Game* game);
     virtual quint32 size(void) const;
 
-    int rowCount(const QModelIndex &parent) const override;
-    QVariant data(const QModelIndex &index, int role) const override;
+    int rowCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
 
 private:
     QVector<std::shared_ptr<Game>> list;
