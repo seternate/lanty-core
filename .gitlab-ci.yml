@@ -29,7 +29,7 @@ stages:
 
 include:
   - project: 'template/ci-cd'
-    ref: 2-add-new-templates
+    ref: 1.0.0
     file: 
       - '/sast.gitlab-ci.yml'
       - '/codequality.gitlab-ci.yml'

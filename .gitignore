@@ -14,13 +14,11 @@
 !/project/include/core/
 !/project/include/game/
 !/project/include/helper/
-!/project/include/logging/
 !/project/include/system/
 !/project/include/yaml/
 !/project/source/
 !/project/source/game/
 !/project/source/helper/
-!/project/source/logging/
 !/project/source/system/
 !/project/source/yaml/
 !/resource/
