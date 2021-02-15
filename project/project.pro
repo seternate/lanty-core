@@ -32,7 +32,6 @@ SOURCES += \
     $$PWD/source/game/Gamelist.cpp \
     $$PWD/source/game/GamelistFactory.cpp \
     $$PWD/source/helper/GameHelper.cpp \
-    $$PWD/source/logging/Logger.cpp \
     $$PWD/source/system/FileExtension.cpp \
     $$PWD/source/system/QDirAdapter.cpp \
     $$PWD/source/system/QPixmapAdapter.cpp \
@@ -47,8 +46,6 @@ HEADERS += \
     $$PWD/include/game/GamelistFactory.hpp \
     $$PWD/include/game/GameVersionSource.hpp \
     $$PWD/include/helper/GameHelper.hpp \
-    $$PWD/include/logging/Logger.hpp \
-    $$PWD/include/logging/LogLevel.hpp \
     $$PWD/include/system/FileExtension.hpp \
     $$PWD/include/system/QDirAdapter.hpp \
     $$PWD/include/system/QPixmapAdapter.hpp \

@@ -16,6 +16,8 @@
 
 #include "game/GamelistFactory.hpp"
 
+#include <QDebug>
+
 #include "game/Game.hpp"
 
 namespace lanty
@@ -33,7 +35,7 @@ void GamelistFactory::setYamlNodeDependency(YamlNode* yamlNode)
     if (yamlNode != nullptr)
     {
         this->yamlNode.reset(yamlNode);
-        Logger(LogLevel::TRACE) << "Set yamlNode dependency for gamelistfactory.";
+        qDebug() << "Set yamlNode dependency for gamelistfactory.";
     }
 }
 
@@ -42,7 +44,7 @@ void GamelistFactory::setGameHelperDependency(GameHelper* gameHelper)
     if (gameHelper != nullptr)
     {
         this->gameHelper.reset(gameHelper);
-        Logger(LogLevel::TRACE) << "Set gameHelper dependency for gamelistfactory.";
+        qDebug() << "Set gameHelper dependency for gamelistfactory.";
     }
 }
 
@@ -51,7 +53,7 @@ void GamelistFactory::setQPixmapDependency(QPixmapAdapter* qpixmap)
     if (qpixmap != nullptr)
     {
         this->pixmap.reset(qpixmap);
-        Logger(LogLevel::TRACE) << "Set qpixmap dependency for gamelistfactory.";
+        qDebug() << "Set qpixmap dependency for gamelistfactory.";
     }
 }
 
@@ -60,7 +62,7 @@ void GamelistFactory::resetDependencies(void)
     this->yamlNode.reset(new YamlNode());
     this->gameHelper.reset(new GameHelper());
     this->pixmap.reset(new QPixmapAdapter());
-    Logger(LogLevel::DEBUG) << "Reseted gamelistfactory dependencies.";
+    qDebug() << "Reseted gamelistfactory dependencies.";
 }
 
 } /* namespace lanty */

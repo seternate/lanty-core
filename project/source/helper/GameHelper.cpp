@@ -16,11 +16,11 @@
 
 #include "helper/GameHelper.hpp"
 
+#include <QDebug>
 #include <QRegularExpression>
 #include <QStringList>
 #include <cstdint>
 
-#include "logging/Logger.hpp"
 #include "system/FileExtension.hpp"
 
 namespace lanty
@@ -66,7 +66,7 @@ QString GameHelper::getImagePathFromDirectory(const Game& game,
 
     if (gameImageFiles.isEmpty() == false)
     {
-        Logger() << "Found " << QString::number(gameImageFiles.size()) << " game images at '"
+        qDebug() << "Found " << QString::number(gameImageFiles.size()) << " game images at '"
                  << gameImageFileDirectory.absolutePath() << "'.";
         for (int32_t i = 0; i < gameImageFiles.size(); i++)
         {
@@ -83,7 +83,7 @@ QString GameHelper::getImagePathFromDirectory(const Game& game,
     }
     else
     {
-        Logger() << "Can not return image path from game '" << game.getName() << "'. No image file at directory '"
+        qDebug() << "Can not return image path from game '" << game.getName() << "'. No image file at directory '"
                  << gameImageFileDirectory.absolutePath() << "'.";
     }
 
