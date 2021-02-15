@@ -23,21 +23,22 @@
 #include "mock/MockGame.hpp"
 #include "mock/MockQDir.hpp"
 
-using ::testing::Return;
-using ::testing::Exactly;
 using ::testing::_;
+using ::testing::Exactly;
+using ::testing::Return;
 
 class GameHelperTest : public ::testing::Test
 {
 public:
-    GameHelperTest(void) : gamehelper(),
-                           cod2(),
-                           wc3(),
-                           cs16(),
-                           cod4(),
-                           qdir(),
-                           entrylist(),
-                           absoluteDirPath("C:/Users/Program/lanty/")
+    GameHelperTest(void) :
+        gamehelper(),
+        cod2(),
+        wc3(),
+        cs16(),
+        cod4(),
+        qdir(),
+        entrylist(),
+        absoluteDirPath("C:/Users/Program/lanty/")
     {
         entrylist.append("call_of_duty_2.png");
         entrylist.append("call_of_duty_2_icon.png");

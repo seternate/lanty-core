@@ -14,35 +14,12 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "system/QPixmapAdapter.hpp"
+#include <gtest/gtest.h>
+#include <QGuiApplication>
 
-namespace lanty
+int main(int argc, char* argv[])
 {
-
-QPixmapAdapter::QPixmapAdapter(const QString &fileName,
-                               const char *format,
-                               Qt::ImageConversionFlags flags) : pixmap(fileName, format, flags) { }
-
-QPixmapAdapter::QPixmapAdapter(const QSize &size) : pixmap(size) { }
-
-bool QPixmapAdapter::load(const QString &fileName, const char *format, Qt::ImageConversionFlags flags)
-{
-    return pixmap.load(fileName, format, flags);
+    QGuiApplication app(argc, argv);
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
-
-bool QPixmapAdapter::isNull(void) const
-{
-    return pixmap.isNull();
-}
-
-QSize QPixmapAdapter::size(void) const
-{
-    return pixmap.size();
-}
-
-QPixmap& QPixmapAdapter::getQPixmap(void)
-{
-    return pixmap;
-}
-
-} /*namespace lanty */

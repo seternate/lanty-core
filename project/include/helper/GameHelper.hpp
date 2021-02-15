@@ -34,16 +34,16 @@ public:
     GameHelper(void) = default;
     virtual ~GameHelper(void) = default;
 
-    virtual QString getCoverImagePathFromDirectory(const Game &game, const QDirAdapter &gameImageFileDirectory);
-    virtual QString getIconImagePathFromDirectory(const Game &game, const QDirAdapter &gameImageFileDirectory);
-    virtual QString formatNameToCoverImageFileName(const Game &game);
-    virtual QString formatNameToIconImageFileName(const Game &game);
+    virtual QString getCoverImagePathFromDirectory(const Game& game, const QDirAdapter& gameImageFileDirectory);
+    virtual QString getIconImagePathFromDirectory(const Game& game, const QDirAdapter& gameImageFileDirectory);
+    virtual QString formatNameToCoverImageFileName(const Game& game);
+    virtual QString formatNameToIconImageFileName(const Game& game);
 
 protected:
-    QString getImagePathFromDirectory(const Game &game,
-                                      const QDirAdapter &gameImageFileDirectory,
-                                      const QString &imageFileNameSuffix = QString(""));
-    QString formatNameToImageFileName(const Game &game, const QString &imageFileNameSuffix = QString(""));
+    QString getImagePathFromDirectory(const Game& game,
+                                      const QDirAdapter& gameImageFileDirectory,
+                                      const QString& imageFileNameSuffix = QString(""));
+    QString formatNameToImageFileName(const Game& game, const QString& imageFileNameSuffix = QString(""));
 };
 
 } /* namespace lanty */

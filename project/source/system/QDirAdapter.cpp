@@ -14,18 +14,35 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "system/FileExtension.hpp"
+#include "system/QDirAdapter.hpp"
 
 namespace lanty
 {
 
-const QString FileExtension::YAML = "*.yaml";
-const QString FileExtension::YML = "*.yml";
-const QString FileExtension::PNG = "*.png";
-const QString FileExtension::JPG = "*.jpg";
-const QString FileExtension::JPEG = "*.jpeg";
-const QString FileExtension::BMP = "*.bmp";
-const QString FileExtension::ZIP = "*.zip";
+QDirAdapter::QDirAdapter(const QString& path) : qDir(path) { }
+
+QDirAdapter::QDirAdapter(const QString& path, const QString& nameFilter, QDir::SortFlags sort, QDir::Filters filters) :
+    qDir(path, nameFilter, sort, filters)
+{ }
+
+QStringList QDirAdapter::entryList(const QStringList& nameFilters, QDir::Filters filters, QDir::SortFlags sort) const
+{
+    return this->qDir.entryList(nameFilters, filters, sort);
+}
+
+bool QDirAdapter::isEmpty(QDir::Filters filters) const
+{
+    return this->qDir.isEmpty(filters);
+}
+
+QString QDirAdapter::absoluteFilePath(const QString& fileName) const
+{
+    return this->qDir.absoluteFilePath(fileName);
+}
+
+QString QDirAdapter::absolutePath(void) const
+{
+    return qDir.absolutePath();
+}
 
 } /* namespace lanty */
-

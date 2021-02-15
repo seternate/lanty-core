@@ -26,14 +26,14 @@ class MockGameHelper : public lanty::GameHelper
 public:
     MOCK_METHOD(QString,
                 getCoverImagePathFromDirectory,
-                (const lanty::Game &game, const lanty::QDirAdapter &gameImageFileDirectory),
+                (const lanty::Game& game, const lanty::QDirAdapter& gameImageFileDirectory),
                 (override));
     MOCK_METHOD(QString,
                 getIconImagePathFromDirectory,
-                (const lanty::Game &game, const lanty::QDirAdapter &gameImageFileDirectory),
+                (const lanty::Game& game, const lanty::QDirAdapter& gameImageFileDirectory),
                 (override));
-    MOCK_METHOD(QString, formatNameToCoverImageFileName, (const lanty::Game &game), (override));
-    MOCK_METHOD(QString, formatNameToIconImageFileName, (const lanty::Game &game), (override));
+    MOCK_METHOD(QString, formatNameToCoverImageFileName, (const lanty::Game& game), (override));
+    MOCK_METHOD(QString, formatNameToIconImageFileName, (const lanty::Game& game), (override));
 };
 
 #endif /* MOCK_MOCKGAMEHELPER_HPP */

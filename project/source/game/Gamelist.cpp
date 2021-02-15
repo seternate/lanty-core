@@ -27,7 +27,7 @@ Game& Gamelist::operator[](const qint32 index)
     return *list[index];
 }
 
-const Game &Gamelist::operator[](const qint32 index) const
+const Game& Gamelist::operator[](const qint32 index) const
 {
     return *list[index];
 }
@@ -38,7 +38,7 @@ const Game& Gamelist::at(const qint32 index) const
     return *list.at(index);
 }
 
-const Game& Gamelist::append(Game *game)
+const Game& Gamelist::append(Game* game)
 {
     std::shared_ptr<Game> newGame(game);
     beginInsertRows(QModelIndex(), this->size(), this->size());
@@ -47,13 +47,13 @@ const Game& Gamelist::append(Game *game)
     return *newGame;
 }
 
-void Gamelist::load(Gamelist *gamelist)
+void Gamelist::load(Gamelist* gamelist)
 {
     beginResetModel();
     this->list.clear();
     endResetModel();
 
-    for(std::shared_ptr<Game> game : gamelist->list)
+    for (std::shared_ptr<Game> game : gamelist->list)
     {
         beginInsertRows(QModelIndex(), this->size(), this->size());
         this->list.append(game);
@@ -64,12 +64,12 @@ void Gamelist::load(Gamelist *gamelist)
     }
 }
 
-void Gamelist::remove(const Game *game)
+void Gamelist::remove(const Game* game)
 {
-    for(qint32 i = 0; i < this->list.size(); i++)
+    for (qint32 i = 0; i < this->list.size(); i++)
     {
-        Game *listgame = this->list.at(i).get();
-        if(game == listgame)
+        Game* listgame = this->list.at(i).get();
+        if (game == listgame)
         {
             beginRemoveRows(QModelIndex(), i, i);
             this->list.remove(i);
@@ -84,23 +84,23 @@ quint32 Gamelist::size(void) const
 }
 
 
-int Gamelist::rowCount(const QModelIndex &parent) const
+int Gamelist::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return this->list.size();
 }
 
-QVariant Gamelist::data(const QModelIndex &index, int role) const
+QVariant Gamelist::data(const QModelIndex& index, int role) const
 {
-    if(!index.isValid())
+    if (!index.isValid())
     {
         return QVariant();
     }
-    if(index.row() >= this->list.size())
+    if (index.row() >= this->list.size())
     {
         return QVariant();
     }
-    if(role == Qt::DisplayRole)
+    if (role == Qt::DisplayRole)
     {
         QString gameName = this->list.at(index.row())->getName();
         return QVariant::fromValue(gameName);

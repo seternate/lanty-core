@@ -41,23 +41,23 @@ public:
     MOCK_METHOD(bool, canJoinServerWithCLI, (), (const, override));
     MOCK_METHOD(bool, canOpenDedicatedServer, (), (const, override));
     MOCK_METHOD(bool, canOpenServer, (), (const, override));
-    MOCK_METHOD(bool, load, (const lanty::YamlNode &yamlNode), (override));
+    MOCK_METHOD(bool, load, (const lanty::YamlNode& yamlNode), (override));
 
 
 public slots:
-    MOCK_METHOD(void, setName, (const QString &name), (override));
-    MOCK_METHOD(void, setArchiveFileName, (const QString &archiveAbsoluteFilePath), (override));
-    MOCK_METHOD(void, setClientExecutableRelativeFilePath, (const QString &clientExecutableRelativeFilePath), (override));
-    MOCK_METHOD(void, setClientArgument, (const QString &clientArgument), (override));
-    MOCK_METHOD(void, setClientConnectArgument, (const QString &clientConnectArgument), (override));
-    MOCK_METHOD(void, setServerExecutableRelativeFilePath, (const QString &serverExecutableRelativeFilePath), (override));
-    MOCK_METHOD(void, setServerArgument, (const QString &serverArgument), (override));
-    MOCK_METHOD(void, setVersion, (const QString &version), (override));
-    MOCK_METHOD(void, setVersionSource, (const lanty::GameVersionSource &gameVersionSource), (override));
-    MOCK_METHOD(void, setVersionRelativeFilePath, (const QString &versionRelativeFilePath), (override));
-    MOCK_METHOD(void, setVersionFileQuery, (const QString &versionFileQuery), (override));
-    MOCK_METHOD(void, setCoverImage, (const lanty::QPixmapAdapter &coverImage), (override));
-    MOCK_METHOD(void, setIconImage, (const lanty::QPixmapAdapter &iconImage), (override));
+    MOCK_METHOD(void, setName, (const QString& name), (override));
+    MOCK_METHOD(void, setArchiveFileName, (const QString& archiveAbsoluteFilePath), (override));
+    MOCK_METHOD(void, setClientExecutableRelativeFilePath, (const QString& clientExecutableRelativeFilePath), (override));
+    MOCK_METHOD(void, setClientArgument, (const QString& clientArgument), (override));
+    MOCK_METHOD(void, setClientConnectArgument, (const QString& clientConnectArgument), (override));
+    MOCK_METHOD(void, setServerExecutableRelativeFilePath, (const QString& serverExecutableRelativeFilePath), (override));
+    MOCK_METHOD(void, setServerArgument, (const QString& serverArgument), (override));
+    MOCK_METHOD(void, setVersion, (const QString& version), (override));
+    MOCK_METHOD(void, setVersionSource, (const lanty::GameVersionSource& gameVersionSource), (override));
+    MOCK_METHOD(void, setVersionRelativeFilePath, (const QString& versionRelativeFilePath), (override));
+    MOCK_METHOD(void, setVersionFileQuery, (const QString& versionFileQuery), (override));
+    MOCK_METHOD(void, setCoverImage, (const lanty::QPixmapAdapter& coverImage), (override));
+    MOCK_METHOD(void, setIconImage, (const lanty::QPixmapAdapter& iconImage), (override));
 };
 
 #endif /* MOCK_MOCKGAME_HPP */

@@ -14,36 +14,42 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "system/QDirAdapter.hpp"
+#include "logging/Logger.hpp"
+
+#include <QDebug>
 
 namespace lanty
 {
 
-QDirAdapter::QDirAdapter(const QString &path) : qDir(path) { }
+LogLevel Logger::GLOBAL_LOG_LEVEL = LogLevel::DEBUG;
 
-QDirAdapter::QDirAdapter(const QString &path,
-                         const QString &nameFilter,
-                         QDir::SortFlags sort,
-                         QDir::Filters filters) : qDir(path, nameFilter, sort, filters) { }
 
-QStringList QDirAdapter::entryList(const QStringList &nameFilters, QDir::Filters filters, QDir::SortFlags sort) const
+void Logger::logLevel(const LogLevel loglevel)
 {
-    return this->qDir.entryList(nameFilters, filters, sort);
+    Logger::GLOBAL_LOG_LEVEL = loglevel;
 }
 
-bool QDirAdapter::isEmpty(QDir::Filters filters) const
+
+Logger::Logger(LogLevel loglevel) : loglevel(loglevel) { }
+
+
+const Logger& Logger::operator<<(const QString& message) const
 {
-    return this->qDir.isEmpty(filters);
+    this->log(message);
+    return *this;
 }
 
-QString QDirAdapter::absoluteFilePath(const QString &fileName) const
-{
-    return this->qDir.absoluteFilePath(fileName);
-}
 
-QString QDirAdapter::absolutePath(void) const
+void Logger::log(const QString& message) const
 {
-    return qDir.absolutePath();
+    QString logMessage;
+
+    if (this->loglevel >= Logger::GLOBAL_LOG_LEVEL)
+    {
+        logMessage.append(message);
+
+        qDebug() << logMessage;
+    }
 }
 
 } /* namespace lanty */

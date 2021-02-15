@@ -14,43 +14,35 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "logging/Logger.hpp"
-
-#include <QDebug>
+#include "system/QPixmapAdapter.hpp"
 
 namespace lanty
 {
 
-LogLevel Logger::GLOBAL_LOG_LEVEL = LogLevel::DEBUG;
+QPixmapAdapter::QPixmapAdapter(const QString& fileName, const char* format, Qt::ImageConversionFlags flags) :
+    pixmap(fileName, format, flags)
+{ }
 
+QPixmapAdapter::QPixmapAdapter(const QSize& size) : pixmap(size) { }
 
-void Logger::logLevel(const LogLevel loglevel)
+bool QPixmapAdapter::load(const QString& fileName, const char* format, Qt::ImageConversionFlags flags)
 {
-    Logger::GLOBAL_LOG_LEVEL = loglevel;
+    return pixmap.load(fileName, format, flags);
 }
 
-
-Logger::Logger(LogLevel loglevel) : loglevel(loglevel) { }
-
-
-const Logger& Logger::operator<<(const QString &message) const
+bool QPixmapAdapter::isNull(void) const
 {
-    this->log(message);
-    return *this;
+    return pixmap.isNull();
 }
 
-
-void Logger::log(const QString &message) const
+QSize QPixmapAdapter::size(void) const
 {
-    QString logMessage;
-
-    if(this->loglevel >= Logger::GLOBAL_LOG_LEVEL)
-    {
-        logMessage.append(message);
-
-        qDebug() << logMessage;
-    }
+    return pixmap.size();
 }
 
-} /* namespace lanty */
+QPixmap& QPixmapAdapter::getQPixmap(void)
+{
+    return pixmap;
+}
 
+} /*namespace lanty */

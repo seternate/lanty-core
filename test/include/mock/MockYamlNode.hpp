@@ -25,27 +25,27 @@ class MockYamlNode : public lanty::YamlNode
 {
 public:
     MOCK_METHOD(QString, getFileName, (), (const, override));
-    MOCK_METHOD(const lanty::YamlNode*, getNode, (const QString &key), (const, override));
+    MOCK_METHOD(const lanty::YamlNode*, getNode, (const QString& key), (const, override));
     MOCK_METHOD(const lanty::YamlNode*, getNode, (const int index), (const, override));
-    MOCK_METHOD(lanty::YamlNode*, getNode, (const QString &key), (override));
+    MOCK_METHOD(lanty::YamlNode*, getNode, (const QString& key), (override));
     MOCK_METHOD(lanty::YamlNode*, getNode, (const int index), (override));
-    MOCK_METHOD(QString, getQStringFromMap, (const QString &key), (const, override));
+    MOCK_METHOD(QString, getQStringFromMap, (const QString& key), (const, override));
     MOCK_METHOD(QString, getQStringFromSequence, (const int index), (const, override));
-    MOCK_METHOD(QString, getQString,(), (const, override));
-    MOCK_METHOD(double, getDoubleFromMap, (const QString &key), (const, override));
+    MOCK_METHOD(QString, getQString, (), (const, override));
+    MOCK_METHOD(double, getDoubleFromMap, (const QString& key), (const, override));
     MOCK_METHOD(double, getDoubleFromSequence, (const int index), (const, override));
     MOCK_METHOD(double, getDouble, (), (const, override));
     MOCK_METHOD(int, getSize, (), (const, override));
-    MOCK_METHOD(bool, isDefined, (const QString &key), (const, override));
-    MOCK_METHOD(bool, isNull, (const QString &key), (const, override));
-    MOCK_METHOD(bool, isValue, (const QString &key), (const, override));
-    MOCK_METHOD(bool, isSequence, (const QString &key), (const, override));
-    MOCK_METHOD(bool, isMap, (const QString &key), (const, override));
+    MOCK_METHOD(bool, isDefined, (const QString& key), (const, override));
+    MOCK_METHOD(bool, isNull, (const QString& key), (const, override));
+    MOCK_METHOD(bool, isValue, (const QString& key), (const, override));
+    MOCK_METHOD(bool, isSequence, (const QString& key), (const, override));
+    MOCK_METHOD(bool, isMap, (const QString& key), (const, override));
     MOCK_METHOD(bool, isNull, (), (const, override));
     MOCK_METHOD(bool, isValue, (), (const, override));
     MOCK_METHOD(bool, isSequence, (), (const, override));
     MOCK_METHOD(bool, isMap, (), (const, override));
-    MOCK_METHOD(bool, loadFromFile, (const QString &absoluteFilePath), (override));
+    MOCK_METHOD(bool, loadFromFile, (const QString& absoluteFilePath), (override));
 };
 
 #endif /* MOCK_MOCKYAMLNODE_HPP */

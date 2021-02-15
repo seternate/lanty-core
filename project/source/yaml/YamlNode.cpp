@@ -16,23 +16,23 @@
 
 #include "yaml/YamlNode.hpp"
 
-#include <fstream>
 #include <QFile>
 #include <QFileInfo>
+#include <fstream>
 #include <string>
 
-#include <logging/Logger.hpp>
 #include <logging/LogLevel.hpp>
+#include <logging/Logger.hpp>
 
 namespace lanty
 {
 
 template<>
-QString YamlNode::getValue<QString>(const YAML::Node &yamlNodeToReturn) const
+QString YamlNode::getValue<QString>(const YAML::Node& yamlNodeToReturn) const
 {
     QString result("");
 
-    if(yamlNodeToReturn.IsDefined())
+    if (yamlNodeToReturn.IsDefined())
     {
         std::string value = yamlNodeToReturn.as<std::string>();
         result = QString::fromStdString(value);
@@ -42,11 +42,11 @@ QString YamlNode::getValue<QString>(const YAML::Node &yamlNodeToReturn) const
 }
 
 template<>
-double YamlNode::getValue<double>(const YAML::Node &yamlNodeToReturn) const
+double YamlNode::getValue<double>(const YAML::Node& yamlNodeToReturn) const
 {
     double result = 0.0;
 
-    if(yamlNodeToReturn.IsDefined())
+    if (yamlNodeToReturn.IsDefined())
     {
         double value = yamlNodeToReturn.as<double>();
         result = value;
@@ -56,22 +56,21 @@ double YamlNode::getValue<double>(const YAML::Node &yamlNodeToReturn) const
 }
 
 
-YamlNode::YamlNode(const QString &absoluteFilePath, const bool load) : node(),
-                                                                       absoluteFilePath(absoluteFilePath),
-                                                                       childNodes()
+YamlNode::YamlNode(const QString& absoluteFilePath, const bool load) :
+    node(),
+    absoluteFilePath(absoluteFilePath),
+    childNodes()
 {
     QFile file(this->absoluteFilePath);
-    if(file.exists() == true && load == true)
+    if (file.exists() == true && load == true)
     {
         Logger(LogLevel::TRACE) << "Loading YAML-file '" << this->getFileName() << "'.";
         this->node = YAML::LoadFile(absoluteFilePath.toStdString());
         Logger() << "Loaded YAML-file '" << this->getFileName() << "'.";
     }
-    else if(file.exists() == false)
+    else if (file.exists() == false)
     {
-        Logger(LogLevel::ERROR) << "Can not load the YAML-file '"
-                                << this->getFileName()
-                                << "'. The file does not exist.";
+        Logger(LogLevel::ERROR) << "Can not load the YAML-file '" << this->getFileName() << "'. The file does not exist.";
     }
 }
 
@@ -91,10 +90,10 @@ QString YamlNode::getFilePath(void) const
     return QFileInfo(this->absoluteFilePath).absoluteFilePath();
 }
 
-const YamlNode* YamlNode::getNode(const QString &key) const
+const YamlNode* YamlNode::getNode(const QString& key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
         Logger() << "No YAML-Node with key '" << key << "' in file '" << this->getFileName() << "'.";
     }
@@ -104,19 +103,17 @@ const YamlNode* YamlNode::getNode(const QString &key) const
 const YamlNode* YamlNode::getNode(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
-        Logger() << "No YAML-Node at index '"
-                 << QString::number(index)
-                 << "' in file '" << this->getFileName() << "'.";
+        Logger() << "No YAML-Node at index '" << QString::number(index) << "' in file '" << this->getFileName() << "'.";
     }
     return this->getNode(yamlNodeToReturn);
 }
 
-YamlNode* YamlNode::getNode(const QString &key)
+YamlNode* YamlNode::getNode(const QString& key)
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
         Logger() << "No YAML-Node with key '" << key << "' in file '" << this->getFileName() << "'.";
     }
@@ -126,19 +123,17 @@ YamlNode* YamlNode::getNode(const QString &key)
 YamlNode* YamlNode::getNode(const int index)
 {
     YAML::Node yamlNodeToReturn = this->node[index];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
-        Logger() << "No YAML-Node at index '"
-                 << QString::number(index) << "' in file '"
-                 << this->getFileName() << "'.";
+        Logger() << "No YAML-Node at index '" << QString::number(index) << "' in file '" << this->getFileName() << "'.";
     }
     return this->getNode(yamlNodeToReturn);
 }
 
-QString YamlNode::getQStringFromMap(const QString &key) const
+QString YamlNode::getQStringFromMap(const QString& key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
         Logger() << "No map with key '" << key << "' at YAML-file '" << this->getFileName() << "'.";
     }
@@ -148,11 +143,9 @@ QString YamlNode::getQStringFromMap(const QString &key) const
 QString YamlNode::getQStringFromSequence(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
-        Logger() << "No item at sequence with index '"
-                 << QString::number(index)
-                 << "' at YAML-file '"
+        Logger() << "No item at sequence with index '" << QString::number(index) << "' at YAML-file '"
                  << this->getFileName() << "'.";
     }
     return this->getValue<QString>(yamlNodeToReturn);
@@ -163,10 +156,10 @@ QString YamlNode::getQString(void) const
     return this->getValue<QString>(this->node);
 }
 
-double YamlNode::getDoubleFromMap(const QString &key) const
+double YamlNode::getDoubleFromMap(const QString& key) const
 {
     YAML::Node yamlNodeToReturn = this->node[key.toStdString()];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
         Logger() << "No map with key '" << key << "' at YAML-file '" << this->getFileName() << "'.";
     }
@@ -176,11 +169,9 @@ double YamlNode::getDoubleFromMap(const QString &key) const
 double YamlNode::getDoubleFromSequence(const int index) const
 {
     YAML::Node yamlNodeToReturn = this->node[index];
-    if(yamlNodeToReturn.IsDefined() == false)
+    if (yamlNodeToReturn.IsDefined() == false)
     {
-        Logger() << "No item at sequence with index '"
-                 << QString::number(index)
-                 << "' at YAML-file '"
+        Logger() << "No item at sequence with index '" << QString::number(index) << "' at YAML-file '"
                  << this->getFileName() << "'.";
     }
     return this->getValue<double>(yamlNodeToReturn);
@@ -196,27 +187,27 @@ int YamlNode::getSize(void) const
     return this->node.size();
 }
 
-bool YamlNode::isDefined(const QString &key) const
+bool YamlNode::isDefined(const QString& key) const
 {
     return this->node[key.toStdString()].IsDefined();
 }
 
-bool YamlNode::isNull(const QString &key) const
+bool YamlNode::isNull(const QString& key) const
 {
     return this->node[key.toStdString()].IsNull();
 }
 
-bool YamlNode::isValue(const QString &key) const
+bool YamlNode::isValue(const QString& key) const
 {
     return this->node[key.toStdString()].IsScalar();
 }
 
-bool YamlNode::isSequence(const QString &key) const
+bool YamlNode::isSequence(const QString& key) const
 {
     return this->node[key.toStdString()].IsSequence();
 }
 
-bool YamlNode::isMap(const QString &key) const
+bool YamlNode::isMap(const QString& key) const
 {
     return this->node[key.toStdString()].IsMap();
 }
@@ -241,9 +232,9 @@ bool YamlNode::isMap(void) const
     return this->node.IsMap();
 }
 
-YamlNode* YamlNode::setNode(const QString &key)
+YamlNode* YamlNode::setNode(const QString& key)
 {
-    YamlNode *result = nullptr;
+    YamlNode* result = nullptr;
 
     YAML::Node newNode = this->node[key.toStdString()];
     std::shared_ptr<YamlNode> newChildNode(new YamlNode());
@@ -255,17 +246,17 @@ YamlNode* YamlNode::setNode(const QString &key)
     return result;
 }
 
-void YamlNode::setString(const QString &value)
+void YamlNode::setString(const QString& value)
 {
     this->node = value.toStdString();
 }
 
-void YamlNode::setString(const QString &key, const QString &value)
+void YamlNode::setString(const QString& key, const QString& value)
 {
     this->node[key.toStdString()] = value.toStdString();
 }
 
-void YamlNode::setString(const int index, const QString &value)
+void YamlNode::setString(const int index, const QString& value)
 {
     this->node[index] = value.toStdString();
 }
@@ -275,7 +266,7 @@ void YamlNode::setDouble(const double value)
     this->node = value;
 }
 
-void YamlNode::setDouble(const QString &key, const double value)
+void YamlNode::setDouble(const QString& key, const double value)
 {
     this->node[key.toStdString()] = value;
 }
@@ -291,13 +282,13 @@ bool YamlNode::loadFromFile(void)
 }
 
 
-bool YamlNode::loadFromFile(const QString &absoluteFilePath)
+bool YamlNode::loadFromFile(const QString& absoluteFilePath)
 {
     bool result = false;
     this->absoluteFilePath = absoluteFilePath;
 
     QFile file(this->absoluteFilePath);
-    if(file.exists() == true)
+    if (file.exists() == true)
     {
         Logger(LogLevel::TRACE) << "Loading YAML-file '" << absoluteFilePath << "'.";
         this->node = YAML::LoadFile(absoluteFilePath.toStdString());
@@ -308,9 +299,7 @@ bool YamlNode::loadFromFile(const QString &absoluteFilePath)
     }
     else
     {
-        Logger(LogLevel::ERROR) << "Can not load the YAML-file '"
-                                << this->getFileName()
-                                << "'. The file does not exist.";
+        Logger(LogLevel::ERROR) << "Can not load the YAML-file '" << this->getFileName() << "'. The file does not exist.";
     }
 
     return result;
@@ -321,7 +310,7 @@ bool YamlNode::saveToFile(void)
     return this->saveToFile(this->absoluteFilePath);
 }
 
-bool YamlNode::saveToFile(const QString &absoluteFilePath)
+bool YamlNode::saveToFile(const QString& absoluteFilePath)
 {
     std::ofstream fileOutStream(absoluteFilePath.toStdString());
     fileOutStream << this->node;
@@ -329,36 +318,32 @@ bool YamlNode::saveToFile(const QString &absoluteFilePath)
 }
 
 
-YamlNode* YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
+YamlNode* YamlNode::getNode(YAML::Node& yamlNodeToReturn) const
 {
     YamlNode* result = nullptr;
 
-    if(yamlNodeToReturn.IsDefined() == true && yamlNodeToReturn.IsNull() == false)
+    if (yamlNodeToReturn.IsDefined() == true && yamlNodeToReturn.IsNull() == false)
     {
-        for(std::shared_ptr<YamlNode> childNode : this->childNodes)
+        for (std::shared_ptr<YamlNode> childNode : this->childNodes)
         {
-            if(childNode->node == yamlNodeToReturn)
+            if (childNode->node == yamlNodeToReturn)
             {
                 result = childNode.get();
                 Logger(LogLevel::TRACE) << "Return Node exists as child node already for YAML-file '"
-                                        << this->getFileName()
-                                        << "'.";
+                                        << this->getFileName() << "'.";
                 break;
             }
         }
 
-        if(result == nullptr)
+        if (result == nullptr)
         {
-            Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '"
-                                    << this->getFileName()
+            Logger(LogLevel::TRACE) << "No child node exists to return for YAML-file '" << this->getFileName()
                                     << "'. Creating child node.";
             std::shared_ptr<YamlNode> yamlChildNode(new YamlNode());
             yamlChildNode->node = yamlNodeToReturn;
             yamlChildNode->absoluteFilePath = this->absoluteFilePath;
             this->childNodes.push_back(yamlChildNode);
-            Logger(LogLevel::TRACE) << "Created child node for YAML-file '"
-                                    << this->getFileName()
-                                    << "'.";
+            Logger(LogLevel::TRACE) << "Created child node for YAML-file '" << this->getFileName() << "'.";
             result = yamlChildNode.get();
         }
     }
@@ -367,7 +352,7 @@ YamlNode* YamlNode::getNode(YAML::Node &yamlNodeToReturn) const
 }
 
 template<typename T>
-T YamlNode::getValue(const YAML::Node &yamlNodeToReturn) const
+T YamlNode::getValue(const YAML::Node& yamlNodeToReturn) const
 {
     T value = yamlNodeToReturn.as<T>();
     return value;

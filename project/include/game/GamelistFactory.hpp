@@ -38,7 +38,7 @@ public:
     virtual ~GamelistFactory(void) = default;
 
     template<typename T>
-    Gamelist* makeGamelist(const QDirAdapter &gameYamlFileDirectory, const QDirAdapter &gameImageFileDirectory)
+    Gamelist* makeGamelist(const QDirAdapter& gameYamlFileDirectory, const QDirAdapter& gameImageFileDirectory)
     {
         Gamelist* gamelist = new Gamelist();
         std::shared_ptr<Game> game = nullptr;
@@ -48,26 +48,23 @@ public:
         QString gameCoverImageAbsoluteFilePath("");
         QString gameIconImageAbsoluteFilePath("");
 
-        Logger() << "Create gamelist with yaml-files from '"
-                 << gameYamlFileDirectory.absolutePath()
-                 << "' and image-files from '"
-                 << gameImageFileDirectory.absolutePath()
-                 << "'.";
+        Logger() << "Create gamelist with yaml-files from '" << gameYamlFileDirectory.absolutePath()
+                 << "' and image-files from '" << gameImageFileDirectory.absolutePath() << "'.";
 
         gameFileExtensionFilter << FileExtension::YAML << FileExtension::YML;
         Logger(LogLevel::TRACE) << "Extensions to filter files: ";
-        for(int i = 0; i < gameFileExtensionFilter.size() - 1; i++)
+        for (int i = 0; i < gameFileExtensionFilter.size() - 1; i++)
         {
-             Logger(LogLevel::TRACE) << gameFileExtensionFilter.at(i) << ", ";
+            Logger(LogLevel::TRACE) << gameFileExtensionFilter.at(i) << ", ";
         }
         Logger(LogLevel::TRACE) << gameFileExtensionFilter.last();
 
         gameYamlFiles = gameYamlFileDirectory.entryList(gameFileExtensionFilter, QDir::Files);
         gameYamlFiles.removeOne(GameHelper::YAML_TEMPLATE_FILE);
 
-        if(!gameYamlFileDirectory.isEmpty())
+        if (!gameYamlFileDirectory.isEmpty())
         {
-            for(int32_t i = 0; i < gameYamlFiles.size(); i++)
+            for (int32_t i = 0; i < gameYamlFiles.size(); i++)
             {
                 game = std::make_shared<T>();
                 gameYamlAbsoluteFilePath = gameYamlFileDirectory.absoluteFilePath(gameYamlFiles.at(i));
@@ -75,27 +72,30 @@ public:
                 game->load(*this->yamlNode);
                 Logger() << "Create game from yaml-file '" << gameYamlAbsoluteFilePath << "'.";
 
-                if(gameImageFileDirectory.isEmpty() == false)
+                if (gameImageFileDirectory.isEmpty() == false)
                 {
                     gameCoverImageAbsoluteFilePath
                         = this->gameHelper->getCoverImagePathFromDirectory(*game, gameImageFileDirectory);
-                    if(pixmap->load(gameCoverImageAbsoluteFilePath) == false)
+                    if (pixmap->load(gameCoverImageAbsoluteFilePath) == false)
                     {
-                        Logger(LogLevel::WARNING) << "Can not load gamecover from '" << gameCoverImageAbsoluteFilePath << "'.";
+                        Logger(LogLevel::WARNING)
+                            << "Can not load gamecover from '" << gameCoverImageAbsoluteFilePath << "'.";
                     }
                     game->setCoverImage(*pixmap);
 
                     gameIconImageAbsoluteFilePath
                         = this->gameHelper->getIconImagePathFromDirectory(*game, gameImageFileDirectory);
-                    if(pixmap->load(gameIconImageAbsoluteFilePath) == false)
+                    if (pixmap->load(gameIconImageAbsoluteFilePath) == false)
                     {
-                        Logger(LogLevel::WARNING) << "Can not load gameicon from '" << gameIconImageAbsoluteFilePath << "'.";
+                        Logger(LogLevel::WARNING)
+                            << "Can not load gameicon from '" << gameIconImageAbsoluteFilePath << "'.";
                     }
                     game->setIconImage(*pixmap);
                 }
                 else
                 {
-                    Logger(LogLevel::WARNING) << "No gameimage files found at '" << gameImageFileDirectory.absolutePath() << "'.";
+                    Logger(LogLevel::WARNING)
+                        << "No gameimage files found at '" << gameImageFileDirectory.absolutePath() << "'.";
                 }
 
                 gamelist->list.push_back(game);
@@ -104,14 +104,15 @@ public:
         }
         else
         {
-            Logger(LogLevel::WARNING) << "Can not create gamelist. No yaml-files at '" << gameYamlFileDirectory.absolutePath() << "'.";
+            Logger(LogLevel::WARNING) << "Can not create gamelist. No yaml-files at '"
+                                      << gameYamlFileDirectory.absolutePath() << "'.";
         }
 
         return gamelist;
     }
-    void setYamlNodeDependency(YamlNode *yamlNode);
-    void setGameHelperDependency(GameHelper *gameHelper);
-    void setQPixmapDependency(QPixmapAdapter *QPixmap);
+    void setYamlNodeDependency(YamlNode* yamlNode);
+    void setGameHelperDependency(GameHelper* gameHelper);
+    void setQPixmapDependency(QPixmapAdapter* QPixmap);
     void resetDependencies(void);
 
 private:

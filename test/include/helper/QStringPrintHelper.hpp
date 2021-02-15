@@ -23,7 +23,7 @@
 
 QT_BEGIN_NAMESPACE
 
-inline void PrintTo(const QString &qString, ::std::ostream *os)
+inline void PrintTo(const QString& qString, ::std::ostream* os)
 {
     *os << qUtf8Printable(qString);
 }

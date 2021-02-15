@@ -20,9 +20,9 @@
 #include <QtCore/qglobal.h>
 
 #if defined(LTYCORE_LIBRARY)
-#  define LTYCORE_EXPORT Q_DECL_EXPORT
+    #define LTYCORE_EXPORT Q_DECL_EXPORT
 #else
-#  define LTYCORE_EXPORT Q_DECL_IMPORT
+    #define LTYCORE_EXPORT Q_DECL_IMPORT
 #endif
 
 #endif /* CORE_LTYCORE_GLOBAL_HPP */

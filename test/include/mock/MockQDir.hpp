@@ -24,7 +24,7 @@
 class MockQDir : public lanty::QDirAdapter
 {
 public:
-    MOCK_METHOD(QStringList, entryList, (const QStringList &, QDir::Filters, QDir::SortFlags), (const, override));
+    MOCK_METHOD(QStringList, entryList, (const QStringList&, QDir::Filters, QDir::SortFlags), (const, override));
     MOCK_METHOD(bool, isEmpty, (QDir::Filters filters), (const, override));
     MOCK_METHOD(QString, absoluteFilePath, (const QString&), (const, override));
 };

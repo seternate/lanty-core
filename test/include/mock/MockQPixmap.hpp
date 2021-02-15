@@ -24,7 +24,7 @@
 class MockQPixmap : public lanty::QPixmapAdapter
 {
 public:
-    MOCK_METHOD(bool, load, (const QString &fileName, const char *format, Qt::ImageConversionFlags flags), (override));
+    MOCK_METHOD(bool, load, (const QString& fileName, const char* format, Qt::ImageConversionFlags flags), (override));
 };
 
 #endif /* MOCK_MOCKQPIXMAP_HPP */

@@ -22,18 +22,21 @@ DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 CONFIG += skip_target_version_ext
 
+QMAKE_CXXFLAGS += --coverage
+LIBS += -lgcov
+
 INCLUDEPATH += $$PWD/include
 
 SOURCES += \
-    $$PWD/src/game/Game.cpp \
-    $$PWD/src/game/Gamelist.cpp \
-    $$PWD/src/game/GamelistFactory.cpp \
-    $$PWD/src/helper/GameHelper.cpp \
-    $$PWD/src/logging/Logger.cpp \
-    $$PWD/src/system/FileExtension.cpp \
-    $$PWD/src/system/QDirAdapter.cpp \
-    $$PWD/src/system/QPixmapAdapter.cpp \
-    $$PWD/src/yaml/YamlNode.cpp \
+    $$PWD/source/game/Game.cpp \
+    $$PWD/source/game/Gamelist.cpp \
+    $$PWD/source/game/GamelistFactory.cpp \
+    $$PWD/source/helper/GameHelper.cpp \
+    $$PWD/source/logging/Logger.cpp \
+    $$PWD/source/system/FileExtension.cpp \
+    $$PWD/source/system/QDirAdapter.cpp \
+    $$PWD/source/system/QPixmapAdapter.cpp \
+    $$PWD/source/yaml/YamlNode.cpp \
 
 
 HEADERS += \

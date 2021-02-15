@@ -43,10 +43,10 @@ HEADERS += \
 SOURCES += \
     $$PWD/../library/googletest/googletest/src/gtest-all.cc \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
-    $$PWD/src/core/main.cpp \
-    $$PWD/src/game/GameTest.cpp \
-    $$PWD/src/helper/GameHelperTest.cpp \
-    $$PWD/src/yaml/YamlNodeTest.cpp
+    $$PWD/source/core/main.cpp \
+    $$PWD/source/game/GameTest.cpp \
+    $$PWD/source/helper/GameHelperTest.cpp \
+    $$PWD/source/yaml/YamlNodeTest.cpp
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
