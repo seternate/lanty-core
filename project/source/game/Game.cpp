@@ -172,30 +172,38 @@ QPixmapAdapter Game::getIconImage(void) const
 
 bool Game::isVersion(void) const
 {
-    qDebug() << "isVersion: " << this->getName() << ": version (" << QString(version.isEmpty())
-             << ") = " << this->getVersion();
-    return !version.isEmpty() && versionSource != GameVersionSource::NONE;
+    bool result = !version.isEmpty() && versionSource != GameVersionSource::NONE;
+
+    qDebug() << this->getName() << " is version: " << result;
+
+    return result;
 }
 
 bool Game::canJoinServerWithCLI(void) const
 {
-    qDebug() << "canJoinServerWithCLI: " << this->getName() << ": Connect Argument = " << this->getClientConnectArgument();
-    return !(this->clientConnectArgument.isEmpty());
+    bool result = !this->clientConnectArgument.isEmpty();
+
+    qDebug() << this->getName() << " can join server with CLI: " << result;
+
+    return result;
 }
 
 bool Game::canOpenDedicatedServer(void) const
 {
-    qDebug() << "canOpenDedicatedServer: " << this->getName()
-             << ": Serverexecutable = " << this->getServerExecutableRelativeFilePath();
-    return !this->serverExecutableRelativeFilePath.isEmpty();
+    bool result = !this->serverExecutableRelativeFilePath.isEmpty();
+
+    qDebug() << this->getName() << " can open dedicated server: " << result;
+
+    return result;
 }
 
 bool Game::canOpenServer(void) const
 {
-    qDebug() << "canOpenServer: " << this->getName()
-             << ": Serverexecutable = " << this->getServerExecutableRelativeFilePath()
-             << ": Server Argument = " << this->getServerArgument();
-    return !this->serverExecutableRelativeFilePath.isEmpty() || !this->serverArgument.isEmpty();
+    bool result = !this->serverExecutableRelativeFilePath.isEmpty() || !this->serverArgument.isEmpty();
+
+    qDebug() << this->getName() << " can open server: " << result;
+
+    return result;
 }
 
 
@@ -208,61 +216,56 @@ bool Game::load(const YamlNode& yamlNode)
 
 void Game::setName(const QString& name)
 {
-    qDebug() << this->name << " changed to " << name;
+    qDebug() << this->getName() << " changed name: " << name;
     this->name = name;
     emit nameChanged(this->name);
 }
 
 void Game::setArchiveFileName(const QString& archiveFileName)
 {
-    qDebug() << this->name << " changed path from '" << this->archiveFileName << "' to '" << archiveFileName << "'.";
+    qDebug() << this->name << " changed archive filename: " << archiveFileName;
     this->archiveFileName = archiveFileName;
     emit archiveFileNameChanged(this->archiveFileName);
 }
 
 void Game::setClientExecutableRelativeFilePath(const QString& clientExecutableRelativeFilePath)
 {
-    qDebug() << this->name << " changed clientexecutable from '" << this->clientExecutableRelativeFilePath << "' to '"
-             << clientExecutableRelativeFilePath << "'.";
+    qDebug() << this->name << " changed client executable filepath: " << clientExecutableRelativeFilePath;
     this->clientExecutableRelativeFilePath = clientExecutableRelativeFilePath;
     emit clientExecutableChanged(this->clientExecutableRelativeFilePath);
 }
 
 void Game::setClientArgument(const QString& clientArgument)
 {
-    qDebug() << this->name << " changed client argument from '" << this->clientArgument << "' to '" << clientArgument
-             << "'.";
+    qDebug() << this->name << " changed client argument: " << clientArgument;
     this->clientArgument = clientArgument;
     emit clientArgumentChanged(this->clientArgument);
 }
 
 void Game::setClientConnectArgument(const QString& clientConnectArgument)
 {
-    qDebug() << this->name << " changed client connect argument from '" << this->clientConnectArgument << "' to '"
-             << clientConnectArgument << "'.";
+    qDebug() << this->name << " changed client connect argument: " << clientConnectArgument;
     this->clientConnectArgument = clientConnectArgument;
     emit clientConnectArgumentChanged(this->clientConnectArgument);
 }
 
 void Game::setServerExecutableRelativeFilePath(const QString& serverExecutableRelativeFilePath)
 {
-    qDebug() << this->name << " changed serverexecutable from '" << this->serverExecutableRelativeFilePath << "' to '"
-             << serverExecutableRelativeFilePath << "'.";
+    qDebug() << this->name << " changed server executable filepath: " << serverExecutableRelativeFilePath;
     this->serverExecutableRelativeFilePath = serverExecutableRelativeFilePath;
     emit serverExecutableChanged(this->serverExecutableRelativeFilePath);
 }
 
 void Game::setServerArgument(const QString& serverArgument)
 {
-    qDebug() << this->name << " changed server argument from '" << this->serverArgument << "' to '" << serverArgument
-             << "'.";
+    qDebug() << this->name << " changed server argument: " << serverArgument;
     this->serverArgument = serverArgument;
     emit serverArgumentChanged(this->serverArgument);
 }
 
 void Game::setVersion(const QString& version)
 {
-    qDebug() << this->name << " changed version from '" << this->version << "' to '" << version << "'.";
+    qDebug() << this->name << " changed version: " << version;
     this->version = version;
     emit versionChanged(this->version);
 }
@@ -275,30 +278,28 @@ void Game::setVersionSource(const GameVersionSource& gameVersionSource)
 
 void Game::setVersionRelativeFilePath(const QString& versionRelativeFilePath)
 {
-    qDebug() << this->name << " changed version file from '" << this->versionRelativeFilePath << "' to '"
-             << versionRelativeFilePath << "'.";
+    qDebug() << this->name << " changed version filepath: " << versionRelativeFilePath;
     this->versionRelativeFilePath = versionRelativeFilePath;
     emit versionFileChanged(this->versionRelativeFilePath);
 }
 
 void Game::setVersionFileQuery(const QString& versionFileQuery)
 {
-    qDebug() << this->name << " changed versionfile query from '" << this->versionFileQuery << "' to '"
-             << versionFileQuery << "'.";
+    qDebug() << this->name << " changed version file query: " << versionFileQuery;
     this->versionFileQuery = versionFileQuery;
     emit versionFileQueryChanged(this->versionFileQuery);
 }
 
 void Game::setCoverImage(const QPixmapAdapter& coverImage)
 {
-    qDebug() << this->name << " changed coverimage.";
+    qDebug() << this->name << " changed coverimage";
     this->coverImage = coverImage;
     emit coverImageChanged(this->coverImage);
 }
 
 void Game::setIconImage(const QPixmapAdapter& iconImage)
 {
-    qDebug() << this->name << " changed iconimage.";
+    qDebug() << this->name << " changed iconimage";
     this->iconImage = iconImage;
     emit iconImageChanged(this->iconImage);
 }
@@ -333,47 +334,47 @@ void Game::loadFromYamlNode(const YamlNode& yamlNode)
 
     this->loadGameDataFromGameNode(*gameNode);
     this->yamlFilePath = yamlNode.getFilePath();
-    qDebug() << "Loaded game from YAML-file '" << yamlNode.getFileName() << "'.";
+    qDebug() << "Loaded game from YAML-file: " << yamlNode.getFileName();
 }
 
 void Game::loadGameDataFromGameNode(const YamlNode& gameNode)
 {
     this->name = gameNode.getQStringFromMap("name");
-    qDebug() << "Loaded gamename '" << this->name << "' from YAML-file '" << gameNode.getFileName() << "'.";
+    qDebug() << "Loaded gamename: " << this->getName();
     this->archiveFileName = gameNode.getQStringFromMap("archive");
-    qDebug() << "Loaded gamearchive '" << this->archiveFileName << "' from YAML-file '" << gameNode.getFileName() << "'.";
+    qDebug() << "Loaded archive filename: " << this->getArchiveFileName();
 
     const YamlNode* versionNode = gameNode.getNode("version");
     if (versionNode != nullptr)
     {
         this->loadVersionDataFromGameNode(*versionNode);
-        qDebug() << "Loaded gameversion info from YAML-file '" << gameNode.getFileName() << "'.";
+        qDebug() << "Loaded game version info";
     }
     else
     {
-        qDebug() << "No gameversion info available from YAML-file '" << gameNode.getFileName() << "'.";
+        qDebug() << "No game version info available";
     }
 
     const YamlNode* clientNode = gameNode.getNode("client");
     this->loadClientDataFromGameNode(*clientNode);
-    qDebug() << "Loaded gameclient info from YAML-file '" << gameNode.getFileName() << "'.";
+    qDebug() << "Loaded game client info";
 
     const YamlNode* serverNode = gameNode.getNode("server");
     if (serverNode != nullptr)
     {
         this->loadServerDataFromGameNode(*serverNode);
-        qDebug() << "Loaded gameserver info from YAML-file '" << gameNode.getFileName() << "'.";
+        qDebug() << "Loaded game server info";
     }
     else
     {
-        qDebug() << "No gameserver info available from YAML-file '" << gameNode.getFileName() << "'.";
+        qDebug() << "No game server info available";
     }
 }
 
 void Game::loadVersionDataFromGameNode(const YamlNode& versionNode)
 {
     this->version = versionNode.getQStringFromMap("info");
-    qDebug() << "Loaded gameversion-info '" << this->version << "' from YAML-file '" << versionNode.getFileName() << "'.";
+    qDebug() << "Loaded game version info: " << this->getVersion();
     QString versionFormat = versionNode.getQStringFromMap("format").toLower();
     if (versionFormat == "file")
     {
@@ -388,34 +389,27 @@ void Game::loadVersionDataFromGameNode(const YamlNode& versionNode)
         this->versionSource = GameVersionSource::NONE;
     }
     this->versionRelativeFilePath = versionNode.getQStringFromMap("file");
-    qDebug() << "Loaded gameversion-file '" << this->versionRelativeFilePath << "' from YAML-file '"
-             << versionNode.getFileName() << "'.";
+    qDebug() << "Loaded game version file: " << this->getVersionRelativeFilePath();
     this->versionFileQuery = versionNode.getQStringFromMap("query");
-    qDebug() << "Loaded gameversion-query '" << this->versionFileQuery << "' from YAML-file '"
-             << versionNode.getFileName() << "'.";
+    qDebug() << "Loaded game version query: '" << this->getVersionFileQuery();
 }
 
 void Game::loadClientDataFromGameNode(const YamlNode& clientNode)
 {
     this->clientExecutableRelativeFilePath = clientNode.getQStringFromMap("executable");
-    qDebug() << "Loaded gameclient-executable '" << this->clientExecutableRelativeFilePath << "' from YAML-file '"
-             << clientNode.getFileName() << "'.";
+    qDebug() << "Loaded game client executable: " << this->getClientExecutableRelativeFilePath();
     this->clientArgument = clientNode.getQStringFromMap("argument");
-    qDebug() << "Loaded gameclient-argument '" << this->clientArgument << "' from YAML-file '"
-             << clientNode.getFileName() << "'.";
+    qDebug() << "Loaded game client argument: " << this->getClientArgument();
     this->clientConnectArgument = clientNode.getQStringFromMap("connect");
-    qDebug() << "Loaded gameclient-connect '" << this->clientConnectArgument << "' from YAML-file '"
-             << clientNode.getFileName() << "'.";
+    qDebug() << "Loaded game client connect: " << this->getClientConnectArgument();
 }
 
 void Game::loadServerDataFromGameNode(const YamlNode& serverNode)
 {
     this->serverExecutableRelativeFilePath = serverNode.getQStringFromMap("executable");
-    qDebug() << "Loaded gameclient-executable '" << this->serverExecutableRelativeFilePath << "' from YAML-file '"
-             << serverNode.getFileName() << "'.";
+    qDebug() << "Loaded game server executable: " << this->getServerExecutableRelativeFilePath();
     this->serverArgument = serverNode.getQStringFromMap("argument");
-    qDebug() << "Loaded gameclient-argument '" << this->serverArgument << "' from YAML-file '"
-             << serverNode.getFileName() << "'.";
+    qDebug() << "Loaded game server argument: " << this->getServerArgument();
 }
 
 

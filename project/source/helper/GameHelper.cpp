@@ -66,8 +66,8 @@ QString GameHelper::getImagePathFromDirectory(const Game& game,
 
     if (gameImageFiles.isEmpty() == false)
     {
-        qDebug() << "Found " << QString::number(gameImageFiles.size()) << " game images at '"
-                 << gameImageFileDirectory.absolutePath() << "'.";
+        qDebug() << "Found " << QString::number(gameImageFiles.size())
+                 << " game images: " << gameImageFileDirectory.absolutePath();
         for (int32_t i = 0; i < gameImageFiles.size(); i++)
         {
             gameImageFile = gameImageFiles.at(i);
@@ -83,8 +83,7 @@ QString GameHelper::getImagePathFromDirectory(const Game& game,
     }
     else
     {
-        qDebug() << "Can not return image path from game '" << game.getName() << "'. No image file at directory '"
-                 << gameImageFileDirectory.absolutePath() << "'.";
+        qDebug() << "No image file for " << game.getName() << " found: " << gameImageFileDirectory.absolutePath();
     }
 
     return gameImageAbsoluteFilePath;
