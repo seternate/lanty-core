@@ -13,7 +13,7 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-QT += core gui testlib
+QT += core gui testlib network
 
 TEMPLATE = app
 
@@ -37,6 +37,7 @@ HEADERS += \
     $$PWD/include/mock/MockGameHelper.hpp \
     $$PWD/include/mock/MockQDir.hpp \
     $$PWD/include/mock/MockQPixmap.hpp \
+    $$PWD/include/mock/MockUser.hpp \
     $$PWD/include/mock/MockYamlNode.hpp \
     $$PWD/include/yaml/YamlNodeTest.hpp
 
@@ -46,6 +47,8 @@ SOURCES += \
     $$PWD/source/core/main.cpp \
     $$PWD/source/game/GameTest.cpp \
     $$PWD/source/helper/GameHelperTest.cpp \
+    $$PWD/source/user/UserTest.cpp \
+    $$PWD/source/user/UserlistTest.cpp \
     $$PWD/source/yaml/YamlNodeTest.cpp
 
 INCLUDEPATH += $$PWD/../library/yaml-cpp/include
