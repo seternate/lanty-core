@@ -13,7 +13,7 @@
 # COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
 # OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
-QT += core gui
+QT += core gui network
 
 TEMPLATE = lib
 VERSION = 0.1.0
@@ -21,6 +21,7 @@ DEFINES += LTYCORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 CONFIG += skip_target_version_ext
+CONFIG += object_parallel_to_source
 
 QMAKE_CXXFLAGS += --coverage
 LIBS += -lgcov
@@ -35,6 +36,8 @@ SOURCES += \
     $$PWD/source/system/FileExtension.cpp \
     $$PWD/source/system/QDirAdapter.cpp \
     $$PWD/source/system/QPixmapAdapter.cpp \
+    $$PWD/source/user/User.cpp \
+    $$PWD/source/user/Userlist.cpp \
     $$PWD/source/yaml/YamlNode.cpp \
 
 
@@ -49,6 +52,8 @@ HEADERS += \
     $$PWD/include/system/FileExtension.hpp \
     $$PWD/include/system/QDirAdapter.hpp \
     $$PWD/include/system/QPixmapAdapter.hpp \
+    $$PWD/include/user/User.hpp \
+    $$PWD/include/user/Userlist.hpp \
     $$PWD/include/yaml/YamlNode.hpp
 
 TRANSLATIONS += $$PWD/../resource/translation/core_de_DE.ts

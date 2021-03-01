@@ -63,6 +63,7 @@ include:
     # Move Qt5 windows lib files packed within the container
     - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
     - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Network.a /usr/lib/x86_64-linux-gnu/libQt5Network.a
     - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
     # Copy library libs from smbshare
     - mkdir -p ${ARTIFACT_DIR}
@@ -137,6 +138,7 @@ build-linux-debug:
     - cp /usr/x86_64-w64-mingw32/lib/libQt5Gui.a /usr/lib/x86_64-linux-gnu/libQt5Gui.a
     - cp /usr/x86_64-w64-mingw32/lib/libQt5Core.a /usr/lib/x86_64-linux-gnu/libQt5Core.a
     - cp /usr/x86_64-w64-mingw32/lib/libQt5Test.a /usr/lib/x86_64-linux-gnu/libQt5Test.a
+    - cp /usr/x86_64-w64-mingw32/lib/libQt5Network.a /usr/lib/x86_64-linux-gnu/libQt5Network.a
     - cp /usr/x86_64-w64-mingw32/lib/liblibEGL.a /usr/lib/x86_64-linux-gnu/libGL.a
   script:
     - cd test

@@ -15,11 +15,13 @@
 !/project/include/game/
 !/project/include/helper/
 !/project/include/system/
+!/project/include/user/
 !/project/include/yaml/
 !/project/source/
 !/project/source/game/
 !/project/source/helper/
 !/project/source/system/
+!/project/source/user/
 !/project/source/yaml/
 !/resource/
 !/resource/font/
@@ -37,6 +39,7 @@
 !/test/source/core/
 !/test/source/game/
 !/test/source/helper/
+!/test/source/user/
 !/test/source/yaml/
 
 #Whitelist files
