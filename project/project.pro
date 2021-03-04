@@ -71,8 +71,12 @@ win32 {
 win32: DESTDIR += $$PWD/../artifact/x86_64/windows
 linux: DESTDIR += $$PWD/../artifact/x86_64/linux
 
-INCLUDEPATH += $$PWD/../library/yaml-cpp/include
+INCLUDEPATH += \
+    $$PWD/../library/yaml-cpp/include
+    $$PWD/../library/nlohmann-json/single_include
+
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
+
 LIBS += -L$$DESTDIR -lyaml-cpp
 
 CONFIG(debug, debug|release) {

@@ -9,6 +9,8 @@
 !/library/yaml-cpp/**
 !/library/googletest/
 !/library/googletest/**
+!/library/nlohmann-json/
+!/library/nlohmann-json/**
 !/project/
 !/project/include/
 !/project/include/core/
