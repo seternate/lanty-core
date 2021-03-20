@@ -109,4 +109,33 @@ QVariant Gamelist::data(const QModelIndex& index, int role) const
     return QVariant();
 }
 
+
+nlohmann::json* Gamelist::toJSON(void) const
+{
+    nlohmann::json* gamelistJSON = new nlohmann::json({});
+    (*gamelistJSON)["gamelist"] = nlohmann::json::array();
+
+    for (quint32 i = 0; i < this->size(); i++)
+    {
+        nlohmann::json* gameJSON = this->at(i).toJSON();
+        (*gamelistJSON)["gamelist"].push_back(*gameJSON);
+        delete gameJSON;
+    }
+
+    return gamelistJSON;
+}
+
+bool Gamelist::fromJSON(const nlohmann::json& json)
+{
+    for (quint32 i = 0; i < json["gamelist"].size(); i++)
+    {
+        nlohmann::json gameJSON = json["gamelist"].at(i);
+        Game* game = new Game();
+        game->fromJSON(gameJSON);
+        this->append(game);
+    }
+
+    return true;
+}
+
 } /* namespace lanty */

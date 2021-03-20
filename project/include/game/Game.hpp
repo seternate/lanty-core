@@ -22,13 +22,14 @@
 
 #include "core/ltycore_global.hpp"
 #include "game/GameVersionSource.hpp"
+#include "serializer/Serializable.hpp"
 #include "system/QPixmapAdapter.hpp"
 #include "yaml/YamlNode.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Game : public QObject
+class LTYCORE_EXPORT Game : public QObject, public Serializable
 {
     Q_OBJECT
     Q_DISABLE_COPY_MOVE(Game);
@@ -59,7 +60,11 @@ public:
     virtual bool canOpenDedicatedServer(void) const;
     virtual bool canOpenServer(void) const;
 
-    virtual bool load(const YamlNode& yamlNode);
+    bool fromJSON(const nlohmann::json& json) override;
+    bool fromYAML(const YamlNode& yaml) override;
+
+    nlohmann::json* toJSON(void) const override;
+    virtual YamlNode* toYAML(void) const override;
 
 public slots:
     virtual void setName(const QString& name);
@@ -97,17 +102,25 @@ signals:
     void iconImageChanged(const lanty::QPixmapAdapter& newIconImage);
 
 private:
-    void loadFromYamlNode(const YamlNode& yamlNode);
-    void loadGameDataFromGameNode(const YamlNode& gameNode);
-    void loadVersionDataFromGameNode(const YamlNode& versionNode);
-    void loadClientDataFromGameNode(const YamlNode& clientNode);
-    void loadServerDataFromGameNode(const YamlNode& serverNode);
+    void loadGameYAML(const YamlNode& gameNode);
+    void loadVersionYAML(const YamlNode& versionNode);
+    void loadClientYAML(const YamlNode& clientNode);
+    void loadServerYAML(const YamlNode& serverNode);
 
-    void saveToYamlNode(YamlNode& yamlNode);
-    void saveGameDataToGameNode(YamlNode& gameNode);
-    void saveVersionDataToGameNode(YamlNode& versionNode);
-    void saveClientDataToGameNode(YamlNode& clientNode);
-    void saveServerDataToGameNode(YamlNode& serverNode);
+    void loadGameJSON(const nlohmann::json& gameJSON);
+    void loadVersionJSON(const nlohmann::json& versionJSON);
+    void loadClientJSON(const nlohmann::json& clientJSON);
+    void loadServerJSON(const nlohmann::json& serverJSON);
+
+    void createGameNode(YamlNode& gameNode) const;
+    void createVersionNode(YamlNode& versionNode) const;
+    void createClientNode(YamlNode& clientNode) const;
+    void createServerNode(YamlNode& serverNode) const;
+
+    void createGameJSON(nlohmann::json& gameJSON) const;
+    void createVersionJSON(nlohmann::json& versionJSON) const;
+    void createClientJSON(nlohmann::json& clientJSON) const;
+    void createServerJSON(nlohmann::json& serverJSON) const;
 
     QString yamlFilePath;
     QString name;

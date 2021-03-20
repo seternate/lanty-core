@@ -20,13 +20,15 @@
 #include <QHostAddress>
 #include <QObject>
 #include <QString>
+#include <nlohmann/json.hpp>
 
 #include "core/ltycore_global.hpp"
+#include "serializer/Serializable.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT User : public QObject
+class LTYCORE_EXPORT User : public QObject, public Serializable
 {
     Q_OBJECT
     Q_DISABLE_COPY_MOVE(User)
@@ -51,6 +53,9 @@ public:
     virtual void setResolutionX(const quint32 x);
     virtual void setResolutionY(const quint32 y);
     virtual void setIPAddress(const QString& ipAddress);
+
+    nlohmann::json* toJSON(void) const override;
+    bool fromJSON(const nlohmann::json& json) override;
 
 signals:
     void changed(void);

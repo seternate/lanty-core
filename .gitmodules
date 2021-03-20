@@ -6,4 +6,4 @@
 	url = ../../../library/googletest.git
 [submodule "library/nlohmann-json"]
 	path = library/nlohmann-json
-	url = git@gitlab.home:library/nlohmann-json.git
+	url = ../../../library/nlohmann-json.git

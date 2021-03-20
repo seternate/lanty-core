@@ -16,12 +16,14 @@
 !/project/include/core/
 !/project/include/game/
 !/project/include/helper/
+!/project/include/serializer/
 !/project/include/system/
 !/project/include/user/
 !/project/include/yaml/
 !/project/source/
 !/project/source/game/
 !/project/source/helper/
+!/project/source/serializer/
 !/project/source/system/
 !/project/source/user/
 !/project/source/yaml/
@@ -41,6 +43,7 @@
 !/test/source/core/
 !/test/source/game/
 !/test/source/helper/
+!/test/source/serializer/
 !/test/source/user/
 !/test/source/yaml/
 

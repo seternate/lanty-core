@@ -18,6 +18,7 @@
 #include <gtest/gtest.h>
 #include <QSignalSpy>
 #include <QString>
+#include <string>
 #include <system/QPixmapAdapter.hpp>
 #include <yaml/YamlNode.hpp>
 
@@ -537,4 +538,47 @@ TEST(GameTest, IconImageChangeSignal)
     game.setIconImage(pixmap);
 
     ASSERT_EQ(1, spy.count());
+}
+
+TEST(GameTest, SerializeJSON)
+{
+    lanty::Game game;
+    nlohmann::json* json;
+
+    QString jsonExpected("{\"game\":{\"archive\":\"test.zip\",\"client\":{\"executable\":\"test.exe\"},\"name\":\"test\"}}");
+
+    game.setName("test");
+    game.setArchiveFileName("test.zip");
+    game.setClientExecutableRelativeFilePath("test.exe");
+
+    json = game.toJSON();
+    std::string s = json->dump();
+
+    ASSERT_EQ(s, jsonExpected.toStdString());
+
+    delete json;
+}
+
+TEST(GameTest, DeserializeJSON)
+{
+    QString name = "test";
+    QString archive = "test.zip";
+    QString clientExecutable = "test.exe";
+
+    nlohmann::json json
+        = "{\"game\":{\"archive\":\"test.zip\",\"client\":{\"executable\":\"test.exe\"},\"name\":\"test\"}}"_json;
+
+    lanty::Game game;
+    game.fromJSON(json);
+
+    ASSERT_EQ(game.getName(), name);
+    ASSERT_EQ(game.getArchiveFileName(), archive);
+    ASSERT_EQ(game.getClientExecutableRelativeFilePath(), clientExecutable);
+    ASSERT_TRUE(game.getClientArgument().isEmpty());
+    ASSERT_TRUE(game.getClientConnectArgument().isEmpty());
+    ASSERT_TRUE(game.getServerArgument().isEmpty());
+    ASSERT_EQ(game.getServerExecutableRelativeFilePath(), game.getClientExecutableRelativeFilePath());
+    ASSERT_TRUE(game.getVersion().isEmpty());
+    ASSERT_TRUE(game.getVersionFileQuery().isEmpty());
+    ASSERT_TRUE(game.getVersionRelativeFilePath().isEmpty());
 }

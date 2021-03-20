@@ -46,12 +46,17 @@ SOURCES += \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
     $$PWD/source/core/main.cpp \
     $$PWD/source/game/GameTest.cpp \
+    $$PWD/source/game/GamelistTest.cpp \
     $$PWD/source/helper/GameHelperTest.cpp \
+    $$PWD/source/serializer/SerializerTest.cpp \
     $$PWD/source/user/UserTest.cpp \
     $$PWD/source/user/UserlistTest.cpp \
     $$PWD/source/yaml/YamlNodeTest.cpp
 
-INCLUDEPATH += $$PWD/../library/yaml-cpp/include
+INCLUDEPATH += \
+    $$PWD/../library/yaml-cpp/include \
+    $$PWD/../library/nlohmann-json/single_include
+
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
 win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lyaml-cpp
 linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lyaml-cpp
