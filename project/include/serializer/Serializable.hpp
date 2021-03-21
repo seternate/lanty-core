@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,48 +14,35 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMELIST_HPP
-#define GAME_GAMELIST_HPP
+#ifndef SERIALIZER_SERIALIZABLE_HPP
+#define SERIALIZER_SERIALIZABLE_HPP
 
-#include <QAbstractListModel>
-#include <QVector>
-#include <memory>
+#include <QString>
+#include <nlohmann/json.hpp>
 
 #include "core/ltycore_global.hpp"
-#include "game/Game.hpp"
+#include "yaml/YamlNode.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Gamelist : public QAbstractListModel, public Serializable
+class LTYCORE_EXPORT Serializable
 {
-    Q_DISABLE_COPY_MOVE(Gamelist)
-
-    friend class GamelistFactory;
-
 public:
-    Gamelist(void) = default;
-    virtual ~Gamelist(void) = default;
+    Serializable(void) = default;
+    virtual ~Serializable(void) = default;
 
-    Game& operator[](const qint32 index);
-    const Game& operator[](const qint32 index) const;
+    virtual nlohmann::json* toJSON(void) const;
+    virtual QString toJSONString(void) const;
+    virtual YamlNode* toYAML(void) const;
+    virtual QString toYAMLString(void) const;
 
-    virtual const Game& at(const qint32 index) const;
-    virtual const Game& append(Game* game);
-    virtual void load(Gamelist* gamelist);
-    virtual void remove(const Game* game);
-    virtual quint32 size(void) const;
-
-    int rowCount(const QModelIndex& parent) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-
-    nlohmann::json* toJSON(void) const override;
-    bool fromJSON(const nlohmann::json& json) override;
-
-private:
-    QVector<std::shared_ptr<Game>> list;
+    virtual bool fromJSON(const nlohmann::json& json);
+    virtual bool fromJSONString(const QString& json);
+    virtual bool fromYAML(const YamlNode& yaml);
+    virtual bool fromYAMLString(const QString& yaml);
 };
 
 } /* namespace lanty */
 
-#endif /* GAME_GAMELIST_HPP */
+#endif /* SERIALIZER_SERIALIZABLE_HPP */

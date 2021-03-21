@@ -87,3 +87,39 @@ TEST(UserTest, GetterIPAddress)
     ASSERT_EQ(1, spy.count());
     ASSERT_EQ(1, spyChange.count());
 }
+
+TEST(UserTest, SerializeJSON)
+{
+    lanty::User user;
+
+    user.setUsername("test");
+    user.setGamepath("C:\\games");
+    user.setResolution(1920, 1080);
+    user.setIPAddress("192.168.1.1");
+
+    nlohmann::json* json = user.toJSON();
+
+    QString jsonExpected
+        = "{\"user\":{\"gamepath\":\"C:\\\\games\",\"ip-address\":\"192.168.1.1\",\"resolution\":{\"x\":1920,\"y\":1080},\"username\":\"test\"}}";
+
+    std::string s = json->dump();
+
+    ASSERT_EQ(s, jsonExpected.toStdString());
+
+    delete json;
+}
+
+TEST(UserTest, DeserialzeJSON)
+{
+    nlohmann::json json
+        = "{\"user\":{\"gamepath\":\"C:\\\\games\",\"ip-address\":\"192.168.1.1\",\"resolution\":{\"x\":1920,\"y\":1080},\"username\":\"test\"}}"_json;
+
+    lanty::User user;
+    user.fromJSON(json);
+
+    ASSERT_EQ(user.getUsername(), "test");
+    ASSERT_EQ(user.getGamepath(), "C:\\games");
+    ASSERT_EQ(user.getResolutionX(), 1920);
+    ASSERT_EQ(user.getResolutionY(), 1080);
+    ASSERT_EQ(user.getIPAddress(), "192.168.1.1");
+}

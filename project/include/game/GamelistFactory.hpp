@@ -69,7 +69,7 @@ public:
                 game = std::make_shared<T>();
                 gameYamlAbsoluteFilePath = gameYamlFileDirectory.absoluteFilePath(gameYamlFiles.at(i));
                 this->yamlNode->loadFromFile(gameYamlAbsoluteFilePath);
-                game->load(*this->yamlNode);
+                game->fromYAML(*this->yamlNode);
                 qDebug() << "Create game from yaml-file: " << gameYamlAbsoluteFilePath;
 
                 if (gameImageFileDirectory.isEmpty() == false)

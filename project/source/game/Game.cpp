@@ -19,6 +19,9 @@
 #include <QDebug>
 #include <QFile>
 
+#include <fstream>
+
+
 namespace lanty
 {
 
@@ -71,7 +74,7 @@ Game::Game(const YamlNode& yamlNode) :
     coverImage(QPixmapAdapter()),
     iconImage(QPixmapAdapter())
 {
-    this->loadFromYamlNode(yamlNode);
+    this->fromYAML(yamlNode);
 }
 
 
@@ -207,10 +210,48 @@ bool Game::canOpenServer(void) const
 }
 
 
-bool Game::load(const YamlNode& yamlNode)
+bool Game::fromJSON(const nlohmann::json& json)
 {
-    loadFromYamlNode(yamlNode);
+    nlohmann::json gameJSON = json["game"];
+
+    this->loadGameJSON(gameJSON);
+
     return true;
+}
+
+bool Game::fromYAML(const YamlNode& yaml)
+{
+    const YamlNode* gameNode = yaml.getNode("game");
+
+    this->loadGameYAML(*gameNode);
+    this->yamlFilePath = yaml.getFilePath();
+
+    qDebug() << "Loaded game from YAML-file: " << yaml.getFileName();
+
+    return true;
+}
+
+
+nlohmann::json* Game::toJSON(void) const
+{
+    nlohmann::json* rootJSON = new nlohmann::json();
+
+    nlohmann::json gameJSON({});
+    this->createGameJSON(gameJSON);
+
+    (*rootJSON)["game"] = gameJSON;
+
+    return rootJSON;
+}
+
+YamlNode* Game::toYAML(void) const
+{
+    YamlNode* rootNode = new YamlNode();
+
+    YamlNode* gamenode = rootNode->setNode("game");
+    this->createGameNode(*gamenode);
+
+    return rootNode;
 }
 
 
@@ -319,35 +360,38 @@ bool Game::save(void)
 
 bool Game::save(const QString& yamlFilePath)
 {
-    YamlNode rootNode(yamlFilePath, false);
+    nlohmann::json* rootJSON = nullptr;
+    rootJSON = this->toJSON();
+    std::ofstream json("C:/Users/Levin/Desktop/test.json");
+    json << *rootJSON;
+
+
+    YamlNode* rootNode = nullptr;
+    bool result = false;
+
     this->yamlFilePath = yamlFilePath;
+    rootNode = this->toYAML();
+    if (rootNode != nullptr)
+    {
+        result = rootNode->saveToFile(yamlFilePath);
+        delete rootNode;
+    }
 
-    this->saveToYamlNode(rootNode);
-
-    return rootNode.saveToFile();
+    return result;
 }
 
 
-void Game::loadFromYamlNode(const YamlNode& yamlNode)
+void Game::loadGameYAML(const YamlNode& gameYAML)
 {
-    const YamlNode* gameNode = yamlNode.getNode("game");
-
-    this->loadGameDataFromGameNode(*gameNode);
-    this->yamlFilePath = yamlNode.getFilePath();
-    qDebug() << "Loaded game from YAML-file: " << yamlNode.getFileName();
-}
-
-void Game::loadGameDataFromGameNode(const YamlNode& gameNode)
-{
-    this->name = gameNode.getQStringFromMap("name");
+    this->name = gameYAML.getQStringFromMap("name");
     qDebug() << "Loaded gamename: " << this->getName();
-    this->archiveFileName = gameNode.getQStringFromMap("archive");
+    this->archiveFileName = gameYAML.getQStringFromMap("archive");
     qDebug() << "Loaded archive filename: " << this->getArchiveFileName();
 
-    const YamlNode* versionNode = gameNode.getNode("version");
+    const YamlNode* versionNode = gameYAML.getNode("version");
     if (versionNode != nullptr)
     {
-        this->loadVersionDataFromGameNode(*versionNode);
+        this->loadVersionYAML(*versionNode);
         qDebug() << "Loaded game version info";
     }
     else
@@ -355,14 +399,14 @@ void Game::loadGameDataFromGameNode(const YamlNode& gameNode)
         qDebug() << "No game version info available";
     }
 
-    const YamlNode* clientNode = gameNode.getNode("client");
-    this->loadClientDataFromGameNode(*clientNode);
+    const YamlNode* clientNode = gameYAML.getNode("client");
+    this->loadClientYAML(*clientNode);
     qDebug() << "Loaded game client info";
 
-    const YamlNode* serverNode = gameNode.getNode("server");
+    const YamlNode* serverNode = gameYAML.getNode("server");
     if (serverNode != nullptr)
     {
-        this->loadServerDataFromGameNode(*serverNode);
+        this->loadServerYAML(*serverNode);
         qDebug() << "Loaded game server info";
     }
     else
@@ -371,11 +415,11 @@ void Game::loadGameDataFromGameNode(const YamlNode& gameNode)
     }
 }
 
-void Game::loadVersionDataFromGameNode(const YamlNode& versionNode)
+void Game::loadVersionYAML(const YamlNode& versionYAML)
 {
-    this->version = versionNode.getQStringFromMap("info");
+    this->version = versionYAML.getQStringFromMap("info");
     qDebug() << "Loaded game version info: " << this->getVersion();
-    QString versionFormat = versionNode.getQStringFromMap("format").toLower();
+    QString versionFormat = versionYAML.getQStringFromMap("format").toLower();
     if (versionFormat == "file")
     {
         this->versionSource = GameVersionSource::FILE;
@@ -388,53 +432,147 @@ void Game::loadVersionDataFromGameNode(const YamlNode& versionNode)
     {
         this->versionSource = GameVersionSource::NONE;
     }
-    this->versionRelativeFilePath = versionNode.getQStringFromMap("file");
+    this->versionRelativeFilePath = versionYAML.getQStringFromMap("file");
     qDebug() << "Loaded game version file: " << this->getVersionRelativeFilePath();
-    this->versionFileQuery = versionNode.getQStringFromMap("query");
+    this->versionFileQuery = versionYAML.getQStringFromMap("query");
     qDebug() << "Loaded game version query: '" << this->getVersionFileQuery();
 }
 
-void Game::loadClientDataFromGameNode(const YamlNode& clientNode)
+void Game::loadClientYAML(const YamlNode& clientYAML)
 {
-    this->clientExecutableRelativeFilePath = clientNode.getQStringFromMap("executable");
+    this->clientExecutableRelativeFilePath = clientYAML.getQStringFromMap("executable");
     qDebug() << "Loaded game client executable: " << this->getClientExecutableRelativeFilePath();
-    this->clientArgument = clientNode.getQStringFromMap("argument");
+    this->clientArgument = clientYAML.getQStringFromMap("argument");
     qDebug() << "Loaded game client argument: " << this->getClientArgument();
-    this->clientConnectArgument = clientNode.getQStringFromMap("connect");
+    this->clientConnectArgument = clientYAML.getQStringFromMap("connect");
     qDebug() << "Loaded game client connect: " << this->getClientConnectArgument();
 }
 
-void Game::loadServerDataFromGameNode(const YamlNode& serverNode)
+void Game::loadServerYAML(const YamlNode& serverYAML)
 {
-    this->serverExecutableRelativeFilePath = serverNode.getQStringFromMap("executable");
+    this->serverExecutableRelativeFilePath = serverYAML.getQStringFromMap("executable");
     qDebug() << "Loaded game server executable: " << this->getServerExecutableRelativeFilePath();
-    this->serverArgument = serverNode.getQStringFromMap("argument");
+    this->serverArgument = serverYAML.getQStringFromMap("argument");
     qDebug() << "Loaded game server argument: " << this->getServerArgument();
 }
 
 
-void Game::saveToYamlNode(YamlNode& yamlNode)
+void Game::loadGameJSON(const nlohmann::json& gameJSON)
 {
-    YamlNode* gamenode = yamlNode.setNode("game");
-    this->saveGameDataToGameNode(*gamenode);
+    this->name = QString::fromStdString(gameJSON.value("name", ""));
+    qDebug() << "Loaded gamename: " << this->getName();
+    this->archiveFileName = QString::fromStdString(gameJSON.value("archive", ""));
+    qDebug() << "Loaded archive filename: " << this->getArchiveFileName();
+
+    nlohmann::json versionJSON = gameJSON.contains("version") == true ? gameJSON["version"] : nlohmann::json();
+    if (versionJSON.is_null() == false)
+    {
+        this->loadVersionJSON(versionJSON);
+        qDebug() << "Loaded game version info";
+    }
+    else
+    {
+        qDebug() << "No game version info available";
+    }
+
+    nlohmann::json clientJSON = gameJSON["client"];
+    this->loadClientJSON(clientJSON);
+    qDebug() << "Loaded game client info";
+
+    nlohmann::json serverJSON = gameJSON.contains("server") == true ? gameJSON["server"] : nlohmann::json();
+    if (serverJSON.is_null() == false)
+    {
+        this->loadServerJSON(serverJSON);
+        qDebug() << "Loaded game server info";
+    }
+    else
+    {
+        qDebug() << "No game server info available";
+    }
 }
 
-void Game::saveGameDataToGameNode(YamlNode& gameNode)
+void Game::loadVersionJSON(const nlohmann::json& versionJSON)
+{
+    if (versionJSON.contains("info") == true)
+    {
+        this->version = QString::fromStdString(versionJSON.value("info", ""));
+    }
+    qDebug() << "Loaded game version info: " << this->getVersion();
+    if (versionJSON.contains("format") == true)
+    {
+        QString versionFormat = QString::fromStdString(versionJSON.value("format", "")).toLower();
+        if (versionFormat == "file")
+        {
+            this->versionSource = GameVersionSource::FILE;
+        }
+        else if (versionFormat == "executable")
+        {
+            this->versionSource = GameVersionSource::EXECUTABLE;
+        }
+        else
+        {
+            this->versionSource = GameVersionSource::NONE;
+        }
+    }
+    if (versionJSON.contains("file") == true)
+    {
+        this->versionRelativeFilePath = QString::fromStdString(versionJSON.value("file", ""));
+    }
+    qDebug() << "Loaded game version file: " << this->getVersionRelativeFilePath();
+    if (versionJSON.contains("query") == true)
+    {
+        this->versionFileQuery = QString::fromStdString(versionJSON.value("query", ""));
+    }
+    qDebug() << "Loaded game version query: '" << this->getVersionFileQuery();
+}
+
+void Game::loadClientJSON(const nlohmann::json& clientJSON)
+{
+    this->clientExecutableRelativeFilePath = QString::fromStdString(clientJSON.value("executable", ""));
+    qDebug() << "Loaded game client executable: " << this->getClientExecutableRelativeFilePath();
+    if (clientJSON.contains("argument") == true)
+    {
+        this->clientArgument = QString::fromStdString(clientJSON.value("argument", ""));
+    }
+    qDebug() << "Loaded game client argument: " << this->getClientArgument();
+    if (clientJSON.contains("connect") == true)
+    {
+        this->clientConnectArgument = QString::fromStdString(clientJSON.value("connect", ""));
+    }
+    qDebug() << "Loaded game client connect: " << this->getClientConnectArgument();
+}
+
+void Game::loadServerJSON(const nlohmann::json& serverJSON)
+{
+    if (serverJSON.contains("executable") == true)
+    {
+        this->serverExecutableRelativeFilePath = QString::fromStdString(serverJSON.value("executable", ""));
+    }
+    qDebug() << "Loaded game server executable: " << this->getServerExecutableRelativeFilePath();
+    if (serverJSON.contains("argument") == true)
+    {
+        this->serverArgument = QString::fromStdString(serverJSON.value("argument", ""));
+    }
+    qDebug() << "Loaded game server argument: " << this->getServerArgument();
+}
+
+
+void Game::createGameNode(YamlNode& gameNode) const
 {
     gameNode.setString("name", this->name);
     gameNode.setString("archive", this->archiveFileName);
 
     YamlNode* versionNode = gameNode.setNode("version");
-    this->saveVersionDataToGameNode(*versionNode);
+    this->createVersionNode(*versionNode);
 
     YamlNode* clientNode = gameNode.setNode("client");
-    this->saveClientDataToGameNode(*clientNode);
+    this->createClientNode(*clientNode);
 
     YamlNode* serverNode = gameNode.setNode("server");
-    this->saveServerDataToGameNode(*serverNode);
+    this->createServerNode(*serverNode);
 }
 
-void Game::saveVersionDataToGameNode(YamlNode& versionNode)
+void Game::createVersionNode(YamlNode& versionNode) const
 {
     if (this->version.isEmpty() == false)
     {
@@ -465,7 +603,7 @@ void Game::saveVersionDataToGameNode(YamlNode& versionNode)
     }
 }
 
-void Game::saveClientDataToGameNode(YamlNode& clientNode)
+void Game::createClientNode(YamlNode& clientNode) const
 {
     clientNode.setString("executable", this->clientExecutableRelativeFilePath);
 
@@ -480,7 +618,7 @@ void Game::saveClientDataToGameNode(YamlNode& clientNode)
     }
 }
 
-void Game::saveServerDataToGameNode(YamlNode& serverNode)
+void Game::createServerNode(YamlNode& serverNode) const
 {
     if (this->serverExecutableRelativeFilePath.isEmpty() == false)
     {
@@ -490,6 +628,86 @@ void Game::saveServerDataToGameNode(YamlNode& serverNode)
     if (this->serverArgument.isEmpty() == false)
     {
         serverNode.setString("argument", this->serverArgument);
+    }
+}
+
+
+void Game::createGameJSON(nlohmann::json& gameJSON) const
+{
+    gameJSON["name"] = this->name.toStdString();
+    gameJSON["archive"] = this->archiveFileName.toStdString();
+
+    nlohmann::json versionJSON;
+    this->createVersionJSON(versionJSON);
+    if (versionJSON.is_null() == false)
+    {
+        gameJSON["version"] = versionJSON;
+    }
+
+    nlohmann::json clientJSON;
+    this->createClientJSON(clientJSON);
+    gameJSON["client"] = clientJSON;
+
+    nlohmann::json serverJSON;
+    this->createServerJSON(serverJSON);
+    if (serverJSON.is_null() == false)
+    {
+        gameJSON["server"] = serverJSON;
+    }
+}
+
+void Game::createVersionJSON(nlohmann::json& versionJSON) const
+{
+    if (this->version.isEmpty() == false)
+    {
+        versionJSON["info"] = this->version.toStdString();
+    }
+
+    if (this->versionSource == GameVersionSource::EXECUTABLE)
+    {
+        versionJSON["format"] = "executable";
+    }
+    else if (this->versionSource == GameVersionSource::FILE)
+    {
+        versionJSON["format"] = "file";
+    }
+
+    if (this->versionRelativeFilePath.isEmpty() == false)
+    {
+        versionJSON["file"] = this->versionRelativeFilePath.toStdString();
+    }
+
+    if (this->versionFileQuery.isEmpty() == false)
+    {
+        versionJSON["query"] = this->versionFileQuery.toStdString();
+    }
+}
+
+void Game::createClientJSON(nlohmann::json& clientJSON) const
+{
+    clientJSON["executable"] = this->clientExecutableRelativeFilePath.toStdString();
+
+    if (this->clientArgument.isEmpty() == false)
+    {
+        clientJSON["argument"] = this->clientArgument.toStdString();
+    }
+
+    if (this->clientConnectArgument.isEmpty() == false)
+    {
+        clientJSON["connect"] = this->clientConnectArgument.toStdString();
+    }
+}
+
+void Game::createServerJSON(nlohmann::json& serverJSON) const
+{
+    if (this->serverExecutableRelativeFilePath.isEmpty() == false)
+    {
+        serverJSON["executable"] = this->serverExecutableRelativeFilePath.toStdString();
+    }
+
+    if (this->serverArgument.isEmpty() == false)
+    {
+        serverJSON["argument"] = this->serverArgument.toStdString();
     }
 }
 

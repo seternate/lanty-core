@@ -33,6 +33,7 @@ SOURCES += \
     $$PWD/source/game/Gamelist.cpp \
     $$PWD/source/game/GamelistFactory.cpp \
     $$PWD/source/helper/GameHelper.cpp \
+    $$PWD/source/serializer/Serializable.cpp \
     $$PWD/source/system/FileExtension.cpp \
     $$PWD/source/system/QDirAdapter.cpp \
     $$PWD/source/system/QPixmapAdapter.cpp \
@@ -49,6 +50,7 @@ HEADERS += \
     $$PWD/include/game/GamelistFactory.hpp \
     $$PWD/include/game/GameVersionSource.hpp \
     $$PWD/include/helper/GameHelper.hpp \
+    $$PWD/include/serializer/Serializable.hpp \
     $$PWD/include/system/FileExtension.hpp \
     $$PWD/include/system/QDirAdapter.hpp \
     $$PWD/include/system/QPixmapAdapter.hpp \
@@ -71,8 +73,12 @@ win32 {
 win32: DESTDIR += $$PWD/../artifact/x86_64/windows
 linux: DESTDIR += $$PWD/../artifact/x86_64/linux
 
-INCLUDEPATH += $$PWD/../library/yaml-cpp/include
+INCLUDEPATH += \
+    $$PWD/../library/yaml-cpp/include \
+    $$PWD/../library/nlohmann-json/single_include
+
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
+
 LIBS += -L$$DESTDIR -lyaml-cpp
 
 CONFIG(debug, debug|release) {

@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,48 +14,53 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMELIST_HPP
-#define GAME_GAMELIST_HPP
-
-#include <QAbstractListModel>
-#include <QVector>
-#include <memory>
-
-#include "core/ltycore_global.hpp"
-#include "game/Game.hpp"
+#include "serializer/Serializable.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Gamelist : public QAbstractListModel, public Serializable
+nlohmann::json* Serializable::toJSON(void) const
 {
-    Q_DISABLE_COPY_MOVE(Gamelist)
+    return nullptr;
+}
 
-    friend class GamelistFactory;
+QString Serializable::toJSONString(void) const
+{
+    return QString("");
+}
 
-public:
-    Gamelist(void) = default;
-    virtual ~Gamelist(void) = default;
+YamlNode* Serializable::toYAML(void) const
+{
+    return nullptr;
+}
 
-    Game& operator[](const qint32 index);
-    const Game& operator[](const qint32 index) const;
+QString Serializable::toYAMLString(void) const
+{
+    return QString("");
+}
 
-    virtual const Game& at(const qint32 index) const;
-    virtual const Game& append(Game* game);
-    virtual void load(Gamelist* gamelist);
-    virtual void remove(const Game* game);
-    virtual quint32 size(void) const;
+bool Serializable::fromJSON(const nlohmann::json& json)
+{
+    Q_UNUSED(json);
+    return false;
+}
 
-    int rowCount(const QModelIndex& parent) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
+bool Serializable::fromJSONString(const QString& json)
+{
+    Q_UNUSED(json);
+    return false;
+}
 
-    nlohmann::json* toJSON(void) const override;
-    bool fromJSON(const nlohmann::json& json) override;
+bool Serializable::fromYAML(const YamlNode& yaml)
+{
+    Q_UNUSED(yaml);
+    return false;
+}
 
-private:
-    QVector<std::shared_ptr<Game>> list;
-};
+bool Serializable::fromYAMLString(const QString& yaml)
+{
+    Q_UNUSED(yaml);
+    return false;
+}
 
 } /* namespace lanty */
-
-#endif /* GAME_GAMELIST_HPP */
