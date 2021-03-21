@@ -31,27 +31,21 @@ INCLUDEPATH += \
     $$PWD/include
 
 HEADERS += \
-    $$PWD/include/helper/QStringPrintHelper.hpp \
-    $$PWD/include/helper/GameHelperTest.hpp \
-    $$PWD/include/mock/MockGame.hpp \
-    $$PWD/include/mock/MockGameHelper.hpp \
-    $$PWD/include/mock/MockQDir.hpp \
-    $$PWD/include/mock/MockQPixmap.hpp \
-    $$PWD/include/mock/MockUser.hpp \
-    $$PWD/include/mock/MockYamlNode.hpp \
-    $$PWD/include/yaml/YamlNodeTest.hpp
+    $$PWD/include/helper/QStringPrintHelper.hpp
 
 SOURCES += \
     $$PWD/../library/googletest/googletest/src/gtest-all.cc \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
     $$PWD/source/core/main.cpp \
+    $$PWD/source/game/GameClientTest.cpp \
+    $$PWD/source/game/GameServerTest.cpp \
     $$PWD/source/game/GameTest.cpp \
-    $$PWD/source/helper/GameHelperTest.cpp \
-    $$PWD/source/user/UserTest.cpp \
-    $$PWD/source/user/UserlistTest.cpp \
-    $$PWD/source/yaml/YamlNodeTest.cpp
+    $$PWD/source/game/GameVersionTest.cpp
 
-INCLUDEPATH += $$PWD/../library/yaml-cpp/include
+INCLUDEPATH += \
+    $$PWD/../library/yaml-cpp/include \
+    $$PWD/../library/nlohmann-json/single_include
+
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
 win32: LIBS += -L$$PWD/../artifact/x86_64/windows -lyaml-cpp
 linux: LIBS += -L$$PWD/../artifact/x86_64/linux -lyaml-cpp

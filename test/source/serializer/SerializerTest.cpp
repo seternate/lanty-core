@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,19 +14,27 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMEVERSIONSOURCE_HPP
-#define GAME_GAMEVERSIONSOURCE_HPP
+#include <gtest/gtest.h>
 
-namespace lanty
+#include "game/Game.hpp"
+#include "serializer/Serializable.hpp"
+
+TEST(SerializerTest, Serialize)
 {
+    lanty::Serializable serialize;
+    ASSERT_EQ(nullptr, serialize.toJSON());
+    ASSERT_EQ(nullptr, serialize.toYAML());
 
-enum class GameVersionSource
+    ASSERT_TRUE(serialize.toJSONString().isEmpty());
+    ASSERT_TRUE(serialize.toYAMLString().isEmpty());
+}
+
+TEST(SerializerTest, Deserialize)
 {
-    EXECUTABLE = 0x02,
-    FILE = 0x01,
-    NONE = 0x00
-};
+    lanty::Serializable serialize;
 
-} /* namespace lanty */
-
-#endif /* GAME_GAMEVERSIONSOURCE_HPP */
+    ASSERT_FALSE(serialize.fromJSON(nlohmann::json()));
+    ASSERT_FALSE(serialize.fromJSONString(""));
+    ASSERT_FALSE(serialize.fromYAML(lanty::YamlNode()));
+    ASSERT_FALSE(serialize.fromYAMLString(""));
+}

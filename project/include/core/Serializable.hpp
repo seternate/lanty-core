@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -16,9 +16,21 @@
 
 #pragma once
 
-#define STRINGIZE2(s)       #s
-#define STRINGIZE(s)        STRINGIZE2(s)
-#define VERSION_MAJOR       0
-#define VERSION_MINOR       1
-#define VERSION_PATCH       0
-#define VERSION_APPLICATION "v" STRINGIZE(VERSION_MAJOR) "." STRINGIZE(VERSION_MINOR) "." STRINGIZE(VERSION_PATCH)
+#include <QString>
+#include <nlohmann/json.hpp>
+
+#include "core/ltycore_global.hpp"
+
+namespace lanty
+{
+
+class LTYCORE_EXPORT Serializable
+{
+public:
+    Serializable(void) = default;
+    virtual ~Serializable(void) = default;
+
+    virtual nlohmann::json toJSON(void) const = 0;
+};
+
+} /* namespace lanty */

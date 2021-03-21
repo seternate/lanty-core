@@ -30,31 +30,18 @@ INCLUDEPATH += $$PWD/include
 
 SOURCES += \
     $$PWD/source/game/Game.cpp \
-    $$PWD/source/game/Gamelist.cpp \
-    $$PWD/source/game/GamelistFactory.cpp \
-    $$PWD/source/helper/GameHelper.cpp \
-    $$PWD/source/system/FileExtension.cpp \
-    $$PWD/source/system/QDirAdapter.cpp \
-    $$PWD/source/system/QPixmapAdapter.cpp \
-    $$PWD/source/user/User.cpp \
-    $$PWD/source/user/Userlist.cpp \
-    $$PWD/source/yaml/YamlNode.cpp \
-
+    $$PWD/source/game/GameClient.cpp \
+    $$PWD/source/game/GameServer.cpp \
+    $$PWD/source/game/GameVersion.cpp
 
 HEADERS += \
     $$PWD/include/core/ltycore_global.hpp \
+    $$PWD/include/core/Serializable.hpp \
     $$PWD/include/core/version.hpp \
     $$PWD/include/game/Game.hpp \
-    $$PWD/include/game/Gamelist.hpp \
-    $$PWD/include/game/GamelistFactory.hpp \
-    $$PWD/include/game/GameVersionSource.hpp \
-    $$PWD/include/helper/GameHelper.hpp \
-    $$PWD/include/system/FileExtension.hpp \
-    $$PWD/include/system/QDirAdapter.hpp \
-    $$PWD/include/system/QPixmapAdapter.hpp \
-    $$PWD/include/user/User.hpp \
-    $$PWD/include/user/Userlist.hpp \
-    $$PWD/include/yaml/YamlNode.hpp
+    $$PWD/include/game/GameClient.hpp \
+    $$PWD/include/game/GameServer.hpp \
+    $$PWD/include/game/GameVersion.hpp
 
 TRANSLATIONS += $$PWD/../resource/translation/core_de_DE.ts
 
@@ -71,8 +58,12 @@ win32 {
 win32: DESTDIR += $$PWD/../artifact/x86_64/windows
 linux: DESTDIR += $$PWD/../artifact/x86_64/linux
 
-INCLUDEPATH += $$PWD/../library/yaml-cpp/include
+INCLUDEPATH += \
+    $$PWD/../library/yaml-cpp/include \
+    $$PWD/../library/nlohmann-json/single_include
+
 DEPENDPATH += $$PWD/../library/yaml-cpp/include
+
 LIBS += -L$$DESTDIR -lyaml-cpp
 
 CONFIG(debug, debug|release) {

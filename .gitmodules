@@ -4,3 +4,6 @@
 [submodule "library/googletest"]
 	path = library/googletest
 	url = ../../../library/googletest.git
+[submodule "library/nlohmann-json"]
+	path = library/nlohmann-json
+	url = ../../../library/nlohmann-json.git

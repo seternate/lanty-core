@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,117 +14,75 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAME_HPP
-#define GAME_GAME_HPP
+#pragma once
 
-#include <QObject>
+#include <QPixmap>
 #include <QString>
+#include <nlohmann/json.hpp>
 
 #include "core/ltycore_global.hpp"
-#include "game/GameVersionSource.hpp"
-#include "system/QPixmapAdapter.hpp"
-#include "yaml/YamlNode.hpp"
+#include "game/GameClient.hpp"
+#include "game/GameServer.hpp"
+#include "game/GameVersion.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Game : public QObject
+class LTYCORE_EXPORT Game : public Serializable
 {
-    Q_OBJECT
-    Q_DISABLE_COPY_MOVE(Game);
-
 public:
-    explicit Game(QObject* parent = nullptr);
-    explicit Game(const YamlNode& yamlNode);
+    static const std::string NAME_SERIALIZER_KEY;
+    static const std::string ARCHIVE_SERIALIZER_KEY;
+    static const std::string VERSION_SERIALIZER_KEY;
+    static const std::string CLIENT_SERIALIZER_KEY;
+    static const std::string SERVER_SERIALIZER_KEY;
+
+    Game(const QString& name = QString(""),
+         const QString& archiveFilePath = QString(""),
+         const GameClient& client = GameClient(),
+         const GameServer& server = GameServer(),
+         const GameVersion& version = GameVersion()) noexcept;
+    Game(const Game& game) noexcept;
+    Game(Game&& game) = delete;
     virtual ~Game(void) = default;
 
-    bool operator==(const Game& game) const;
-    bool operator!=(const Game& game) const;
+    Game& operator=(const Game& game) noexcept;
+    Game& operator=(Game&& game) = delete;
+    bool operator==(const Game& game) const noexcept;
+    bool operator!=(const Game& game) const noexcept;
 
-    virtual QString getName(void) const;
-    virtual QString getArchiveFileName(void) const;
-    virtual QString getClientExecutableRelativeFilePath(void) const;
-    virtual QString getClientArgument(void) const;
-    virtual QString getClientConnectArgument(void) const;
-    virtual QString getServerExecutableRelativeFilePath(void) const;
-    virtual QString getServerArgument(void) const;
-    virtual QString getVersion(void) const;
-    virtual GameVersionSource getVersionSource(void) const;
-    virtual QString getVersionRelativeFilePath(void) const;
-    virtual QString getVersionFileQuery(void) const;
-    virtual QPixmapAdapter getCoverImage(void) const;
-    virtual QPixmapAdapter getIconImage(void) const;
-    virtual bool isVersion(void) const;
-    virtual bool canJoinServerWithCLI(void) const;
-    virtual bool canOpenDedicatedServer(void) const;
-    virtual bool canOpenServer(void) const;
+    const QString& getName(void) const noexcept;
+    const QString& getArchiveFileName(void) const noexcept;
+    const GameClient& getClient(void) const noexcept;
+    const GameServer& getServer(void) const noexcept;
+    const GameVersion& getVersion(void) const noexcept;
+    const QPixmap& getCover(void) const noexcept;
+    const QPixmap& getIcon(void) const noexcept;
 
-    virtual bool load(const YamlNode& yamlNode);
+    virtual void setName(const QString& name) noexcept;
+    virtual void setArchiveFileName(const QString& archiveFileName) noexcept;
+    virtual void setClientExecutableFilePath(const QString& clientExecutableFilePath) noexcept;
+    virtual void setClientArgument(const QString& clientArgument) noexcept;
+    virtual void setClientConnectArgument(const QString& clientConnectArgument) noexcept;
+    virtual void setServerExecutableFilePath(const QString& serverExecutableFilePath) noexcept;
+    virtual void setServerArgument(const QString& serverArgument) noexcept;
+    virtual void setVersion(const QString& version) noexcept;
+    virtual void setVersionSource(const GameVersion::Source versionSource) noexcept;
+    virtual void setVersionFilePath(const QString& versionFilePath) noexcept;
+    virtual void setVersionFileQuery(const QString& versionFileQuery) noexcept;
+    virtual void setCover(const QPixmap& cover) noexcept;
+    virtual void setIcon(const QPixmap& icon) noexcept;
 
-public slots:
-    virtual void setName(const QString& name);
-    virtual void setArchiveFileName(const QString& archiveFileName);
-    virtual void setClientExecutableRelativeFilePath(const QString& clientExecutableRelativeFilePath);
-    virtual void setClientArgument(const QString& clientArgument);
-    virtual void setClientConnectArgument(const QString& clientConnectArgument);
-    virtual void setServerExecutableRelativeFilePath(const QString& serverExecutableRelativeFilePath);
-    virtual void setServerArgument(const QString& serverArgument);
-    virtual void setVersion(const QString& version);
-    virtual void setVersionSource(const GameVersionSource& gameVersionSource);
-    virtual void setVersionRelativeFilePath(const QString& versionRelativeFilePath);
-    virtual void setVersionFileQuery(const QString& versionFileQuery);
-    virtual void setCoverImage(const QPixmapAdapter& coverImage);
-    virtual void setIconImage(const QPixmapAdapter& iconImage);
-
-    virtual bool deleteYamlFile(void);
-    virtual bool save(void);
-    virtual bool save(const QString& yamlFilePath);
-
-signals:
-    void changed(void);
-    void nameChanged(const QString& newName);
-    void archiveFileNameChanged(const QString& newArchiveFileName);
-    void clientExecutableChanged(const QString& newClientExecutable);
-    void clientArgumentChanged(const QString& newClientArgument);
-    void clientConnectArgumentChanged(const QString& newClientConnectArgument);
-    void serverExecutableChanged(const QString& newServerExecutable);
-    void serverArgumentChanged(const QString& newServerArgument);
-    void versionChanged(const QString& newVersion);
-    void versionSourceChanged(GameVersionSource newGameVersionSource);
-    void versionFileChanged(const QString& newVersionFile);
-    void versionFileQueryChanged(const QString& newVersionFile);
-    void coverImageChanged(const lanty::QPixmapAdapter& newCoverImage);
-    void iconImageChanged(const lanty::QPixmapAdapter& newIconImage);
+    nlohmann::json toJSON(void) const override;
 
 private:
-    void loadFromYamlNode(const YamlNode& yamlNode);
-    void loadGameDataFromGameNode(const YamlNode& gameNode);
-    void loadVersionDataFromGameNode(const YamlNode& versionNode);
-    void loadClientDataFromGameNode(const YamlNode& clientNode);
-    void loadServerDataFromGameNode(const YamlNode& serverNode);
-
-    void saveToYamlNode(YamlNode& yamlNode);
-    void saveGameDataToGameNode(YamlNode& gameNode);
-    void saveVersionDataToGameNode(YamlNode& versionNode);
-    void saveClientDataToGameNode(YamlNode& clientNode);
-    void saveServerDataToGameNode(YamlNode& serverNode);
-
-    QString yamlFilePath;
     QString name;
     QString archiveFileName;
-    QString clientExecutableRelativeFilePath;
-    QString clientArgument;
-    QString clientConnectArgument;
-    QString serverExecutableRelativeFilePath;
-    QString serverArgument;
-    QString version;
-    GameVersionSource versionSource;
-    QString versionRelativeFilePath;
-    QString versionFileQuery;
-    QPixmapAdapter coverImage;
-    QPixmapAdapter iconImage;
+    GameClient client;
+    GameServer server;
+    GameVersion version;
+    QPixmap cover;
+    QPixmap icon;
 };
 
 } /* namespace lanty */
-
-#endif /* GAME_GAME_HPP */

@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,11 +14,53 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+#include "serializer/Serializable.hpp"
 
-#define STRINGIZE2(s)       #s
-#define STRINGIZE(s)        STRINGIZE2(s)
-#define VERSION_MAJOR       0
-#define VERSION_MINOR       1
-#define VERSION_PATCH       0
-#define VERSION_APPLICATION "v" STRINGIZE(VERSION_MAJOR) "." STRINGIZE(VERSION_MINOR) "." STRINGIZE(VERSION_PATCH)
+namespace lanty
+{
+
+nlohmann::json* Serializable::toJSON(void) const
+{
+    return nullptr;
+}
+
+QString Serializable::toJSONString(void) const
+{
+    return QString("");
+}
+
+YamlNode* Serializable::toYAML(void) const
+{
+    return nullptr;
+}
+
+QString Serializable::toYAMLString(void) const
+{
+    return QString("");
+}
+
+bool Serializable::fromJSON(const nlohmann::json& json)
+{
+    Q_UNUSED(json);
+    return false;
+}
+
+bool Serializable::fromJSONString(const QString& json)
+{
+    Q_UNUSED(json);
+    return false;
+}
+
+bool Serializable::fromYAML(const YamlNode& yaml)
+{
+    Q_UNUSED(yaml);
+    return false;
+}
+
+bool Serializable::fromYAMLString(const QString& yaml)
+{
+    Q_UNUSED(yaml);
+    return false;
+}
+
+} /* namespace lanty */

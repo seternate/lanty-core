@@ -19,8 +19,10 @@
 namespace lanty
 {
 
-User::User(const QString& username) :
-    QObject(),
+User::User(QObject* parent) : QObject(parent) { }
+
+User::User(const QString& username, QObject* parent) :
+    QObject(parent),
     username(username),
     gamepath(""),
     resolutionX(0),
@@ -110,5 +112,34 @@ void User::setIPAddress(const QString& ipAddress)
     emit this->changed();
 }
 
+
+nlohmann::json* User::toJSON(void) const
+{
+    nlohmann::json* json = new nlohmann::json({});
+    nlohmann::json userjson({});
+
+    userjson["username"] = this->getUsername().toStdString();
+    userjson["gamepath"] = this->getGamepath().toStdString();
+    userjson["resolution"]["x"] = this->getResolutionX();
+    userjson["resolution"]["y"] = this->getResolutionY();
+    userjson["ip-address"] = this->getIPAddress().toStdString();
+
+    (*json)["user"] = userjson;
+
+    return json;
+}
+
+bool User::fromJSON(const nlohmann::json& json)
+{
+    nlohmann::json userjson = json["user"];
+
+    this->setUsername(QString::fromStdString(userjson["username"]));
+    this->setGamepath(QString::fromStdString(userjson["gamepath"]));
+    this->setResolutionX(userjson["resolution"]["x"]);
+    this->setResolutionY(userjson["resolution"]["y"]);
+    this->setIPAddress(QString::fromStdString(userjson["ip-address"]));
+
+    return true;
+}
 
 } /* namespace lanty */

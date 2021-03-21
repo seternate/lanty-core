@@ -41,7 +41,7 @@ public:
     MOCK_METHOD(bool, canJoinServerWithCLI, (), (const, override));
     MOCK_METHOD(bool, canOpenDedicatedServer, (), (const, override));
     MOCK_METHOD(bool, canOpenServer, (), (const, override));
-    MOCK_METHOD(bool, load, (const lanty::YamlNode& yamlNode), (override));
+    MOCK_METHOD(bool, fromYAML, (const lanty::YamlNode& yamlNode), (override));
 
 
 public slots:
