@@ -27,8 +27,8 @@ namespace lanty
 class LTYCORE_EXPORT Serializable
 {
 public:
-    Serializable(void) = default;
-    virtual ~Serializable(void) = default;
+    Serializable(void) = default;             // GCOVR_EXCL_LINE
+    virtual ~Serializable(void) = default;    // GCOVR_EXCL_LINE
 
     virtual nlohmann::json toJSON(void) const = 0;
 };

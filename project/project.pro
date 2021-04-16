@@ -21,9 +21,10 @@ DEFINES += LTYCORE_LIBRARY
 DEFINES += QT_DEPRECATED_WARNINGS
 CONFIG += c++17
 CONFIG += skip_target_version_ext
-CONFIG += object_parallel_to_source
+# CONFIG += object_parallel_to_source
 
 QMAKE_CXXFLAGS += --coverage
+QMAKE_LFLAGS += --coverage
 LIBS += -lgcov
 
 INCLUDEPATH += $$PWD/include

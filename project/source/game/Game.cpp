@@ -30,6 +30,7 @@ Game::Game(const QString& name,
            const GameClient& client,
            const GameServer& server,
            const GameVersion& version) noexcept :
+    Serializable(),
     name(name),
     archiveFileName(archiveFilePath),
     client(client),

@@ -38,6 +38,12 @@ TEST(GameTest, FieldsShouldBeEmptyAfterCallingDefaultConstructor)
     ASSERT_TRUE(game.getIcon().isNull());
 }
 
+TEST(GameTest, DefaultDestructor)
+{
+    lanty::Game* game = new lanty::Game;
+    delete game;
+}
+
 TEST(GameTest, GetterSetterTest)
 {
     lanty::Game game;

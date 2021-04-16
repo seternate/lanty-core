@@ -47,7 +47,7 @@ public:
     GameVersion(void) noexcept;
     GameVersion(const GameVersion& gameversion) noexcept;
     GameVersion(GameVersion&& gameversion) = delete;
-    virtual ~GameVersion(void) = default;
+    virtual ~GameVersion(void) = default;    // GCOVR_EXCL_LINE
 
     GameVersion& operator=(const GameVersion& gameversion) noexcept;
     GameVersion& operator=(GameVersion&& gameversion) = delete;

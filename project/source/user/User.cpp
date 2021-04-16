@@ -27,6 +27,7 @@ const std::string User::RESOLUTION_Y_SERIALIZER_KEY = "y";
 const std::string User::IPADDRESS_SERIALIZER_KEY = "ip-address";
 
 User::User(const QString& username, const QString& gamepath, const QString& ipAddress) noexcept :
+    Serializable(),
     username(username),
     gamepath(gamepath),
     resolutionX(0),

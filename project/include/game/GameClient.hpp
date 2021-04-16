@@ -38,7 +38,7 @@ public:
                const QString& argument = QString("")) noexcept;
     GameClient(const GameClient& gameclient) noexcept;
     GameClient(GameClient&& gameclient) = delete;
-    virtual ~GameClient(void) = default;
+    virtual ~GameClient(void) = default;    // GCOVR_EXCL_LINE
 
     GameClient& operator=(const GameClient& gameclient) noexcept;
     GameClient& operator=(GameClient&& gameclient) = delete;

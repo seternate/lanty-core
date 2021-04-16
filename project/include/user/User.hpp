@@ -42,7 +42,7 @@ public:
          const QString& ipAddress = QString("")) noexcept;
     User(const User& user) noexcept;
     User(User&& user) = delete;
-    virtual ~User(void) = default;
+    virtual ~User(void) = default;    // GCOVR_EXCL_LINE
 
     User& operator=(const User& user) noexcept;
     User& operator=(User&& user) = delete;

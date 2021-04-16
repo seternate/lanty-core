@@ -35,7 +35,7 @@ public:
     GameServer(const QString& filePath = QString(""), const QString& argument = QString("")) noexcept;
     GameServer(const GameServer& gameserver) noexcept;
     GameServer(GameServer&& gameserver) noexcept = delete;
-    virtual ~GameServer(void) = default;
+    virtual ~GameServer(void) = default;    // GCOVR_EXCL_LINE
 
     GameServer& operator=(const GameServer& gameserver) noexcept;
     GameServer& operator=(GameServer&& gameserver) = delete;

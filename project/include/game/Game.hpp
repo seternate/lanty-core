@@ -45,7 +45,7 @@ public:
          const GameVersion& version = GameVersion()) noexcept;
     Game(const Game& game) noexcept;
     Game(Game&& game) = delete;
-    virtual ~Game(void) = default;
+    virtual ~Game(void) = default;    // GCOVR_EXCL_LINE
 
     Game& operator=(const Game& game) noexcept;
     Game& operator=(Game&& game) = delete;
