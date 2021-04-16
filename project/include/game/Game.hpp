@@ -19,6 +19,7 @@
 #include <QPixmap>
 #include <QString>
 #include <nlohmann/json.hpp>
+#include <string>
 
 #include "core/ltycore_global.hpp"
 #include "game/GameClient.hpp"

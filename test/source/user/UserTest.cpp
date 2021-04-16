@@ -15,111 +15,114 @@
  */
 
 #include <gtest/gtest.h>
-#include <QSignalSpy>
 
 #include "helper/QStringPrintHelper.hpp"
 #include "user/User.hpp"
 
-TEST(UserTest, GetterUsername)
+TEST(UserTest, FieldsShouldBeEmptyAfterCallingDefaultConstructor)
 {
+    lanty::User user;
+
+    ASSERT_TRUE(user.getUsername().isEmpty());
+    ASSERT_TRUE(user.getGamepath().isEmpty());
+    ASSERT_EQ(user.getResolutionX(), 0);
+    ASSERT_EQ(user.getResolutionY(), 0);
+    ASSERT_TRUE(user.getIPAddress().isNull());
+}
+
+TEST(UserTest, GetterSetterTest)
+{
+    lanty::User user;
+
     QString username("seternate");
-    lanty::User user("asd");
-    QSignalSpy spy(&user, SIGNAL(usernameChanged(QString)));
-    QSignalSpy spyChange(&user, SIGNAL(changed()));
-
     user.setUsername(username);
-
     ASSERT_EQ(user.getUsername(), username);
-    ASSERT_EQ(1, spy.count());
-    ASSERT_EQ(1, spyChange.count());
-}
 
-TEST(UserTest, GetterGamepath)
-{
     QString gamepath("C:/Users/dummy test");
-    lanty::User user("asd");
-    QSignalSpy spy(&user, SIGNAL(gamepathChanged(QString)));
-    QSignalSpy spyChange(&user, SIGNAL(changed()));
-
     user.setGamepath(gamepath);
-
     ASSERT_EQ(user.getGamepath(), gamepath);
-    ASSERT_EQ(1, spy.count());
-    ASSERT_EQ(1, spyChange.count());
-}
 
-TEST(UserTest, GetterResolution)
-{
     quint32 resolutionX1 = 1920;
     quint32 resolutionY1 = 1080;
     quint32 resolutionX2 = 1280;
     quint32 resolutionY2 = 720;
-    lanty::User user("asd");
-    QSignalSpy spy(&user, SIGNAL(resolutionChanged(quint32, quint32)));
-    QSignalSpy spyChange(&user, SIGNAL(changed()));
-
     user.setResolution(resolutionX1, resolutionY1);
     ASSERT_EQ(user.getResolutionX(), resolutionX1);
     ASSERT_EQ(user.getResolutionY(), resolutionY1);
-
     user.setResolutionX(resolutionX2);
     ASSERT_EQ(user.getResolutionX(), resolutionX2);
     ASSERT_EQ(user.getResolutionY(), resolutionY1);
-
     user.setResolutionY(resolutionY2);
     ASSERT_EQ(user.getResolutionX(), resolutionX2);
     ASSERT_EQ(user.getResolutionY(), resolutionY2);
 
-    ASSERT_EQ(3, spy.count());
-    ASSERT_EQ(3, spyChange.count());
-}
-
-TEST(UserTest, GetterIPAddress)
-{
-    QString ipAddress("127.0.0.1");
-    lanty::User user("asd");
-    QSignalSpy spy(&user, SIGNAL(ipAddressChanged(QString)));
-    QSignalSpy spyChange(&user, SIGNAL(changed()));
-
+    QString ipAddress("192.168.0.14");
     user.setIPAddress(ipAddress);
 
-    ASSERT_EQ(user.getIPAddress(), ipAddress);
-    ASSERT_EQ(1, spy.count());
-    ASSERT_EQ(1, spyChange.count());
+    ASSERT_EQ(user.getIPAddress().toString(), ipAddress);
 }
 
-TEST(UserTest, SerializeJSON)
+TEST(UserTest, ComparisonOperatorIfBothObjectsAreEqual)
 {
-    lanty::User user;
+    lanty::User userOne("seternate", "C:\\games");
+    lanty::User userTwo("seternate", "C:\\games");
 
-    user.setUsername("test");
-    user.setGamepath("C:\\games");
+    ASSERT_EQ(userOne, userTwo);
+}
+
+TEST(UserTest, ComparisonOperatorIfBothObjectsAreUnEqual)
+{
+    lanty::User userOne("seternate", "C:\\games");
+    lanty::User userTwo("poisness", "C:\\lan");
+
+    ASSERT_NE(userOne, userTwo);
+}
+
+TEST(UserTest, CopyConstructorAndOperator)
+{
+    lanty::User user("seternate", "C:\\games");
+
+    lanty::User constructor(user);
+    ASSERT_EQ(user, constructor);
+
+    lanty::User copyOperator;
+    copyOperator = user;
+    ASSERT_EQ(user, copyOperator);
+}
+
+TEST(UserTest, SerializeToJSON)
+{
+    lanty::User user("seternate", "C:\\games", "192.168.0.15");
     user.setResolution(1920, 1080);
-    user.setIPAddress("192.168.1.1");
 
-    nlohmann::json* json = user.toJSON();
+    nlohmann::json json = user.toJSON();
 
-    QString jsonExpected
-        = "{\"user\":{\"gamepath\":\"C:\\\\games\",\"ip-address\":\"192.168.1.1\",\"resolution\":{\"x\":1920,\"y\":1080},\"username\":\"test\"}}";
+    EXPECT_EQ(json.size(), 4);
+    ASSERT_TRUE(json.contains("username"));
+    ASSERT_TRUE(json.contains("gamepath"));
+    ASSERT_TRUE(json.contains("resolution"));
+    ASSERT_TRUE(json["resolution"].contains("x"));
+    ASSERT_TRUE(json["resolution"].contains("y"));
+    ASSERT_TRUE(json.contains("ip-address"));
 
-    std::string s = json->dump();
-
-    ASSERT_EQ(s, jsonExpected.toStdString());
-
-    delete json;
+    ASSERT_EQ(json[lanty::User::USERNAME_SERIALIZER_KEY], "seternate");
+    ASSERT_EQ(json[lanty::User::GAMEPATH_SERIALIZER_KEY], "C:\\games");
+    ASSERT_EQ(json[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_X_SERIALIZER_KEY], 1920);
+    ASSERT_EQ(json[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_Y_SERIALIZER_KEY], 1080);
+    ASSERT_EQ(json[lanty::User::IPADDRESS_SERIALIZER_KEY], "192.168.0.15");
 }
 
-TEST(UserTest, DeserialzeJSON)
+TEST(UserTest, DoNotShowEmptyFieldsAtJSON)
 {
-    nlohmann::json json
-        = "{\"user\":{\"gamepath\":\"C:\\\\games\",\"ip-address\":\"192.168.1.1\",\"resolution\":{\"x\":1920,\"y\":1080},\"username\":\"test\"}}"_json;
-
     lanty::User user;
-    user.fromJSON(json);
 
-    ASSERT_EQ(user.getUsername(), "test");
-    ASSERT_EQ(user.getGamepath(), "C:\\games");
-    ASSERT_EQ(user.getResolutionX(), 1920);
-    ASSERT_EQ(user.getResolutionY(), 1080);
-    ASSERT_EQ(user.getIPAddress(), "192.168.1.1");
+    nlohmann::json json = user.toJSON();
+
+    ASSERT_TRUE(json.empty());
+    ASSERT_FALSE(json.contains("username"));
+    ASSERT_FALSE(json.contains("gamepath"));
+    ASSERT_FALSE(json.contains("resolution"));
+    ASSERT_FALSE(json["resolution"].contains("x"));
+    ASSERT_FALSE(json["resolution"].contains("y"));
+    ASSERT_FALSE(json.contains("ip-address"));
 }

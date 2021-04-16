@@ -14,55 +14,55 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef USER_USER_HPP
-#define USER_USER_HPP
+#pragma once
 
 #include <QHostAddress>
-#include <QObject>
 #include <QString>
 #include <nlohmann/json.hpp>
+#include <string>
 
+#include "core/Serializable.hpp"
 #include "core/ltycore_global.hpp"
-#include "serializer/Serializable.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT User : public QObject, public Serializable
+class LTYCORE_EXPORT User : public Serializable
 {
-    Q_OBJECT
-    Q_DISABLE_COPY_MOVE(User)
+public:
+    static const std::string USERNAME_SERIALIZER_KEY;
+    static const std::string GAMEPATH_SERIALIZER_KEY;
+    static const std::string RESOLUTION_SERIALIZER_KEY;
+    static const std::string RESOLUTION_X_SERIALIZER_KEY;
+    static const std::string RESOLUTION_Y_SERIALIZER_KEY;
+    static const std::string IPADDRESS_SERIALIZER_KEY;
 
-public:    
-    User(QObject* parent = nullptr);
-    User(const QString& username, QObject* parent = nullptr);
+    User(const QString& username = QString(""),
+         const QString& gamepath = QString(""),
+         const QString& ipAddress = QString("")) noexcept;
+    User(const User& user) noexcept;
+    User(User&& user) = delete;
     virtual ~User(void) = default;
 
-    bool operator==(const User& game) const;
-    bool operator!=(const User& game) const;
+    User& operator=(const User& user) noexcept;
+    User& operator=(User&& user) = delete;
+    bool operator==(const User& user) const noexcept;
+    bool operator!=(const User& user) const noexcept;
 
-    virtual QString getUsername(void) const;
-    virtual QString getGamepath(void) const;
-    virtual quint32 getResolutionX(void) const;
-    virtual quint32 getResolutionY(void) const;
-    virtual QString getIPAddress(void) const;
+    const QString& getUsername(void) const noexcept;
+    const QString& getGamepath(void) const noexcept;
+    quint32 getResolutionX(void) const noexcept;
+    quint32 getResolutionY(void) const noexcept;
+    const QHostAddress& getIPAddress(void) const noexcept;
 
-    virtual void setUsername(const QString& username);
-    virtual void setGamepath(const QString& gamepath);
-    virtual void setResolution(const quint32 x, const quint32 y);
-    virtual void setResolutionX(const quint32 x);
-    virtual void setResolutionY(const quint32 y);
-    virtual void setIPAddress(const QString& ipAddress);
+    virtual void setUsername(const QString& username) noexcept;
+    virtual void setGamepath(const QString& gamepath) noexcept;
+    virtual void setResolution(const quint32 x, const quint32 y) noexcept;
+    virtual void setResolutionX(const quint32 x) noexcept;
+    virtual void setResolutionY(const quint32 y) noexcept;
+    virtual void setIPAddress(const QString& ipAddress) noexcept;
 
-    nlohmann::json* toJSON(void) const override;
-    bool fromJSON(const nlohmann::json& json) override;
-
-signals:
-    void changed(void);
-    void usernameChanged(QString newUsername);
-    void gamepathChanged(QString newGamepath);
-    void resolutionChanged(quint32 newResolutionX, const quint32 newResolutionY);
-    void ipAddressChanged(QString newIPAddress);
+    nlohmann::json toJSON(void) const override;
 
 private:
     QString username;
@@ -73,5 +73,3 @@ private:
 };
 
 } /* namespace lanty */
-
-#endif /* USER_USER_HPP */

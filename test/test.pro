@@ -40,7 +40,8 @@ SOURCES += \
     $$PWD/source/game/GameClientTest.cpp \
     $$PWD/source/game/GameServerTest.cpp \
     $$PWD/source/game/GameTest.cpp \
-    $$PWD/source/game/GameVersionTest.cpp
+    $$PWD/source/game/GameVersionTest.cpp \
+    $$PWD/source/user/UserTest.cpp
 
 INCLUDEPATH += \
     $$PWD/../library/yaml-cpp/include \

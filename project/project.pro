@@ -32,7 +32,8 @@ SOURCES += \
     $$PWD/source/game/Game.cpp \
     $$PWD/source/game/GameClient.cpp \
     $$PWD/source/game/GameServer.cpp \
-    $$PWD/source/game/GameVersion.cpp
+    $$PWD/source/game/GameVersion.cpp \
+    $$PWD/source/user/User.cpp
 
 HEADERS += \
     $$PWD/include/core/ltycore_global.hpp \
@@ -41,7 +42,8 @@ HEADERS += \
     $$PWD/include/game/Game.hpp \
     $$PWD/include/game/GameClient.hpp \
     $$PWD/include/game/GameServer.hpp \
-    $$PWD/include/game/GameVersion.hpp
+    $$PWD/include/game/GameVersion.hpp \
+    $$PWD/include/user/User.hpp
 
 TRANSLATIONS += $$PWD/../resource/translation/core_de_DE.ts
 

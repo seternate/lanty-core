@@ -19,127 +19,135 @@
 namespace lanty
 {
 
-User::User(QObject* parent) : QObject(parent) { }
+const std::string User::USERNAME_SERIALIZER_KEY = "username";
+const std::string User::GAMEPATH_SERIALIZER_KEY = "gamepath";
+const std::string User::RESOLUTION_SERIALIZER_KEY = "resolution";
+const std::string User::RESOLUTION_X_SERIALIZER_KEY = "x";
+const std::string User::RESOLUTION_Y_SERIALIZER_KEY = "y";
+const std::string User::IPADDRESS_SERIALIZER_KEY = "ip-address";
 
-User::User(const QString& username, QObject* parent) :
-    QObject(parent),
+User::User(const QString& username, const QString& gamepath, const QString& ipAddress) noexcept :
     username(username),
-    gamepath(""),
+    gamepath(gamepath),
     resolutionX(0),
     resolutionY(0),
-    ipAddress()
+    ipAddress(ipAddress)
+{ }
+
+User::User(const User& user) noexcept :
+    username(user.getUsername()),
+    gamepath(user.getGamepath()),
+    resolutionX(user.getResolutionX()),
+    resolutionY(user.getResolutionY()),
+    ipAddress(user.getIPAddress())
 { }
 
 
-bool User::operator==(const lanty::User& game) const
+User& User::operator=(const User& user) noexcept
 {
-    return this->username == game.username && this->gamepath == game.gamepath && this->resolutionX == game.resolutionX
-           && this->resolutionY == game.resolutionY && this->ipAddress == game.ipAddress;
+    this->setUsername(user.getUsername());
+    this->setGamepath(user.getGamepath());
+    this->setResolution(user.getResolutionX(), user.getResolutionY());
+    this->setIPAddress(user.getIPAddress().toString());
+    return *this;
 }
 
-bool User::operator!=(const lanty::User& game) const
+bool User::operator==(const lanty::User& user) const noexcept
 {
-    return !(*this == game);
+    return this->username == user.username && this->gamepath == user.gamepath && this->resolutionX == user.resolutionX
+           && this->resolutionY == user.resolutionY && this->ipAddress.isEqual(user.ipAddress);
+}
+
+bool User::operator!=(const lanty::User& user) const noexcept
+{
+    return !(*this == user);
 }
 
 
-QString User::getUsername(void) const
+const QString& User::getUsername(void) const noexcept
 {
     return this->username;
 }
 
-QString User::getGamepath(void) const
+const QString& User::getGamepath(void) const noexcept
 {
     return this->gamepath;
 }
 
-quint32 User::getResolutionX(void) const
+quint32 User::getResolutionX(void) const noexcept
 {
     return this->resolutionX;
 }
 
-quint32 User::getResolutionY(void) const
+quint32 User::getResolutionY(void) const noexcept
 {
     return this->resolutionY;
 }
 
-QString User::getIPAddress(void) const
+const QHostAddress& User::getIPAddress(void) const noexcept
 {
-    return this->ipAddress.toString();
+    return this->ipAddress;
 }
 
 
-void User::setUsername(const QString& username)
+void User::setUsername(const QString& username) noexcept
 {
     this->username = username;
-
-    emit this->usernameChanged(this->username);
-    emit this->changed();
 }
 
-void User::setGamepath(const QString& gamepath)
+void User::setGamepath(const QString& gamepath) noexcept
 {
     this->gamepath = gamepath;
-
-    emit this->gamepathChanged(this->gamepath);
-    emit this->changed();
 }
 
-void User::setResolution(const quint32 x, const quint32 y)
+void User::setResolution(const quint32 x, const quint32 y) noexcept
 {
     this->resolutionX = x;
     this->resolutionY = y;
-
-    emit this->resolutionChanged(this->resolutionX, this->resolutionY);
-    emit this->changed();
 }
 
-void User::setResolutionX(const quint32 x)
+void User::setResolutionX(const quint32 x) noexcept
 {
     this->setResolution(x, this->resolutionY);
 }
 
-void User::setResolutionY(const quint32 y)
+void User::setResolutionY(const quint32 y) noexcept
 {
     this->setResolution(this->resolutionX, y);
 }
 
-void User::setIPAddress(const QString& ipAddress)
+void User::setIPAddress(const QString& ipAddress) noexcept
 {
     this->ipAddress = QHostAddress(ipAddress);
-
-    emit this->ipAddressChanged(this->getIPAddress());
-    emit this->changed();
 }
 
 
-nlohmann::json* User::toJSON(void) const
+nlohmann::json User::toJSON(void) const
 {
-    nlohmann::json* json = new nlohmann::json({});
-    nlohmann::json userjson({});
+    nlohmann::json json = nlohmann::json::object();
 
-    userjson["username"] = this->getUsername().toStdString();
-    userjson["gamepath"] = this->getGamepath().toStdString();
-    userjson["resolution"]["x"] = this->getResolutionX();
-    userjson["resolution"]["y"] = this->getResolutionY();
-    userjson["ip-address"] = this->getIPAddress().toStdString();
-
-    (*json)["user"] = userjson;
+    if (this->getUsername().isEmpty() == false)
+    {
+        json[USERNAME_SERIALIZER_KEY] = this->getUsername().toStdString();
+    }
+    if (this->getGamepath().isEmpty() == false)
+    {
+        json[GAMEPATH_SERIALIZER_KEY] = this->getGamepath().toStdString();
+    }
+    if (this->getResolutionX() != 0)
+    {
+        json[RESOLUTION_SERIALIZER_KEY][RESOLUTION_X_SERIALIZER_KEY] = this->getResolutionX();
+    }
+    if (this->getResolutionY() != 0)
+    {
+        json[RESOLUTION_SERIALIZER_KEY][RESOLUTION_Y_SERIALIZER_KEY] = this->getResolutionY();
+    }
+    if (this->getIPAddress().isNull() == false)
+    {
+        json[IPADDRESS_SERIALIZER_KEY] = this->getIPAddress().toString().toStdString();
+    }
 
     return json;
-}
-
-bool User::fromJSON(const nlohmann::json& json)
-{
-    nlohmann::json userjson = json["user"];
-
-    this->setUsername(QString::fromStdString(userjson["username"]));
-    this->setGamepath(QString::fromStdString(userjson["gamepath"]));
-    this->setResolutionX(userjson["resolution"]["x"]);
-    this->setResolutionY(userjson["resolution"]["y"]);
-    this->setIPAddress(QString::fromStdString(userjson["ip-address"]));
-
-    return true;
 }
 
 } /* namespace lanty */
