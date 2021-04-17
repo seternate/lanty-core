@@ -172,3 +172,41 @@ TEST(GameVersion, DoNotShowEmptyFieldsAtJSON)
     ASSERT_FALSE(json.contains("file"));
     ASSERT_FALSE(json.contains("query"));
 }
+
+TEST(GameVersion, SerializeToYAML)
+{
+    QVector<QString> arguments = { "2.13.9", "FILE", "version.txt", "Ext=" };
+
+    lanty::GameVersion gameversion;
+    gameversion.setVersion(arguments.at(0));
+    gameversion.setSource(lanty::GameVersion::QStringToSource(arguments.at(1)));
+    gameversion.setFilePath(arguments.at(2));
+    gameversion.setFileQuery(arguments.at(3));
+
+    YAML::Node yaml = gameversion.toYAML();
+
+    ASSERT_EQ(yaml.size(), arguments.size());
+    ASSERT_TRUE(yaml["info"]);
+    ASSERT_TRUE(yaml["format"]);
+    ASSERT_TRUE(yaml["file"]);
+    ASSERT_TRUE(yaml["query"]);
+
+    ASSERT_EQ(yaml[lanty::GameVersion::VERSION_SERIALIZER_KEY].as<std::string>(), arguments.at(0).toStdString());
+    ASSERT_EQ(yaml[lanty::GameVersion::SOURCE_SERIALIZER_KEY].as<std::string>(), arguments.at(1).toStdString());
+    ASSERT_EQ(yaml[lanty::GameVersion::FILEPATH_SERIALIZER_KEY].as<std::string>(), arguments.at(2).toStdString());
+    ASSERT_EQ(yaml[lanty::GameVersion::FILEQUERY_SERIALIZER_KEY].as<std::string>(), arguments.at(3).toStdString());
+}
+
+TEST(GameVersion, DoNotShowEmptyFieldsAtYAML)
+{
+    lanty::GameVersion gameversion;
+
+    YAML::Node yaml = gameversion.toYAML();
+
+    EXPECT_EQ(yaml.size(), 0);
+    EXPECT_TRUE(yaml.IsNull());
+    ASSERT_FALSE(yaml["info"]);
+    ASSERT_FALSE(yaml["format"]);
+    ASSERT_FALSE(yaml["file"]);
+    ASSERT_FALSE(yaml["query"]);
+}

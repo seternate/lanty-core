@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <yaml-cpp/yaml.h>
 #include <QHostAddress>
 #include <QString>
 #include <nlohmann/json.hpp>
@@ -63,6 +64,7 @@ public:
     virtual void setIPAddress(const QString& ipAddress) noexcept;
 
     nlohmann::json toJSON(void) const override;
+    YAML::Node toYAML(void) const override;
 
 private:
     QString username;

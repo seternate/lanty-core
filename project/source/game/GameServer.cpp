@@ -101,4 +101,20 @@ nlohmann::json GameServer::toJSON(void) const
     return json;
 }
 
+YAML::Node GameServer::toYAML(void) const
+{
+    YAML::Node yaml;
+
+    if (this->getExecutableFilePath().isEmpty() == false)
+    {
+        yaml[GameServer::EXECUTABLE_FILE_PATH_SERIALIZER_KEY] = this->getExecutableFilePath().toStdString();
+    }
+    if (this->getArgument().isEmpty() == false)
+    {
+        yaml[GameServer::ARGUMENT_SERIALIZER_KEY] = this->getArgument().toStdString();
+    }
+
+    return yaml;
+}
+
 } /* namespace lanty */

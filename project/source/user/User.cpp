@@ -151,4 +151,32 @@ nlohmann::json User::toJSON(void) const
     return json;
 }
 
+YAML::Node User::toYAML(void) const
+{
+    YAML::Node yaml;
+
+    if (this->getUsername().isEmpty() == false)
+    {
+        yaml[USERNAME_SERIALIZER_KEY] = this->getUsername().toStdString();
+    }
+    if (this->getGamepath().isEmpty() == false)
+    {
+        yaml[GAMEPATH_SERIALIZER_KEY] = this->getGamepath().toStdString();
+    }
+    if (this->getResolutionX() != 0)
+    {
+        yaml[RESOLUTION_SERIALIZER_KEY][RESOLUTION_X_SERIALIZER_KEY] = this->getResolutionX();
+    }
+    if (this->getResolutionY() != 0)
+    {
+        yaml[RESOLUTION_SERIALIZER_KEY][RESOLUTION_Y_SERIALIZER_KEY] = this->getResolutionY();
+    }
+    if (this->getIPAddress().isNull() == false)
+    {
+        yaml[IPADDRESS_SERIALIZER_KEY] = this->getIPAddress().toString().toStdString();
+    }
+
+    return yaml;
+}
+
 } /* namespace lanty */

@@ -122,3 +122,35 @@ TEST(GameClient, DoNotShowEmptyFieldsAtJSON)
     ASSERT_FALSE(json.contains("argument"));
     ASSERT_FALSE(json.contains("connect"));
 }
+
+TEST(GameClient, SerializeToYAML)
+{
+    QVector<QString> arguments = { "bin/cod2mp.exe", "+connect ?", "+name seternate" };
+
+    lanty::GameClient gameclient(arguments.at(0), arguments.at(1), arguments.at(2));
+
+    YAML::Node yaml = gameclient.toYAML();
+
+    ASSERT_EQ(yaml.size(), arguments.size());
+    ASSERT_TRUE(yaml["executable"]);
+    ASSERT_TRUE(yaml["argument"]);
+    ASSERT_TRUE(yaml["connect"]);
+
+    ASSERT_EQ(yaml[lanty::GameClient::EXECUTABLE_FILE_PATH_SERIALIZER_KEY].as<std::string>(),
+              arguments.at(0).toStdString());
+    ASSERT_EQ(yaml[lanty::GameClient::CONNECT_ARGUMENT_SERIALIZER_KEY].as<std::string>(), arguments.at(1).toStdString());
+    ASSERT_EQ(yaml[lanty::GameClient::ARGUMENT_SERIALIZER_KEY].as<std::string>(), arguments.at(2).toStdString());
+}
+
+TEST(GameClient, DoNotShowEmptyFieldsAtYAML)
+{
+    lanty::GameClient gameclient;
+
+    YAML::Node yaml = gameclient.toYAML();
+
+    EXPECT_EQ(yaml.size(), 0);
+    EXPECT_TRUE(yaml.IsNull());
+    ASSERT_FALSE(yaml["executable"]);
+    ASSERT_FALSE(yaml["argument"]);
+    ASSERT_FALSE(yaml["connect"]);
+}

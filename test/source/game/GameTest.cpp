@@ -170,3 +170,39 @@ TEST(GameTest, DoNotShowEmptyFieldsAtJSON)
     ASSERT_FALSE(json.contains("client"));
     ASSERT_FALSE(json.contains("server"));
 }
+
+TEST(GameTest, SerializeToYAML)
+{
+    lanty::Game game("Call of Duty 2", "cod2.zip");
+
+    game.setClientExecutableFilePath("bin/cod2mp.exe");
+    game.setServerExecutableFilePath("bin/cod2mp.exe");
+    game.setVersion("1.2.0");
+    game.setVersionSource(lanty::GameVersion::Source::EXECUTABLE);
+
+    YAML::Node yaml = game.toYAML();
+
+    ASSERT_EQ(yaml.size(), 5);
+    ASSERT_TRUE(yaml["name"]);
+    ASSERT_TRUE(yaml["archive"]);
+    ASSERT_TRUE(yaml["version"]);
+    ASSERT_TRUE(yaml["client"]);
+    ASSERT_TRUE(yaml["server"]);
+
+    ASSERT_EQ(yaml[lanty::Game::NAME_SERIALIZER_KEY].as<std::string>(), "Call of Duty 2");
+    ASSERT_EQ(yaml[lanty::Game::ARCHIVE_SERIALIZER_KEY].as<std::string>(), "cod2.zip");
+}
+
+TEST(GameTest, DoNotShowEmptyFieldsAtYAML)
+{
+    lanty::Game game;
+
+    YAML::Node yaml = game.toYAML();
+
+    ASSERT_TRUE(yaml.IsNull());
+    ASSERT_FALSE(yaml["name"]);
+    ASSERT_FALSE(yaml["archive"]);
+    ASSERT_FALSE(yaml["version"]);
+    ASSERT_FALSE(yaml["client"]);
+    ASSERT_FALSE(yaml["server"]);
+}

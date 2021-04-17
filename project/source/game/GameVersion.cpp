@@ -146,4 +146,29 @@ nlohmann::json GameVersion::toJSON(void) const
     return json;
 }
 
+YAML::Node GameVersion::toYAML(void) const
+{
+    YAML::Node yaml;
+
+    if (this->getVersion().isEmpty() == false)
+    {
+        if (this->source != GameVersion::Source::NONE)
+        {
+            yaml[GameVersion::VERSION_SERIALIZER_KEY] = this->getVersion().toStdString();
+            yaml[GameVersion::SOURCE_SERIALIZER_KEY] = GameVersion::SourceToQString(this->source).toStdString();
+        }
+        if (this->getFilePath().isEmpty() == false && this->source == GameVersion::Source::FILE)
+        {
+            yaml[GameVersion::FILEPATH_SERIALIZER_KEY] = this->getFilePath().toStdString();
+
+            if (this->getFileQuery().isEmpty() == false)
+            {
+                yaml[GameVersion::FILEQUERY_SERIALIZER_KEY] = this->getFileQuery().toStdString();
+            }
+        }
+    }
+
+    return yaml;
+}
+
 } /* namespace lanty */

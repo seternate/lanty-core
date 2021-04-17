@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <yaml-cpp/yaml.h>
 #include <QString>
 #include <nlohmann/json.hpp>
 
@@ -31,6 +32,7 @@ public:
     virtual ~Serializable(void) = default;    // GCOVR_EXCL_LINE
 
     virtual nlohmann::json toJSON(void) const = 0;
+    virtual YAML::Node toYAML(void) const = 0;
 };
 
 } /* namespace lanty */

@@ -126,3 +126,40 @@ TEST(UserTest, DoNotShowEmptyFieldsAtJSON)
     ASSERT_FALSE(json["resolution"].contains("y"));
     ASSERT_FALSE(json.contains("ip-address"));
 }
+
+TEST(UserTest, SerializeToYAML)
+{
+    lanty::User user("seternate", "C:\\games", "192.168.0.15");
+    user.setResolution(1920, 1080);
+
+    YAML::Node yaml = user.toYAML();
+
+    EXPECT_EQ(yaml.size(), 4);
+    ASSERT_TRUE(yaml["username"]);
+    ASSERT_TRUE(yaml["gamepath"]);
+    ASSERT_TRUE(yaml["resolution"]);
+    ASSERT_TRUE(yaml["resolution"]["x"]);
+    ASSERT_TRUE(yaml["resolution"]["y"]);
+    ASSERT_TRUE(yaml["ip-address"]);
+
+    ASSERT_EQ(yaml[lanty::User::USERNAME_SERIALIZER_KEY].as<std::string>(), "seternate");
+    ASSERT_EQ(yaml[lanty::User::GAMEPATH_SERIALIZER_KEY].as<std::string>(), "C:\\games");
+    ASSERT_EQ(yaml[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_X_SERIALIZER_KEY].as<quint32>(), 1920);
+    ASSERT_EQ(yaml[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_Y_SERIALIZER_KEY].as<quint32>(), 1080);
+    ASSERT_EQ(yaml[lanty::User::IPADDRESS_SERIALIZER_KEY].as<std::string>(), "192.168.0.15");
+}
+
+TEST(UserTest, DoNotShowEmptyFieldsAtYAML)
+{
+    lanty::User user;
+
+    YAML::Node yaml = user.toYAML();
+
+    ASSERT_TRUE(yaml.IsNull());
+    ASSERT_FALSE(yaml["username"]);
+    ASSERT_FALSE(yaml["gamepath"]);
+    ASSERT_FALSE(yaml["resolution"]);
+    ASSERT_FALSE(yaml["resolution"]["x"]);
+    ASSERT_FALSE(yaml["resolution"]["y"]);
+    ASSERT_FALSE(yaml["ip-address"]);
+}

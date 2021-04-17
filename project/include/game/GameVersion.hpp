@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <yaml-cpp/yaml.h>
 #include <QString>
 #include <QVector>
 #include <string>
@@ -67,6 +68,7 @@ public:
     bool isVersion(void) const noexcept;
 
     nlohmann::json toJSON(void) const override;
+    YAML::Node toYAML(void) const override;
 
 private:
     static const QVector<QString> sourceQString;

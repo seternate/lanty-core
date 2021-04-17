@@ -176,3 +176,32 @@ TEST(GameServer, DoNotShowEmptyFieldsAtJSON)
     ASSERT_FALSE(json.contains("executable"));
     ASSERT_FALSE(json.contains("argument"));
 }
+
+TEST(GameServer, SerializeToYAML)
+{
+    QVector<QString> arguments = { "bin/cod2mp.exe", "+map crossfire" };
+
+    lanty::GameServer gameserver(arguments.at(0), arguments.at(1));
+
+    YAML::Node yaml = gameserver.toYAML();
+
+    ASSERT_EQ(yaml.size(), arguments.size());
+    ASSERT_TRUE(yaml["executable"]);
+    ASSERT_TRUE(yaml["argument"]);
+
+    ASSERT_EQ(yaml[lanty::GameServer::EXECUTABLE_FILE_PATH_SERIALIZER_KEY].as<std::string>(),
+              arguments.at(0).toStdString());
+    ASSERT_EQ(yaml[lanty::GameServer::ARGUMENT_SERIALIZER_KEY].as<std::string>(), arguments.at(1).toStdString());
+}
+
+TEST(GameServer, DoNotShowEmptyFieldsAtYAML)
+{
+    lanty::GameServer gameserver;
+
+    YAML::Node yaml = gameserver.toYAML();
+
+    EXPECT_EQ(yaml.size(), 0);
+    EXPECT_TRUE(yaml.IsNull());
+    ASSERT_FALSE(yaml["executable"]);
+    ASSERT_FALSE(yaml["argument"]);
+}

@@ -212,5 +212,39 @@ nlohmann::json Game::toJSON(void) const
     return json;
 }
 
+YAML::Node Game::toYAML(void) const
+{
+    YAML::Node yaml;
+
+    if (this->getName().isEmpty() == false)
+    {
+        yaml["name"] = this->getName().toStdString();
+    }
+    if (this->getArchiveFileName().isEmpty() == false)
+    {
+        yaml["archive"] = this->getArchiveFileName().toStdString();
+    }
+
+    YAML::Node version = this->getVersion().toYAML();
+    if (version.IsNull() == false)
+    {
+        yaml["version"] = version;
+    }
+
+    YAML::Node client = this->getClient().toYAML();
+    if (client.IsNull() == false)
+    {
+        yaml["client"] = client;
+    }
+
+    YAML::Node server = this->getServer().toYAML();
+    if (server.IsNull() == false)
+    {
+        yaml["server"] = server;
+    }
+
+    return yaml;
+}
+
 
 } /* namespace lanty */

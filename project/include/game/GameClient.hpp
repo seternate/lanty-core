@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <yaml-cpp/yaml.h>
 #include <QString>
 #include <nlohmann/json.hpp>
 #include <string>
@@ -56,6 +57,7 @@ public:
     bool canJoinServerWithCLI(void) const noexcept;
 
     nlohmann::json toJSON(void) const override;
+    YAML::Node toYAML(void) const override;
 
 private:
     QString executableFilePath;

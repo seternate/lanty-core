@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <yaml-cpp/yaml.h>
 #include <QPixmap>
 #include <QString>
 #include <nlohmann/json.hpp>
@@ -75,6 +76,7 @@ public:
     virtual void setIcon(const QPixmap& icon) noexcept;
 
     nlohmann::json toJSON(void) const override;
+    YAML::Node toYAML(void) const override;
 
 private:
     QString name;

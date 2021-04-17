@@ -115,4 +115,24 @@ nlohmann::json GameClient::toJSON(void) const
     return json;
 }
 
+YAML::Node GameClient::toYAML(void) const
+{
+    YAML::Node yaml;
+
+    if (this->getExecutableFilePath().isEmpty() == false)
+    {
+        yaml[GameClient::EXECUTABLE_FILE_PATH_SERIALIZER_KEY] = this->getExecutableFilePath().toStdString();
+    }
+    if (this->getArgument().isEmpty() == false)
+    {
+        yaml[GameClient::ARGUMENT_SERIALIZER_KEY] = this->getArgument().toStdString();
+    }
+    if (this->getConnectArgument().isEmpty() == false)
+    {
+        yaml[GameClient::CONNECT_ARGUMENT_SERIALIZER_KEY] = this->getConnectArgument().toStdString();
+    }
+
+    return yaml;
+}
+
 } /* namespace lanty */
