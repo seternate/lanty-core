@@ -30,8 +30,12 @@
 namespace lanty
 {
 
+class GameLoader;
+
 class LTYCORE_EXPORT Game : public Serializable
 {
+    friend GameLoader;
+
 public:
     static const std::string NAME_SERIALIZER_KEY;
     static const std::string ARCHIVE_SERIALIZER_KEY;
@@ -45,11 +49,11 @@ public:
          const GameServer& server = GameServer(),
          const GameVersion& version = GameVersion()) noexcept;
     Game(const Game& game) noexcept;
-    Game(Game&& game) = delete;
+    Game(Game&& game) noexcept;
     virtual ~Game(void) = default;    // GCOVR_EXCL_LINE
 
     Game& operator=(const Game& game) noexcept;
-    Game& operator=(Game&& game) = delete;
+    Game& operator=(Game&& game) noexcept;
     bool operator==(const Game& game) const noexcept;
     bool operator!=(const Game& game) const noexcept;
 

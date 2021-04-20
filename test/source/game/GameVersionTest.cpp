@@ -20,6 +20,28 @@
 #include "game/GameVersion.hpp"
 #include "helper/QStringPrintHelper.hpp"
 
+TEST(GameVersion, QStringToSourceReturnNONEIfNoValidQString)
+{
+    ASSERT_EQ(lanty::GameVersion::QStringToSource(""), lanty::GameVersion::Source::NONE);
+    ASSERT_EQ(lanty::GameVersion::QStringToSource("asdasd"), lanty::GameVersion::Source::NONE);
+    ASSERT_EQ(lanty::GameVersion::QStringToSource("none"), lanty::GameVersion::Source::NONE);
+    ASSERT_EQ(lanty::GameVersion::QStringToSource("None"), lanty::GameVersion::Source::NONE);
+}
+
+TEST(GameVersion, QStringToSourceReturnTheRightSourceEnum)
+{
+    ASSERT_EQ(lanty::GameVersion::QStringToSource("EXECUTABLE"), lanty::GameVersion::Source::EXECUTABLE);
+    ASSERT_EQ(lanty::GameVersion::QStringToSource("FILE"), lanty::GameVersion::Source::FILE);
+    ASSERT_EQ(lanty::GameVersion::QStringToSource("NONE"), lanty::GameVersion::Source::NONE);
+}
+
+TEST(GameVersion, SourceToQStringReturnsTheRightQStrings)
+{
+    ASSERT_EQ(lanty::GameVersion::SourceToQString(lanty::GameVersion::Source::EXECUTABLE), "EXECUTABLE");
+    ASSERT_EQ(lanty::GameVersion::SourceToQString(lanty::GameVersion::Source::FILE), "FILE");
+    ASSERT_EQ(lanty::GameVersion::SourceToQString(lanty::GameVersion::Source::NONE), "NONE");
+}
+
 TEST(GameVersion, FieldsShouldBeEmptyAfterCallingDefaultConstructor)
 {
     lanty::GameVersion gameversion;
@@ -82,6 +104,33 @@ TEST(GameVersion, CopyConstructorAndOperator)
     ASSERT_EQ(gameversion, copyOperator);
 }
 
+TEST(GameVersion, MoveConstructorAndOperator)
+{
+    lanty::GameVersion gameversion;
+    gameversion.setVersion("1.1.1");
+    gameversion.setSource(lanty::GameVersion::Source::EXECUTABLE);
+    gameversion.setFilePath("text.txt");
+    gameversion.setFileQuery("version");
+
+    lanty::GameVersion gameversionConstructor;
+    gameversionConstructor.setVersion("1.1.1");
+    gameversionConstructor.setSource(lanty::GameVersion::Source::EXECUTABLE);
+    gameversionConstructor.setFilePath("text.txt");
+    gameversionConstructor.setFileQuery("version");
+
+    lanty::GameVersion constructor(std::move(gameversionConstructor));
+    ASSERT_EQ(gameversion, constructor);
+
+    lanty::GameVersion gameversionOperator;
+    gameversionOperator.setVersion("1.1.1");
+    gameversionOperator.setSource(lanty::GameVersion::Source::EXECUTABLE);
+    gameversionOperator.setFilePath("text.txt");
+    gameversionOperator.setFileQuery("version");
+
+    lanty::GameVersion moveOperator;
+    moveOperator = std::move(gameversionOperator);
+    ASSERT_EQ(gameversion, moveOperator);
+}
 
 TEST(GameVersion, isVersionEqualsFalseIfNoVersionStringAndSourceIsNONE)
 {

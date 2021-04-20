@@ -196,8 +196,8 @@ build-unit-test-linux-debug:
     - cd ${ARTIFACT_DIR}
     - ./${UNIT_TEST_EXECUTABLE} --gtest_output="xml:${ARTIFACT_NAME}-report.xml"
     - cd ${CI_PROJECT_DIR}
-    - gcovr --filter project/ --exclude '(.+\/)?((json)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h))$' --xml-pretty -o ${ARTIFACT_NAME}-coverage.xml
-    - gcovr --filter project/ --exclude '(.+\/)?((json)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h))$'
+    - gcovr --filter project/ --exclude '(.+\/)?(((json)|(traits)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h)))$' --exclude '(.+\/)?(moc_QGame)\.((cpp)|(c))$' --xml-pretty -o ${ARTIFACT_NAME}-coverage.xml
+    - gcovr --filter project/ --exclude '(.+\/)?(((json)|(traits)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h)))$' --exclude '(.+\/)?(moc_QGame)\.((cpp)|(c))$'
   after_script:
     - cp ${ARTIFACT_DIR}/${ARTIFACT_NAME}-report.xml .
   artifacts:

@@ -31,16 +31,27 @@ INCLUDEPATH += \
     $$PWD/include
 
 HEADERS += \
+    $$PWD/include/core/YAMLLoadableTest.hpp \
+    $$PWD/include/game/GameClientLoaderTest.hpp \
+    $$PWD/include/game/GameLoaderTest.hpp \
+    $$PWD/include/game/GameServerLoaderTest.hpp \
+    $$PWD/include/game/GameVersionLoaderTest.hpp \
     $$PWD/include/helper/QStringPrintHelper.hpp
 
 SOURCES += \
     $$PWD/../library/googletest/googletest/src/gtest-all.cc \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
     $$PWD/source/core/main.cpp \
+    $$PWD/source/core/YAMLLoadableTest.cpp \
+    $$PWD/source/game/GameClientLoaderTest.cpp \
     $$PWD/source/game/GameClientTest.cpp \
+    $$PWD/source/game/GameLoaderTest.cpp \
+    $$PWD/source/game/GameServerLoaderTest.cpp \
     $$PWD/source/game/GameServerTest.cpp \
     $$PWD/source/game/GameTest.cpp \
+    $$PWD/source/game/GameVersionLoaderTest.cpp \
     $$PWD/source/game/GameVersionTest.cpp \
+    $$PWD/source/game/QGameTest.cpp \
     $$PWD/source/user/UserTest.cpp
 
 INCLUDEPATH += \

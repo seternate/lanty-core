@@ -32,8 +32,20 @@ GameServer::GameServer(const GameServer& gameserver) noexcept :
     argument(gameserver.getArgument())
 { }
 
+GameServer::GameServer(GameServer&& gameserver) noexcept :
+    executableFilePath(std::move(gameserver.executableFilePath)),
+    argument(std::move(gameserver.argument))
+{ }
+
 
 GameServer& GameServer::operator=(const GameServer& gameserver) noexcept
+{
+    this->executableFilePath = std::move(gameserver.executableFilePath);
+    this->argument = std::move(gameserver.argument);
+    return *this;
+}
+
+GameServer& GameServer::operator=(GameServer&& gameserver) noexcept
 {
     this->setExecutableFilePath(gameserver.getExecutableFilePath());
     this->setArgument(gameserver.getArgument());

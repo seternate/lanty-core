@@ -74,6 +74,20 @@ TEST(GameClient, CopyConstructorAndOperator)
     ASSERT_EQ(gameclient, copyOperator);
 }
 
+TEST(GameClient, MoveConstructorAndOperator)
+{
+    lanty::GameClient gameclient("bin/cod2mp.exe", "127.0.0.1", "+map warfare");
+
+    lanty::GameClient temp = lanty::GameClient("bin/cod2mp.exe", "127.0.0.1", "+map warfare");
+    lanty::GameClient constructor(std::move(temp));
+    ASSERT_EQ(gameclient, constructor);
+
+    lanty::GameClient moveOperator;
+    temp = lanty::GameClient("bin/cod2mp.exe", "127.0.0.1", "+map warfare");
+    moveOperator = std::move(temp);
+    ASSERT_EQ(gameclient, moveOperator);
+}
+
 TEST(GameClient, canJoinServerWithCLIEqualsFalseIfEmptyConnectArgument)
 {
     lanty::GameClient gameclient;

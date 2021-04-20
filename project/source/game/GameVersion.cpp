@@ -34,7 +34,15 @@ QString GameVersion::SourceToQString(GameVersion::Source source)
 
 GameVersion::Source GameVersion::QStringToSource(const QString& source)
 {
-    return static_cast<GameVersion::Source>(GameVersion::sourceQString.indexOf(source));
+    qint32 sourceIndex = GameVersion::sourceQString.indexOf(source);
+    GameVersion::Source sourceEnum = GameVersion::Source::NONE;
+
+    if (sourceIndex != -1)
+    {
+        sourceEnum = static_cast<GameVersion::Source>(sourceIndex);
+    }
+
+    return sourceEnum;
 }
 
 
@@ -51,6 +59,13 @@ GameVersion::GameVersion(const lanty::GameVersion& gameversion) noexcept :
     fileQuery(gameversion.getFileQuery())
 { }
 
+GameVersion::GameVersion(GameVersion&& gameversion) noexcept :
+    version(std::move(gameversion.version)),
+    source(std::move(gameversion.source)),
+    filePath(std::move(gameversion.filePath)),
+    fileQuery(std::move(gameversion.fileQuery))
+{ }
+
 
 GameVersion& GameVersion::operator=(const GameVersion& gameversion) noexcept
 {
@@ -58,6 +73,15 @@ GameVersion& GameVersion::operator=(const GameVersion& gameversion) noexcept
     this->setSource(gameversion.getSource());
     this->setFilePath(gameversion.getFilePath());
     this->setFileQuery(gameversion.getFileQuery());
+    return *this;
+}
+
+GameVersion& GameVersion::operator=(GameVersion&& gameversion) noexcept
+{
+    this->version = std::move(gameversion.version);
+    this->source = std::move(gameversion.source);
+    this->filePath = std::move(gameversion.filePath);
+    this->fileQuery = std::move(gameversion.fileQuery);
     return *this;
 }
 

@@ -47,11 +47,11 @@ public:
 
     GameVersion(void) noexcept;
     GameVersion(const GameVersion& gameversion) noexcept;
-    GameVersion(GameVersion&& gameversion) = delete;
+    GameVersion(GameVersion&& gameversion) noexcept;
     virtual ~GameVersion(void) = default;    // GCOVR_EXCL_LINE
 
     GameVersion& operator=(const GameVersion& gameversion) noexcept;
-    GameVersion& operator=(GameVersion&& gameversion) = delete;
+    GameVersion& operator=(GameVersion&& gameversion) noexcept;
     bool operator==(const GameVersion& gameversion) const noexcept;
     bool operator!=(const GameVersion& gameversion) const noexcept;
 

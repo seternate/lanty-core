@@ -135,6 +135,34 @@ TEST(GameTest, CopyConstructorAndOperator)
     ASSERT_EQ(game, copyOperator);
 }
 
+TEST(GameTest, MoveConstructorAndOperator)
+{
+    lanty::Game game;
+    game.setName("CoD2");
+    game.setVersion("1.0.0");
+    game.setClientExecutableFilePath("wow.exe");
+    game.setServerArgument("+max_client 16");
+
+    lanty::Game gameConstructor;
+    gameConstructor.setName("CoD2");
+    gameConstructor.setVersion("1.0.0");
+    gameConstructor.setClientExecutableFilePath("wow.exe");
+    gameConstructor.setServerArgument("+max_client 16");
+
+    lanty::Game constructor(std::move(gameConstructor));
+    ASSERT_EQ(game, constructor);
+
+    lanty::Game gameOperator;
+    gameOperator.setName("CoD2");
+    gameOperator.setVersion("1.0.0");
+    gameOperator.setClientExecutableFilePath("wow.exe");
+    gameOperator.setServerArgument("+max_client 16");
+
+    lanty::Game moveOperator;
+    moveOperator = std::move(gameOperator);
+    ASSERT_EQ(game, moveOperator);
+}
+
 TEST(GameTest, SerializeToJSON)
 {
     lanty::Game game("Call of Duty 2", "cod2.zip");

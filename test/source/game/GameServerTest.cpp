@@ -69,6 +69,20 @@ TEST(GameServer, CopyConstructorAndOperator)
     ASSERT_EQ(gameserver, copyOperator);
 }
 
+TEST(GameServer, MoveConstructorAndOperator)
+{
+    lanty::GameServer gameserver("bin/cod2mp.exe", "+map warfare");
+
+    lanty::GameServer temp = lanty::GameServer("bin/cod2mp.exe", "+map warfare");
+    lanty::GameServer constructor(std::move(temp));
+    ASSERT_EQ(gameserver, constructor);
+
+    lanty::GameServer moveOperator;
+    temp = lanty::GameServer("bin/cod2mp.exe", "+map warfare");
+    moveOperator = std::move(temp);
+    ASSERT_EQ(gameserver, moveOperator);
+}
+
 TEST(GameServer, canOpenDedicatedServerEqualsFalseIfNoServerExeAndEmptyArgument)
 {
     lanty::GameServer gameserver;

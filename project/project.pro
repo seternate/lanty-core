@@ -32,18 +32,29 @@ INCLUDEPATH += $$PWD/include
 SOURCES += \
     $$PWD/source/game/Game.cpp \
     $$PWD/source/game/GameClient.cpp \
+    $$PWD/source/game/GameClientLoader.cpp \
+    $$PWD/source/game/GameLoader.cpp \
     $$PWD/source/game/GameServer.cpp \
+    $$PWD/source/game/GameServerLoader.cpp \
     $$PWD/source/game/GameVersion.cpp \
+    $$PWD/source/game/GameVersionLoader.cpp \
+    $$PWD/source/game/QGame.cpp \
     $$PWD/source/user/User.cpp
 
 HEADERS += \
     $$PWD/include/core/ltycore_global.hpp \
     $$PWD/include/core/Serializable.hpp \
     $$PWD/include/core/version.hpp \
+    $$PWD/include/core/YAMLLoadable.hpp \
     $$PWD/include/game/Game.hpp \
     $$PWD/include/game/GameClient.hpp \
+    $$PWD/include/game/GameClientLoader.hpp \
+    $$PWD/include/game/GameLoader.hpp \
     $$PWD/include/game/GameServer.hpp \
+    $$PWD/include/game/GameServerLoader.hpp \
     $$PWD/include/game/GameVersion.hpp \
+    $$PWD/include/game/GameVersionLoader.hpp \
+    $$PWD/include/game/QGame.hpp \
     $$PWD/include/user/User.hpp
 
 TRANSLATIONS += $$PWD/../resource/translation/core_de_DE.ts

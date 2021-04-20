@@ -35,12 +35,28 @@ GameClient::GameClient(const GameClient& gameclient) noexcept :
     argument(gameclient.getArgument())
 { }
 
+GameClient::GameClient(GameClient&& gameclient) noexcept
+{
+    this->executableFilePath = std::move(gameclient.executableFilePath);
+    this->connectArgument = std::move(gameclient.connectArgument);
+    this->argument = std::move(gameclient.argument);
+}
+
 
 GameClient& GameClient::operator=(const GameClient& gameclient) noexcept
 {
     this->setExecutableFilePath(gameclient.getExecutableFilePath());
     this->setConnectArgument(gameclient.getConnectArgument());
     this->setArgument(gameclient.getArgument());
+    return *this;
+}
+
+GameClient& GameClient::operator=(GameClient&& gameclient) noexcept
+{
+    this->executableFilePath = std::move(gameclient.executableFilePath);
+    this->connectArgument = std::move(gameclient.connectArgument);
+    this->argument = std::move(gameclient.argument);
+
     return *this;
 }
 

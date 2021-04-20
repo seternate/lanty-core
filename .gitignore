@@ -36,6 +36,8 @@
 !/resource/xcf/
 !/test/
 !/test/include/
+!/test/include/core/
+!/test/include/game/
 !/test/include/helper/
 !/test/include/mock/
 !/test/include/yaml/

@@ -50,6 +50,17 @@ Game::Game(const Game& game) noexcept :
     icon(game.getIcon())
 { }
 
+Game::Game(Game&& game) noexcept
+{
+    this->name = std::move(game.name);
+    this->archiveFileName = std::move(game.archiveFileName);
+    this->client = std::move(game.client);
+    this->server = std::move(game.server);
+    this->version = std::move(game.version);
+    this->cover = std::move(game.cover);
+    this->icon = std::move(game.icon);
+}
+
 
 Game& Game::operator=(const Game& game) noexcept
 {
@@ -59,6 +70,19 @@ Game& Game::operator=(const Game& game) noexcept
     this->version = game.version;
     this->setCover(game.getCover());
     this->setIcon(game.getIcon());
+    return *this;
+}
+
+Game& Game::operator=(Game&& game) noexcept
+{
+    this->name = std::move(game.name);
+    this->archiveFileName = std::move(game.archiveFileName);
+    this->client = std::move(game.client);
+    this->server = std::move(game.server);
+    this->version = std::move(game.version);
+    this->cover = std::move(game.cover);
+    this->icon = std::move(game.icon);
+
     return *this;
 }
 

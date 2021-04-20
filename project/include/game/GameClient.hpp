@@ -38,11 +38,11 @@ public:
                const QString& connectArgument = QString(""),
                const QString& argument = QString("")) noexcept;
     GameClient(const GameClient& gameclient) noexcept;
-    GameClient(GameClient&& gameclient) = delete;
+    GameClient(GameClient&& gameclient) noexcept;
     virtual ~GameClient(void) = default;    // GCOVR_EXCL_LINE
 
     GameClient& operator=(const GameClient& gameclient) noexcept;
-    GameClient& operator=(GameClient&& gameclient) = delete;
+    GameClient& operator=(GameClient&& gameclient) noexcept;
     bool operator==(const GameClient& gameclient) const noexcept;
     bool operator!=(const GameClient& gameclient) const noexcept;
 
