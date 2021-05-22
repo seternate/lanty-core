@@ -39,6 +39,7 @@ SOURCES += \
     $$PWD/source/game/GameVersion.cpp \
     $$PWD/source/game/GameVersionLoader.cpp \
     $$PWD/source/game/QGame.cpp \
+    $$PWD/source/game/QGamelist.cpp \
     $$PWD/source/user/User.cpp
 
 HEADERS += \
@@ -55,6 +56,7 @@ HEADERS += \
     $$PWD/include/game/GameVersion.hpp \
     $$PWD/include/game/GameVersionLoader.hpp \
     $$PWD/include/game/QGame.hpp \
+    $$PWD/include/game/QGamelist.hpp \
     $$PWD/include/user/User.hpp
 
 TRANSLATIONS += $$PWD/../resource/translation/core_de_DE.ts

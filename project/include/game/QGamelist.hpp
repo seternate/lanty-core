@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,48 +14,49 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMELIST_HPP
-#define GAME_GAMELIST_HPP
+#pragma once
 
 #include <QAbstractListModel>
+#include <QVariant>
 #include <QVector>
 #include <memory>
+#include <nlohmann/json.hpp>
 
+#include "core/Serializable.hpp"
 #include "core/ltycore_global.hpp"
 #include "game/Game.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Gamelist : public QAbstractListModel
+class LTYCORE_EXPORT QGamelist : public QAbstractListModel, public Serializable
 {
-    Q_DISABLE_COPY_MOVE(Gamelist)
-
-    friend class GamelistFactory;
+    Q_DISABLE_COPY_MOVE(QGamelist)
 
 public:
-    Gamelist(void) = default;
-    virtual ~Gamelist(void) = default;
+    QGamelist(void) = default;             // GCOVR_EXCL_LINE
+    virtual ~QGamelist(void) = default;    // GCOVR_EXCL_LINE
 
-    Game& operator[](const qint32 index);
-    const Game& operator[](const qint32 index) const;
+    bool operator==(const QGamelist& gamelist) const;
+    bool operator!=(const QGamelist& gamelist) const;
+    Game& operator[](const qint64 index);
+    const Game& operator[](const qint64 index) const;
 
-    virtual const Game& at(const qint32 index) const;
-    virtual const Game& append(Game* game);
-    virtual void load(Gamelist* gamelist);
-    virtual void remove(const Game* game);
-    virtual quint32 size(void) const;
+    const Game& at(const qint64 index) const;
+    bool append(Game* game);
+    bool contains(const Game* game) const;
+    quint64 size(void) const;
+    void sortGames(void);
+    bool update(const QGamelist& gamelist);
 
     int rowCount(const QModelIndex& parent) const override;
     QVariant data(const QModelIndex& index, int role) const override;
 
-    nlohmann::json* toJSON(void) const override;
-    bool fromJSON(const nlohmann::json& json) override;
+    nlohmann::json toJSON(void) const override;
+    YAML::Node toYAML(void) const override;
 
 private:
     QVector<std::shared_ptr<Game>> list;
 };
 
 } /* namespace lanty */
-
-#endif /* GAME_GAMELIST_HPP */
