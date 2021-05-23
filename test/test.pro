@@ -41,10 +41,12 @@ HEADERS += \
 SOURCES += \
     $$PWD/../library/googletest/googletest/src/gtest-all.cc \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
+    $$PWD/source/core/FileExtensionTest.cpp \
     $$PWD/source/core/main.cpp \
     $$PWD/source/core/YAMLLoadableTest.cpp \
     $$PWD/source/game/GameClientLoaderTest.cpp \
     $$PWD/source/game/GameClientTest.cpp \
+    $$PWD/source/game/GameImageTest.cpp \
     $$PWD/source/game/GameLoaderTest.cpp \
     $$PWD/source/game/GameServerLoaderTest.cpp \
     $$PWD/source/game/GameServerTest.cpp \

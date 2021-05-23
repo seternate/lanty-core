@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,35 +14,15 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SYSTEM_QPIXMAPADAPTER_HPP
-#define SYSTEM_QPIXMAPADAPTER_HPP
+#include <gtest/gtest.h>
 
-#include <QPixmap>
-#include <QSize>
-#include <QString>
-#include <Qt>
+#include "core/FileExtension.hpp"
+#include "helper/QStringPrintHelper.hpp"
 
-#include "core/ltycore_global.hpp"
-
-namespace lanty
+TEST(FileExtensionTest, ExtensionToWildcard)
 {
+    lanty::FileExtension fileExtension;
 
-class LTYCORE_EXPORT QPixmapAdapter
-{
-public:
-    QPixmapAdapter(void) = default;
-    QPixmapAdapter(const QSize& size);
-    QPixmapAdapter(const QString& fileName, const char* format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
-
-    virtual bool load(const QString& fileName, const char* format = nullptr, Qt::ImageConversionFlags flags = Qt::AutoColor);
-    virtual bool isNull(void) const;
-    virtual QSize size(void) const;
-    QPixmap& getQPixmap(void);
-
-private:
-    QPixmap pixmap;
-};
-
-} /* namespace lanty */
-
-#endif /* SYSTEM_QPIXMAPADAPTER_HPP */
+    ASSERT_EQ(fileExtension.toWildcard(lanty::FileExtension::BMP), QString("*.bmp"));
+    ASSERT_EQ(fileExtension.toWildcard(lanty::FileExtension::YAML), QString("*.yaml"));
+}

@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,28 +14,39 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef SYSTEM_FILEEXTENSION_HPP
-#define SYSTEM_FILEEXTENSION_HPP
+#include <gtest/gtest.h>
 
-#include <QString>
+#include "game/GameImage.hpp"
+#include "helper/QStringPrintHelper.hpp"
 
-#include "core/ltycore_global.hpp"
-
-namespace lanty
+TEST(GameImageTest, CoverFilenameWithDotInsideGamename)
 {
+    lanty::Game game("Counter Strike 1.6");
+    lanty::GameImage image(game);
 
-class LTYCORE_EXPORT FileExtension
+    ASSERT_EQ(image.coverFilename(), QString("counter_strike_1_6"));
+}
+
+TEST(GameImageTest, CoverFilenameWithDashInsideGamename)
 {
-public:
-    static const QString YAML;
-    static const QString YML;
-    static const QString PNG;
-    static const QString JPG;
-    static const QString JPEG;
-    static const QString BMP;
-    static const QString ZIP;
-};
+    lanty::Game game("Warcraft 3 - Frozen Throne");
+    lanty::GameImage image(game);
 
-} /* namespace lanty */
+    ASSERT_EQ(image.coverFilename(), QString("warcraft_3_frozen_throne"));
+}
 
-#endif /* SYSTEM_FILEEXTENSION_HPP */
+TEST(GameImageTest, IconFilenameWithDotInsideGamename)
+{
+    lanty::Game game("Counter Strike 1.6");
+    lanty::GameImage image(game);
+
+    ASSERT_EQ(image.iconFilename(), QString("counter_strike_1_6_icon"));
+}
+
+TEST(GameImageTest, iconFilenameWithDashInsideGamename)
+{
+    lanty::Game game("Warcraft 3 - Frozen Throne");
+    lanty::GameImage image(game);
+
+    ASSERT_EQ(image.iconFilename(), QString("warcraft_3_frozen_throne_icon"));
+}

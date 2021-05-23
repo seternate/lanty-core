@@ -30,9 +30,11 @@ LIBS += -lgcov
 INCLUDEPATH += $$PWD/include
 
 SOURCES += \
+    $$PWD/source/core/FileExtension.cpp \
     $$PWD/source/game/Game.cpp \
     $$PWD/source/game/GameClient.cpp \
     $$PWD/source/game/GameClientLoader.cpp \
+    $$PWD/source/game/GameImage.cpp \
     $$PWD/source/game/GameLoader.cpp \
     $$PWD/source/game/GameServer.cpp \
     $$PWD/source/game/GameServerLoader.cpp \
@@ -43,6 +45,7 @@ SOURCES += \
     $$PWD/source/user/User.cpp
 
 HEADERS += \
+    $$PWD/include/core/FileExtension.hpp \
     $$PWD/include/core/ltycore_global.hpp \
     $$PWD/include/core/Serializable.hpp \
     $$PWD/include/core/version.hpp \
@@ -50,6 +53,7 @@ HEADERS += \
     $$PWD/include/game/Game.hpp \
     $$PWD/include/game/GameClient.hpp \
     $$PWD/include/game/GameClientLoader.hpp \
+    $$PWD/include/game/GameImage.hpp \
     $$PWD/include/game/GameLoader.hpp \
     $$PWD/include/game/GameServer.hpp \
     $$PWD/include/game/GameServerLoader.hpp \

@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,38 +14,36 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef GAME_GAMEHELPER_HPP
-#define GAME_GAMEHELPER_HPP
+#pragma once
 
+#include <QDir>
 #include <QString>
 
 #include "core/ltycore_global.hpp"
 #include "game/Game.hpp"
-#include "system/QDirAdapter.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT GameHelper
+class LTYCORE_EXPORT GameImage
 {
 public:
-    const static QString YAML_TEMPLATE_FILE;
+    static const QString ICON_SUFFIX;
 
-    GameHelper(void) = default;
-    virtual ~GameHelper(void) = default;
+    GameImage(const Game& game) noexcept;
+    virtual ~GameImage(void) = default;    // GCOVR_EXCL_LINE
 
-    virtual QString getCoverImagePathFromDirectory(const Game& game, const QDirAdapter& gameImageFileDirectory);
-    virtual QString getIconImagePathFromDirectory(const Game& game, const QDirAdapter& gameImageFileDirectory);
-    virtual QString formatNameToCoverImageFileName(const Game& game);
-    virtual QString formatNameToIconImageFileName(const Game& game);
+    QString coverFilename(void) const noexcept;
+    QString iconFilename(void) const noexcept;
+    QString coverFilepath(const QDir& imageDirectory) const noexcept;
+    QString iconFilepath(const QDir& imageDirectory) const noexcept;
 
-protected:
-    QString getImagePathFromDirectory(const Game& game,
-                                      const QDirAdapter& gameImageFileDirectory,
-                                      const QString& imageFileNameSuffix = QString(""));
-    QString formatNameToImageFileName(const Game& game, const QString& imageFileNameSuffix = QString(""));
+private:
+    Game game;
+
+    QString imageFilepath(const QString& imageFilename, const QDir& imageDirectory) const noexcept;
+    QString imageBaseFilename(void) const noexcept;
+    QStringList fileExtensionFilterForImages(void) const noexcept;
 };
 
 } /* namespace lanty */
-
-#endif /* GAME_GAMEHELPER_HPP */

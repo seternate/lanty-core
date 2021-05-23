@@ -1,4 +1,4 @@
-/* Copyright <2020> <Levin Jeck>
+/* Copyright <2021> <Levin Jeck>
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
  * documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
@@ -14,35 +14,24 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "system/QDirAdapter.hpp"
+#include "core/FileExtension.hpp"
 
 namespace lanty
 {
 
-QDirAdapter::QDirAdapter(const QString& path) : qDir(path) { }
+const QString FileExtension::YAML = "yaml";
+const QString FileExtension::YML = "yml";
+const QString FileExtension::PNG = "png";
+const QString FileExtension::JPG = "jpg";
+const QString FileExtension::JPEG = "jpeg";
+const QString FileExtension::BMP = "bmp";
+const QString FileExtension::ZIP = "zip";
 
-QDirAdapter::QDirAdapter(const QString& path, const QString& nameFilter, QDir::SortFlags sort, QDir::Filters filters) :
-    qDir(path, nameFilter, sort, filters)
-{ }
-
-QStringList QDirAdapter::entryList(const QStringList& nameFilters, QDir::Filters filters, QDir::SortFlags sort) const
+QString FileExtension::toWildcard(const QString& fileExtension) const noexcept
 {
-    return this->qDir.entryList(nameFilters, filters, sort);
-}
+    QString wildcard("*.");
 
-bool QDirAdapter::isEmpty(QDir::Filters filters) const
-{
-    return this->qDir.isEmpty(filters);
-}
-
-QString QDirAdapter::absoluteFilePath(const QString& fileName) const
-{
-    return this->qDir.absoluteFilePath(fileName);
-}
-
-QString QDirAdapter::absolutePath(void) const
-{
-    return qDir.absolutePath();
+    return wildcard.append(fileExtension);
 }
 
 } /* namespace lanty */

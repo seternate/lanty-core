@@ -5,28 +5,21 @@
 !/configuration/
 !/configuration/doxygen/
 !/library/
-!/library/yaml-cpp/
-!/library/yaml-cpp/**
 !/library/googletest/
 !/library/googletest/**
 !/library/nlohmann-json/
 !/library/nlohmann-json/**
+!/library/yaml-cpp/
+!/library/yaml-cpp/**
 !/project/
 !/project/include/
 !/project/include/core/
 !/project/include/game/
-!/project/include/helper/
-!/project/include/serializer/
-!/project/include/system/
 !/project/include/user/
-!/project/include/yaml/
 !/project/source/
+!/project/source/core/
 !/project/source/game/
-!/project/source/helper/
-!/project/source/serializer/
-!/project/source/system/
 !/project/source/user/
-!/project/source/yaml/
 !/resource/
 !/resource/font/
 !/resource/image/
@@ -39,15 +32,11 @@
 !/test/include/core/
 !/test/include/game/
 !/test/include/helper/
-!/test/include/mock/
-!/test/include/yaml/
 !/test/source/
 !/test/source/core/
 !/test/source/game/
 !/test/source/helper/
-!/test/source/serializer/
 !/test/source/user/
-!/test/source/yaml/
 
 #Whitelist files
 !*.cpp
