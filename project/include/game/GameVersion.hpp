@@ -19,6 +19,7 @@
 #include <yaml-cpp/yaml.h>
 #include <QString>
 #include <QVector>
+#include <nlohmann/json.hpp>
 #include <string>
 
 #include "core/Serializable.hpp"

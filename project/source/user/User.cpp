@@ -36,11 +36,21 @@ User::User(const QString& username, const QString& gamepath, const QString& ipAd
 { }
 
 User::User(const User& user) noexcept :
+    Serializable(),
     username(user.getUsername()),
     gamepath(user.getGamepath()),
     resolutionX(user.getResolutionX()),
     resolutionY(user.getResolutionY()),
     ipAddress(user.getIPAddress())
+{ }
+
+User::User(User&& user) noexcept :
+    Serializable(),
+    username(std::move(user.username)),
+    gamepath(std::move(user.gamepath)),
+    resolutionX(std::move(user.resolutionX)),
+    resolutionY(std::move(user.resolutionY)),
+    ipAddress(std::move(user.ipAddress))
 { }
 
 
@@ -53,13 +63,24 @@ User& User::operator=(const User& user) noexcept
     return *this;
 }
 
-bool User::operator==(const lanty::User& user) const noexcept
+User& User::operator=(User&& user) noexcept
+{
+    this->username = std::move(user.username);
+    this->gamepath = std::move(user.gamepath);
+    this->resolutionX = std::move(user.resolutionX);
+    this->resolutionY = std::move(user.resolutionY);
+    this->ipAddress = std::move(user.ipAddress);
+
+    return *this;
+}
+
+bool User::operator==(const User& user) const noexcept
 {
     return this->username == user.username && this->gamepath == user.gamepath && this->resolutionX == user.resolutionX
            && this->resolutionY == user.resolutionY && this->ipAddress.isEqual(user.ipAddress);
 }
 
-bool User::operator!=(const lanty::User& user) const noexcept
+bool User::operator!=(const User& user) const noexcept
 {
     return !(*this == user);
 }
@@ -75,12 +96,12 @@ const QString& User::getGamepath(void) const noexcept
     return this->gamepath;
 }
 
-quint32 User::getResolutionX(void) const noexcept
+quint64 User::getResolutionX(void) const noexcept
 {
     return this->resolutionX;
 }
 
-quint32 User::getResolutionY(void) const noexcept
+quint64 User::getResolutionY(void) const noexcept
 {
     return this->resolutionY;
 }
@@ -101,25 +122,25 @@ void User::setGamepath(const QString& gamepath) noexcept
     this->gamepath = gamepath;
 }
 
-void User::setResolution(const quint32 x, const quint32 y) noexcept
+void User::setResolution(const quint64 x, const quint64 y) noexcept
 {
     this->resolutionX = x;
     this->resolutionY = y;
 }
 
-void User::setResolutionX(const quint32 x) noexcept
+void User::setResolutionX(const quint64 x) noexcept
 {
-    this->setResolution(x, this->resolutionY);
+    this->resolutionX = x;
 }
 
-void User::setResolutionY(const quint32 y) noexcept
+void User::setResolutionY(const quint64 y) noexcept
 {
-    this->setResolution(this->resolutionX, y);
+    this->resolutionY = y;
 }
 
 void User::setIPAddress(const QString& ipAddress) noexcept
 {
-    this->ipAddress = QHostAddress(ipAddress);
+    this->ipAddress.setAddress(ipAddress);
 }
 
 
@@ -129,23 +150,23 @@ nlohmann::json User::toJSON(void) const
 
     if (this->getUsername().isEmpty() == false)
     {
-        json[USERNAME_SERIALIZER_KEY] = this->getUsername().toStdString();
+        json[User::USERNAME_SERIALIZER_KEY] = this->getUsername().toStdString();
     }
     if (this->getGamepath().isEmpty() == false)
     {
-        json[GAMEPATH_SERIALIZER_KEY] = this->getGamepath().toStdString();
+        json[User::GAMEPATH_SERIALIZER_KEY] = this->getGamepath().toStdString();
     }
     if (this->getResolutionX() != 0)
     {
-        json[RESOLUTION_SERIALIZER_KEY][RESOLUTION_X_SERIALIZER_KEY] = this->getResolutionX();
+        json[User::RESOLUTION_SERIALIZER_KEY][User::RESOLUTION_X_SERIALIZER_KEY] = this->getResolutionX();
     }
     if (this->getResolutionY() != 0)
     {
-        json[RESOLUTION_SERIALIZER_KEY][RESOLUTION_Y_SERIALIZER_KEY] = this->getResolutionY();
+        json[User::RESOLUTION_SERIALIZER_KEY][User::RESOLUTION_Y_SERIALIZER_KEY] = this->getResolutionY();
     }
     if (this->getIPAddress().isNull() == false)
     {
-        json[IPADDRESS_SERIALIZER_KEY] = this->getIPAddress().toString().toStdString();
+        json[User::IPADDRESS_SERIALIZER_KEY] = this->getIPAddress().toString().toStdString();
     }
 
     return json;
@@ -157,23 +178,23 @@ YAML::Node User::toYAML(void) const
 
     if (this->getUsername().isEmpty() == false)
     {
-        yaml[USERNAME_SERIALIZER_KEY] = this->getUsername().toStdString();
+        yaml[User::USERNAME_SERIALIZER_KEY] = this->getUsername().toStdString();
     }
     if (this->getGamepath().isEmpty() == false)
     {
-        yaml[GAMEPATH_SERIALIZER_KEY] = this->getGamepath().toStdString();
+        yaml[User::GAMEPATH_SERIALIZER_KEY] = this->getGamepath().toStdString();
     }
     if (this->getResolutionX() != 0)
     {
-        yaml[RESOLUTION_SERIALIZER_KEY][RESOLUTION_X_SERIALIZER_KEY] = this->getResolutionX();
+        yaml[User::RESOLUTION_SERIALIZER_KEY][User::RESOLUTION_X_SERIALIZER_KEY] = this->getResolutionX();
     }
     if (this->getResolutionY() != 0)
     {
-        yaml[RESOLUTION_SERIALIZER_KEY][RESOLUTION_Y_SERIALIZER_KEY] = this->getResolutionY();
+        yaml[User::RESOLUTION_SERIALIZER_KEY][User::RESOLUTION_Y_SERIALIZER_KEY] = this->getResolutionY();
     }
     if (this->getIPAddress().isNull() == false)
     {
-        yaml[IPADDRESS_SERIALIZER_KEY] = this->getIPAddress().toString().toStdString();
+        yaml[User::IPADDRESS_SERIALIZER_KEY] = this->getIPAddress().toString().toStdString();
     }
 
     return yaml;

@@ -42,25 +42,25 @@ public:
          const QString& gamepath = QString(""),
          const QString& ipAddress = QString("")) noexcept;
     User(const User& user) noexcept;
-    User(User&& user) = delete;
+    User(User&& user) noexcept;
     virtual ~User(void) = default;    // GCOVR_EXCL_LINE
 
     User& operator=(const User& user) noexcept;
-    User& operator=(User&& user) = delete;
+    User& operator=(User&& user) noexcept;
     bool operator==(const User& user) const noexcept;
     bool operator!=(const User& user) const noexcept;
 
     const QString& getUsername(void) const noexcept;
     const QString& getGamepath(void) const noexcept;
-    quint32 getResolutionX(void) const noexcept;
-    quint32 getResolutionY(void) const noexcept;
+    quint64 getResolutionX(void) const noexcept;
+    quint64 getResolutionY(void) const noexcept;
     const QHostAddress& getIPAddress(void) const noexcept;
 
     virtual void setUsername(const QString& username) noexcept;
     virtual void setGamepath(const QString& gamepath) noexcept;
-    virtual void setResolution(const quint32 x, const quint32 y) noexcept;
-    virtual void setResolutionX(const quint32 x) noexcept;
-    virtual void setResolutionY(const quint32 y) noexcept;
+    virtual void setResolution(const quint64 x, const quint64 y) noexcept;
+    virtual void setResolutionX(const quint64 x) noexcept;
+    virtual void setResolutionY(const quint64 y) noexcept;
     virtual void setIPAddress(const QString& ipAddress) noexcept;
 
     nlohmann::json toJSON(void) const override;
@@ -69,8 +69,8 @@ public:
 private:
     QString username;
     QString gamepath;
-    quint32 resolutionX;
-    quint32 resolutionY;
+    quint64 resolutionX;
+    quint64 resolutionY;
     QHostAddress ipAddress;
 };
 

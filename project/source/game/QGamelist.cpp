@@ -44,7 +44,7 @@ bool QGamelist::operator!=(const QGamelist& gamelist) const
 
 Game& QGamelist::operator[](const qint64 index)
 {
-    return *(this->list[index].get());
+    return *(this->list[index]);
 }
 
 const Game& QGamelist::operator[](const qint64 index) const
@@ -144,10 +144,6 @@ int QGamelist::rowCount(const QModelIndex& parent) const
 QVariant QGamelist::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
-    {
-        return QVariant();
-    }
-    if (index.row() >= this->list.size())
     {
         return QVariant();
     }

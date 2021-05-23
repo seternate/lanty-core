@@ -30,6 +30,17 @@ TEST(UserTest, FieldsShouldBeEmptyAfterCallingDefaultConstructor)
     ASSERT_TRUE(user.getIPAddress().isNull());
 }
 
+TEST(UserTest, FieldsNotEmptyAfterConstructor)
+{
+    lanty::User user("seternate", "C:/Users/Levin/Desktop/games", "192.168.0.87");
+
+    ASSERT_EQ(user.getUsername(), QString("seternate"));
+    ASSERT_EQ(user.getGamepath(), QString("C:/Users/Levin/Desktop/games"));
+    ASSERT_EQ(user.getResolutionX(), 0);
+    ASSERT_EQ(user.getResolutionY(), 0);
+    ASSERT_EQ(user.getIPAddress().toString(), QString("192.168.0.87"));
+}
+
 TEST(UserTest, GetterSetterTest)
 {
     lanty::User user;
@@ -88,6 +99,21 @@ TEST(UserTest, CopyConstructorAndOperator)
     lanty::User copyOperator;
     copyOperator = user;
     ASSERT_EQ(user, copyOperator);
+}
+
+TEST(UserTest, MoveConstructorAndOperator)
+{
+    lanty::User user("seternate", "C:\\games");
+    lanty::User userConstructor("seternate", "C:\\games");
+
+    lanty::User constructor(std::move(userConstructor));
+    ASSERT_EQ(user, constructor);
+
+    lanty::User userOperator("seternate", "C:\\games");
+
+    lanty::User moveOperator;
+    moveOperator = std::move(userOperator);
+    ASSERT_EQ(user, moveOperator);
 }
 
 TEST(UserTest, SerializeToJSON)

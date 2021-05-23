@@ -76,6 +76,20 @@ TEST(QGamelistTest, ComparisonOperatorIfBothObjectsAreUnEqual)
     ASSERT_NE(gamelistOne, gamelistTwo);
 }
 
+TEST(QGamelistTest, AccessOperator)
+{
+    lanty::QGamelist gamelist;
+    const lanty::QGamelist* gamelistPtr = &gamelist;
+
+    lanty::Game* game = new lanty::QGame();
+    game->setName("game");
+
+    gamelist.append(game);
+
+    ASSERT_EQ(gamelist[0], *game);
+    ASSERT_EQ((*gamelistPtr)[0], *game);
+}
+
 TEST(QGamelistTest, AppendUniqueGamesToList)
 {
     lanty::QGamelist gamelist;
@@ -243,9 +257,9 @@ TEST(QGamelistTest, ReturnNoDataIfIndexOutOfBound)
     gamelist.append(gameOne);
     gamelist.append(gameTwo);
 
-    QModelIndex index = gamelist.index(5);
+    QModelIndex index = gamelist.index(2);
 
-    QVariant result = gamelist.data(index, 0);
+    QVariant result = gamelist.data(index, Qt::DisplayRole);
 
     ASSERT_TRUE(result.isNull());
 }
