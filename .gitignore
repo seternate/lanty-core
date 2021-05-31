@@ -32,6 +32,7 @@
 !/test/include/core/
 !/test/include/game/
 !/test/include/helper/
+!/test/include/user/
 !/test/source/
 !/test/source/core/
 !/test/source/game/

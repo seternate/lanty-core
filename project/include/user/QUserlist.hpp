@@ -16,57 +16,47 @@
 
 #pragma once
 
-#include <yaml-cpp/yaml.h>
-#include <QString>
-#include <string>
+#include <QAbstractListModel>
+#include <QVariant>
+#include <QVector>
+#include <memory>
+#include <nlohmann/json.hpp>
+
+#include "core/Serializable.hpp"
+#include "core/ltycore_global.hpp"
+#include "user/User.hpp"
 
 namespace lanty
 {
 
-template<typename T>
-class YAMLLoadable
+class LTYCORE_EXPORT QUserlist : public QAbstractListModel, public Serializable
 {
+    Q_DISABLE_COPY_MOVE(QUserlist)
+
 public:
-    virtual T load(const YAML::Node& yaml) const = 0;
+    QUserlist(void) = default;             // GCOVR_EXCL_LINE
+    virtual ~QUserlist(void) = default;    // GCOVR_EXCL_LINE
 
-protected:
-    QString loadFieldAsQString(const YAML::Node& yaml, const std::string& key) const
-    {
-        QString field("");
+    bool operator==(const QUserlist& userlist) const;
+    bool operator!=(const QUserlist& userlist) const;
+    User& operator[](const qint64 index);
+    const User& operator[](const qint64 index) const;
 
-        YAML::Node yamlField = yaml[key];
-        if (yamlField.IsDefined() == true)
-        {
-            std::string fieldFromYaml = yamlField.as<std::string>();
-            field = QString::fromStdString(fieldFromYaml);
-        }
+    const User& at(const qint64 index) const;
+    bool append(User* user);
+    bool contains(const User* user) const;
+    quint64 size(void) const;
+    void sortUsers(void);
+    bool update(const QUserlist& userlist);
 
-        return field;
-    }
+    int rowCount(const QModelIndex& parent) const override;
+    QVariant data(const QModelIndex& index, int role) const override;
 
-    qint64 loadFieldAsInteger(const YAML::Node& yaml, const std::string& key) const
-    {
-        qint64 field = 0;
+    nlohmann::json toJSON(void) const override;
+    YAML::Node toYAML(void) const override;
 
-        YAML::Node yamlField = yaml[key];
-        if (yamlField.IsDefined() == true)
-        {
-            field = yamlField.as<qint64>();
-        }
-
-        return field;
-    }
-
-    YAML::Node loadFieldAsYAML(const YAML::Node& yaml, const std::string& key) const
-    {
-        YAML::Node yamlField = yaml[key];
-        if (yamlField.IsDefined() == false)
-        {
-            return YAML::Node();
-        }
-
-        return yamlField;
-    }
+private:
+    QVector<std::shared_ptr<User>> list;
 };
 
 } /* namespace lanty */

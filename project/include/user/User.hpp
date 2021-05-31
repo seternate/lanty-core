@@ -49,6 +49,7 @@ public:
     User& operator=(User&& user) noexcept;
     bool operator==(const User& user) const noexcept;
     bool operator!=(const User& user) const noexcept;
+    bool operator<(const User& user) const noexcept;
 
     const QString& getUsername(void) const noexcept;
     const QString& getGamepath(void) const noexcept;

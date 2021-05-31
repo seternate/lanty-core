@@ -121,6 +121,14 @@ TEST(GameTest, ComparisonOperatorIfBothObjectsAreUnEqual)
     ASSERT_NE(gameOne, gameTwo);
 }
 
+TEST(GameTest, LessThanOperator)
+{
+    lanty::Game gameOne("World of Warcraft");
+    lanty::Game gameTwo("Team Fortress 2");
+
+    ASSERT_LT(gameTwo, gameOne);
+}
+
 TEST(GameTest, CopyConstructorAndOperator)
 {
     lanty::Game game;

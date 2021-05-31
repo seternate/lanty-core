@@ -100,6 +100,11 @@ bool Game::operator!=(const Game& game) const noexcept
     return !(*this == game);
 }
 
+bool Game::operator<(const Game& game) const noexcept
+{
+    return this->getName().compare(game.getName(), Qt::CaseSensitivity::CaseInsensitive);
+}
+
 
 const QString& Game::getName(void) const noexcept
 {

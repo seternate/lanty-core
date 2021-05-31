@@ -56,6 +56,7 @@ public:
     Game& operator=(Game&& game) noexcept;
     bool operator==(const Game& game) const noexcept;
     bool operator!=(const Game& game) const noexcept;
+    bool operator<(const Game& game) const noexcept;
 
     const QString& getName(void) const noexcept;
     const QString& getArchiveFileName(void) const noexcept;

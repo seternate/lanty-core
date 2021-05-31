@@ -14,34 +14,24 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "core/YAMLLoadableTest.hpp"
+#pragma once
 
-#include <gtest/gtest.h>
+#include <yaml-cpp/yaml.h>
 
-TEST_F(YAMLLoadableTest, loadFieldAsQStringKeyDoesNotExistReturnEmptyQString)
+#include "core/YAMLLoadable.hpp"
+#include "core/ltycore_global.hpp"
+#include "user/User.hpp"
+
+namespace lanty
 {
-    QString emptyValue = this->loadFieldAsQString(emptyYAML, "not_existing_key");
 
-    ASSERT_TRUE(emptyValue.isEmpty() == true);
-}
-
-TEST_F(YAMLLoadableTest, loadFieldAsQStringKeyDoesExistReturnValue)
+class LTYCORE_EXPORT UserLoader : public YAMLLoadable<User>
 {
-    QString value = this->loadFieldAsQString(yaml, "existing_key_string");
+public:
+    UserLoader(void) = default;             // GCOVR_EXCL_LINE
+    virtual ~UserLoader(void) = default;    // GCOVR_EXCL_LINE
 
-    ASSERT_EQ(value, "value");
-}
+    User load(const YAML::Node& yaml) const override;
+};
 
-TEST_F(YAMLLoadableTest, loadFieldAsIntegerKeyDoesNotExistsReturnZero)
-{
-    qint64 zeroValue = this->loadFieldAsInteger(emptyYAML, "not_existing_key");
-
-    ASSERT_EQ(zeroValue, 0);
-}
-
-TEST_F(YAMLLoadableTest, loadFieldAsIntegerKeyDoesExistReturnValue)
-{
-    qint64 value = this->loadFieldAsInteger(yaml, "existing_key_integer");
-
-    ASSERT_EQ(value, 99);
-}
+} /* namespace lanty */

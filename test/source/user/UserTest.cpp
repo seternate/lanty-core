@@ -81,6 +81,14 @@ TEST(UserTest, ComparisonOperatorIfBothObjectsAreEqual)
     ASSERT_EQ(userOne, userTwo);
 }
 
+TEST(UserTest, LessThanOperator)
+{
+    lanty::User userOne("seternate");
+    lanty::User userTwo("Awes0me");
+
+    ASSERT_LT(userTwo, userOne);
+}
+
 TEST(UserTest, ComparisonOperatorIfBothObjectsAreUnEqual)
 {
     lanty::User userOne("seternate", "C:\\games");

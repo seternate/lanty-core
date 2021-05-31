@@ -39,7 +39,17 @@ TEST(QGameTest, ComparisonOperatorIfBothObjectsAreUnEqual)
     ASSERT_NE(gameOne, gameTwo);
 }
 
-TEST(GameVersion, CopyConstructorAndOperatorForGames)
+TEST(QGameTest, LessThanOperator)
+{
+    lanty::QGame gameOne;
+    gameOne.setName("World of Warcraft");
+    lanty::QGame gameTwo;
+    gameTwo.setName("Team Fortress 2");
+
+    ASSERT_LT(gameTwo, gameOne);
+}
+
+TEST(QGameTest, CopyConstructorAndOperatorForGames)
 {
     lanty::Game game;
     game.setName("test");

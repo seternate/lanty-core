@@ -14,34 +14,27 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "core/YAMLLoadableTest.hpp"
+#include "user/UserLoader.hpp"
 
-#include <gtest/gtest.h>
-
-TEST_F(YAMLLoadableTest, loadFieldAsQStringKeyDoesNotExistReturnEmptyQString)
+namespace lanty
 {
-    QString emptyValue = this->loadFieldAsQString(emptyYAML, "not_existing_key");
 
-    ASSERT_TRUE(emptyValue.isEmpty() == true);
+User UserLoader::load(const YAML::Node& yaml) const
+{
+    User user;
+
+    user.setUsername(this->loadFieldAsQString(yaml, User::USERNAME_SERIALIZER_KEY));
+    user.setGamepath(this->loadFieldAsQString(yaml, User::GAMEPATH_SERIALIZER_KEY));
+    YAML::Node yamlResolution = this->loadFieldAsYAML(yaml, User::RESOLUTION_SERIALIZER_KEY);
+    if (yamlResolution.IsNull() == false)
+    {
+        qint64 X = this->loadFieldAsInteger(yamlResolution, User::RESOLUTION_X_SERIALIZER_KEY);
+        qint64 Y = this->loadFieldAsInteger(yamlResolution, User::RESOLUTION_Y_SERIALIZER_KEY);
+        user.setResolution(X, Y);
+    }
+    user.setIPAddress(this->loadFieldAsQString(yaml, User::IPADDRESS_SERIALIZER_KEY));
+
+    return user;
 }
 
-TEST_F(YAMLLoadableTest, loadFieldAsQStringKeyDoesExistReturnValue)
-{
-    QString value = this->loadFieldAsQString(yaml, "existing_key_string");
-
-    ASSERT_EQ(value, "value");
-}
-
-TEST_F(YAMLLoadableTest, loadFieldAsIntegerKeyDoesNotExistsReturnZero)
-{
-    qint64 zeroValue = this->loadFieldAsInteger(emptyYAML, "not_existing_key");
-
-    ASSERT_EQ(zeroValue, 0);
-}
-
-TEST_F(YAMLLoadableTest, loadFieldAsIntegerKeyDoesExistReturnValue)
-{
-    qint64 value = this->loadFieldAsInteger(yaml, "existing_key_integer");
-
-    ASSERT_EQ(value, 99);
-}
+} /* namespace lanty */

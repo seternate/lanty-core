@@ -21,22 +21,13 @@ namespace lanty
 
 QGame::QGame(QObject* parent) noexcept : QObject(parent), Game()
 {
-    QObject::connect(this, SIGNAL(nameChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(archiveFileNameChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(clientExecutableFilePathChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(clientArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(clientConnectArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(serverExecutableFilePathChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(serverArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(versionChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(versionSourceChanged(const lanty::GameVersion::Source)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(versionFilePathChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(versionFileQueryChanged(const QString&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(coverChanged(const QPixmap&)), this, SIGNAL(changed(void)));
-    QObject::connect(this, SIGNAL(iconChanged(const QPixmap&)), this, SIGNAL(changed(void)));
+    this->connectSignals();
 }
 
-QGame::QGame(const Game& game, QObject* parent) noexcept : QObject(parent), Game(game) { }
+QGame::QGame(const Game& game, QObject* parent) noexcept : QObject(parent), Game(game)
+{
+    this->connectSignals();
+}
 
 
 QGame& QGame::operator=(const Game& game) noexcept
@@ -132,6 +123,24 @@ void QGame::setIcon(const QPixmap& icon) noexcept
 {
     Game::setIcon(icon);
     emit this->iconChanged(icon);
+}
+
+
+void QGame::connectSignals(void) noexcept
+{
+    QObject::connect(this, SIGNAL(nameChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(archiveFileNameChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(clientExecutableFilePathChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(clientArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(clientConnectArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(serverExecutableFilePathChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(serverArgumentChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionSourceChanged(const lanty::GameVersion::Source)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionFilePathChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(versionFileQueryChanged(const QString&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(coverChanged(const QPixmap&)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(iconChanged(const QPixmap&)), this, SIGNAL(changed(void)));
 }
 
 } /* namespace lanty */

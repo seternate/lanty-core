@@ -68,6 +68,9 @@ signals:
     void coverChanged(const QPixmap& newCover);
     void iconChanged(const QPixmap& newIcon);
     void changed(void);
+
+private:
+    void connectSignals(void) noexcept;
 };
 
 } /* namespace lanty */

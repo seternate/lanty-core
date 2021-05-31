@@ -37,6 +37,7 @@ protected:
 
     void SetUp() override
     {
-        yaml["existing_key"] = "value";
+        yaml["existing_key_string"] = "value";
+        yaml["existing_key_integer"] = 99;
     }
 };

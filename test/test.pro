@@ -36,6 +36,7 @@ HEADERS += \
     $$PWD/include/game/GameLoaderTest.hpp \
     $$PWD/include/game/GameServerLoaderTest.hpp \
     $$PWD/include/game/GameVersionLoaderTest.hpp \
+    $$PWD/include/user/UserLoaderTest.hpp \
     $$PWD/include/helper/QStringPrintHelper.hpp
 
 SOURCES += \
@@ -55,6 +56,9 @@ SOURCES += \
     $$PWD/source/game/GameVersionTest.cpp \
     $$PWD/source/game/QGamelistTest.cpp \
     $$PWD/source/game/QGameTest.cpp \
+    $$PWD/source/user/QUserlistTest.cpp \
+    $$PWD/source/user/QUserTest.cpp \
+    $$PWD/source/user/UserLoaderTest.cpp
     $$PWD/source/user/UserTest.cpp
 
 INCLUDEPATH += \

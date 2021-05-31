@@ -23,7 +23,6 @@
 
 #include <QDebug>
 #include <QSignalSpy>
-#include <fstream>
 
 TEST(QGamelistTest, DefaultConstructorCreatesEmptyList)
 {

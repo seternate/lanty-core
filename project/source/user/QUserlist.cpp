@@ -14,18 +14,18 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "game/QGamelist.hpp"
+#include "user/QUserlist.hpp"
 
 namespace lanty
 {
 
-bool QGamelist::operator==(const QGamelist& gamelist) const
+bool QUserlist::operator==(const QUserlist& userlist) const
 {
     bool result = false;
 
-    for (std::shared_ptr<Game> gamePtr : gamelist.list)
+    for (std::shared_ptr<User> userPtr : userlist.list)
     {
-        result = this->contains(gamePtr.get());
+        result = this->contains(userPtr.get());
         if (result == false)
         {
             break;
@@ -35,93 +35,93 @@ bool QGamelist::operator==(const QGamelist& gamelist) const
     return result;
 }
 
-bool QGamelist::operator!=(const QGamelist& gamelist) const
+bool QUserlist::operator!=(const QUserlist& userlist) const
 {
-    return !(this->operator==(gamelist));
+    return !(this->operator==(userlist));
 }
 
-Game& QGamelist::operator[](const qint64 index)
-{
-    return *(this->list[index]);
-}
-
-const Game& QGamelist::operator[](const qint64 index) const
+User& QUserlist::operator[](const qint64 index)
 {
     return *(this->list[index]);
 }
 
+const User& QUserlist::operator[](const qint64 index) const
+{
+    return *(this->list[index]);
+}
 
-const Game& QGamelist::at(const qint64 index) const
+
+const User& QUserlist::at(const qint64 index) const
 {
     return *(this->list.at(index).get());
 }
 
-bool QGamelist::append(Game* game)
+bool QUserlist::append(User* user)
 {
-    bool gameWasAppended = false;
+    bool userWasAppended = false;
 
-    if (this->contains(game) == false)
+    if (this->contains(user) == false)
     {
         beginInsertRows(QModelIndex(), this->size(), this->size());
-        this->list.append(std::shared_ptr<Game>(game));
+        this->list.append(std::shared_ptr<User>(user));
         endInsertRows();
-        gameWasAppended = true;
+        userWasAppended = true;
     }
 
-    return gameWasAppended;
+    return userWasAppended;
 }
 
-bool QGamelist::contains(const Game* game) const
+bool QUserlist::contains(const User* user) const
 {
-    bool foundEqualGameInList = false;
+    bool foundEqualUserInList = false;
 
-    for (std::shared_ptr<Game> gamePtrFromList : this->list)
+    for (std::shared_ptr<User> userPtrFromList : this->list)
     {
-        Game& gameFromList = *gamePtrFromList.get();
+        User& userFromList = *userPtrFromList.get();
 
-        if (game->operator==(gameFromList))
+        if (user->operator==(userFromList))
         {
-            foundEqualGameInList = true;
+            foundEqualUserInList = true;
             break;
         }
     }
 
-    return foundEqualGameInList;
+    return foundEqualUserInList;
 }
 
-quint64 QGamelist::size(void) const
+quint64 QUserlist::size(void) const
 {
     return this->list.size();
 }
 
-void QGamelist::sortGames(void)
+void QUserlist::sortUsers(void)
 {
     beginResetModel();
     std::sort(this->list.begin(), this->list.end());
     endResetModel();
 }
 
-bool QGamelist::update(const QGamelist& gamelist)
+bool QUserlist::update(const QUserlist& userlist)
 {
     bool updated = false;
 
-    for (std::shared_ptr<Game> gamePtr : gamelist.list)
+    for (std::shared_ptr<User> userPtr : userlist.list)
     {
-        if (this->contains(gamePtr.get()) == false)
+        if (this->contains(userPtr.get()) == false)
         {
             beginInsertRows(QModelIndex(), this->size(), this->size());
-            this->list.append(gamePtr);
+            this->list.append(userPtr);
             endInsertRows();
             updated = true;
         }
     }
 
-    for (std::shared_ptr<Game> gamePtr : this->list)
+    for (std::shared_ptr<User> userPtr : this->list)
     {
-        if (gamelist.contains(gamePtr.get()) == false)
+        if (userlist.contains(userPtr.get()) == false)
         {
-            beginRemoveRows(QModelIndex(), this->list.indexOf(gamePtr), this->list.indexOf(gamePtr));
-            this->list.removeOne(gamePtr);
+            beginRemoveRows(QModelIndex(), this->list.indexOf(userPtr), this->list.indexOf(userPtr));
+            this->list.removeOne(userPtr);
             endRemoveRows();
             updated = true;
         }
@@ -131,13 +131,13 @@ bool QGamelist::update(const QGamelist& gamelist)
 }
 
 
-int QGamelist::rowCount(const QModelIndex& parent) const
+int QUserlist::rowCount(const QModelIndex& parent) const
 {
     Q_UNUSED(parent)
     return this->list.size();
 }
 
-QVariant QGamelist::data(const QModelIndex& index, int role) const
+QVariant QUserlist::data(const QModelIndex& index, int role) const
 {
     if (!index.isValid())
     {
@@ -145,33 +145,33 @@ QVariant QGamelist::data(const QModelIndex& index, int role) const
     }
     if (role == Qt::DisplayRole)
     {
-        QString gameName = this->list.at(index.row())->getName();
-        return QVariant::fromValue(gameName);
+        QString userName = this->list.at(index.row())->getUsername();
+        return QVariant::fromValue(userName);
     }
 
     return QVariant();
 }
 
 
-nlohmann::json QGamelist::toJSON(void) const
+nlohmann::json QUserlist::toJSON(void) const
 {
     nlohmann::json json = nlohmann::json::array();
 
-    for (std::shared_ptr<Game> gamePtr : this->list)
+    for (std::shared_ptr<User> userPtr : this->list)
     {
-        json.push_back(gamePtr->toJSON());
+        json.push_back(userPtr->toJSON());
     }
 
     return json;
 }
 
-YAML::Node QGamelist::toYAML(void) const
+YAML::Node QUserlist::toYAML(void) const
 {
     YAML::Node yaml;
 
-    for (std::shared_ptr<Game> gamePtr : this->list)
+    for (std::shared_ptr<User> userPtr : this->list)
     {
-        yaml.push_back(gamePtr->toYAML());
+        yaml.push_back(userPtr->toYAML());
     }
 
     return yaml;

@@ -85,6 +85,11 @@ bool User::operator!=(const User& user) const noexcept
     return !(*this == user);
 }
 
+bool User::operator<(const User& user) const noexcept
+{
+    return this->getUsername().compare(user.getUsername(), Qt::CaseSensitivity::CaseInsensitive);
+}
+
 
 const QString& User::getUsername(void) const noexcept
 {
