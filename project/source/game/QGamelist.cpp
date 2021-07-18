@@ -23,7 +23,7 @@ bool QGamelist::operator==(const QGamelist& gamelist) const
 {
     bool result = false;
 
-    for (std::shared_ptr<Game> gamePtr : gamelist.list)
+    for (std::shared_ptr<QGame> gamePtr : gamelist.list)
     {
         result = this->contains(gamePtr.get());
         if (result == false)
@@ -40,30 +40,30 @@ bool QGamelist::operator!=(const QGamelist& gamelist) const
     return !(this->operator==(gamelist));
 }
 
-Game& QGamelist::operator[](const qint64 index)
+QGame& QGamelist::operator[](const qint64 index)
 {
     return *(this->list[index]);
 }
 
-const Game& QGamelist::operator[](const qint64 index) const
+const QGame& QGamelist::operator[](const qint64 index) const
 {
     return *(this->list[index]);
 }
 
 
-const Game& QGamelist::at(const qint64 index) const
+const QGame& QGamelist::at(const qint64 index) const
 {
     return *(this->list.at(index).get());
 }
 
-bool QGamelist::append(Game* game)
+bool QGamelist::append(QGame* game)
 {
     bool gameWasAppended = false;
 
     if (this->contains(game) == false)
     {
         beginInsertRows(QModelIndex(), this->size(), this->size());
-        this->list.append(std::shared_ptr<Game>(game));
+        this->list.append(std::shared_ptr<QGame>(game));
         endInsertRows();
         gameWasAppended = true;
     }
@@ -71,11 +71,11 @@ bool QGamelist::append(Game* game)
     return gameWasAppended;
 }
 
-bool QGamelist::contains(const Game* game) const
+bool QGamelist::contains(const QGame* game) const
 {
     bool foundEqualGameInList = false;
 
-    for (std::shared_ptr<Game> gamePtrFromList : this->list)
+    for (std::shared_ptr<QGame> gamePtrFromList : this->list)
     {
         Game& gameFromList = *gamePtrFromList.get();
 
@@ -87,6 +87,20 @@ bool QGamelist::contains(const Game* game) const
     }
 
     return foundEqualGameInList;
+}
+
+void QGamelist::remove(const QGame* game)
+{
+    for (qint64 i = 0; i < this->list.size(); i++)
+    {
+        QGame* listgame = this->list.at(i).get();
+        if (game == listgame)
+        {
+            beginRemoveRows(QModelIndex(), i, i);
+            this->list.remove(i);
+            endRemoveRows();
+        }
+    }
 }
 
 quint64 QGamelist::size(void) const
@@ -105,7 +119,7 @@ bool QGamelist::update(const QGamelist& gamelist)
 {
     bool updated = false;
 
-    for (std::shared_ptr<Game> gamePtr : gamelist.list)
+    for (std::shared_ptr<QGame> gamePtr : gamelist.list)
     {
         if (this->contains(gamePtr.get()) == false)
         {
@@ -116,7 +130,7 @@ bool QGamelist::update(const QGamelist& gamelist)
         }
     }
 
-    for (std::shared_ptr<Game> gamePtr : this->list)
+    for (std::shared_ptr<QGame> gamePtr : this->list)
     {
         if (gamelist.contains(gamePtr.get()) == false)
         {
@@ -169,7 +183,7 @@ YAML::Node QGamelist::toYAML(void) const
 {
     YAML::Node yaml;
 
-    for (std::shared_ptr<Game> gamePtr : this->list)
+    for (std::shared_ptr<QGame> gamePtr : this->list)
     {
         yaml.push_back(gamePtr->toYAML());
     }

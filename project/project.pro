@@ -42,6 +42,7 @@ SOURCES += \
     $$PWD/source/game/GameVersionLoader.cpp \
     $$PWD/source/game/QGame.cpp \
     $$PWD/source/game/QGamelist.cpp \
+    $$PWD/source/game/QGamelistFactory.cpp \
     $$PWD/source/user/QUser.cpp \
     $$PWD/source/user/QUserlist.cpp \
     $$PWD/source/user/User.cpp \
@@ -64,6 +65,7 @@ HEADERS += \
     $$PWD/include/game/GameVersionLoader.hpp \
     $$PWD/include/game/QGame.hpp \
     $$PWD/include/game/QGamelist.hpp \
+    $$PWD/include/game/QGamelistFactory.hpp \
     $$PWD/include/user/QUser.hpp \
     $$PWD/include/user/QUserlist.hpp \
     $$PWD/include/user/User.hpp \

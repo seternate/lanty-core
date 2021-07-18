@@ -1,11 +1,13 @@
-[![pipeline status](https://gitlab.home/project/lanty/core-library/badges/master/pipeline.svg)](https://gitlab.home/project/lanty/core-library/-/commits/master)
-[![coverage report](https://gitlab.home/project/lanty/core-library/badges/master/coverage.svg)](https://gitlab.home/project/lanty/core-library/-/commits/master)
-
 # Core Library for Lanty
 Lanty is a lanpartymanager written in Qt5. It main purpose is to serve games and host many useful features for your next lanparty like gamedownloading, key distribution and chat client. It is easy to use through server and client GUI applications. The Core Library is a dynamic library with functionality used by both applications.
 
 ## Platform
 - Windows: Windows 10 (20H2)
+
+## Library
+- [googletest](https://github.com/google/googletest/tree/release-1.10.0)
+- [nlohmann/json](https://github.com/nlohmann/json/tree/v3.9.1)
+- [jbeder/yaml-cpp](https://github.com/jbeder/yaml-cpp/tree/yaml-cpp-0.6.3)
 
 ## Author
 - Levin Jeck

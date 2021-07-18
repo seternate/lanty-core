@@ -16,48 +16,31 @@
 
 #pragma once
 
-#include <QAbstractListModel>
-#include <QVariant>
-#include <QVector>
-#include <memory>
-#include <nlohmann/json.hpp>
+#include <QDir>
+#include <QFileInfoList>
 
-#include "core/Serializable.hpp"
 #include "core/ltycore_global.hpp"
-#include "game/QGame.hpp"
+#include "game/QGamelist.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT QGamelist : public QAbstractListModel, public Serializable
+class LTYCORE_EXPORT QGamelistFactory
 {
-    Q_DISABLE_COPY_MOVE(QGamelist)
-
 public:
-    QGamelist(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~QGamelist(void) = default;    // GCOVR_EXCL_LINE
+    static const QString YAML_TEMPLATE_FILE;
+    static const std::string GAME_DESERIALIZER_KEY;
 
-    bool operator==(const QGamelist& gamelist) const;
-    bool operator!=(const QGamelist& gamelist) const;
-    QGame& operator[](const qint64 index);
-    const QGame& operator[](const qint64 index) const;
+    QGamelistFactory(void) = default;             // GCOVR_EXCL_LINE
+    virtual ~QGamelistFactory(void) = default;    // GCOVR_EXCL_LINE
 
-    const QGame& at(const qint64 index) const;
-    bool append(QGame* game);
-    bool contains(const QGame* game) const;
-    void remove(const QGame* game);
-    quint64 size(void) const;
-    void sortGames(void);
-    bool update(const QGamelist& gamelist);
-
-    int rowCount(const QModelIndex& parent) const override;
-    QVariant data(const QModelIndex& index, int role) const override;
-
-    nlohmann::json toJSON(void) const override;
-    YAML::Node toYAML(void) const override;
+    QGamelist* makeQGamelist(const QDir& gameYamlDirectory, const QDir& gameImageDirectory) const;
 
 private:
-    QVector<std::shared_ptr<QGame>> list;
+    QFileInfoList getAllYamlFiles(const QDir& gameYamlDirectory) const;
+    QStringList yamlFileFilter(void) const;
+    QGamelist* loadGamesFromYamlFiles(const QFileInfoList& yamlFiles) const;
+    void loadGameImages(QGamelist* const gamelist, const QDir& gameImageDirectory) const;
 };
 
 } /* namespace lanty */

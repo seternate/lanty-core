@@ -16,7 +16,6 @@
 
 #include <gtest/gtest.h>
 
-#include "game/Game.hpp"
 #include "game/QGame.hpp"
 #include "game/QGamelist.hpp"
 #include "helper/QStringPrintHelper.hpp"
@@ -36,10 +35,10 @@ TEST(QGamelistTest, ComparisonOperatorIfBothObjectsAreEqual)
     lanty::QGamelist gamelistOne;
     lanty::QGamelist gamelistTwo;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
-    lanty::Game* gameThree = new lanty::QGame();
-    lanty::Game* gameFour = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
+    lanty::QGame* gameThree = new lanty::QGame();
+    lanty::QGame* gameFour = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
     gameThree->setName("unique1");
@@ -58,10 +57,10 @@ TEST(QGamelistTest, ComparisonOperatorIfBothObjectsAreUnEqual)
     lanty::QGamelist gamelistOne;
     lanty::QGamelist gamelistTwo;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
-    lanty::Game* gameThree = new lanty::QGame();
-    lanty::Game* gameFour = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
+    lanty::QGame* gameThree = new lanty::QGame();
+    lanty::QGame* gameFour = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
     gameThree->setName("unique3");
@@ -80,7 +79,7 @@ TEST(QGamelistTest, AccessOperator)
     lanty::QGamelist gamelist;
     const lanty::QGamelist* gamelistPtr = &gamelist;
 
-    lanty::Game* game = new lanty::QGame();
+    lanty::QGame* game = new lanty::QGame();
     game->setName("game");
 
     gamelist.append(game);
@@ -95,8 +94,8 @@ TEST(QGamelistTest, AppendUniqueGamesToList)
     QSignalSpy spyRowsAboutToBeInserted(&gamelist, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)));
     QSignalSpy spyRowsInserted(&gamelist, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -117,8 +116,8 @@ TEST(QGamelistTest, AppendNonUniqueGamesToList)
     QSignalSpy spyRowsAboutToBeInserted(&gamelist, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)));
     QSignalSpy spyRowsInserted(&gamelist, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("non-unique");
     gameTwo->setName("non-unique");
 
@@ -138,8 +137,8 @@ TEST(QGamelistTest, GamelistContainsGameAlready)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("non-unique");
     gameTwo->setName("non-unique");
 
@@ -152,8 +151,8 @@ TEST(QGamelistTest, GamelistContainsGameNot)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -162,14 +161,51 @@ TEST(QGamelistTest, GamelistContainsGameNot)
     ASSERT_FALSE(gamelist.contains(gameTwo));
 }
 
+TEST(QGamelistTest, RemoveAGameInsideGamelist)
+{
+    lanty::QGamelist gamelist;
+
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
+    gameOne->setName("unique1");
+    gameTwo->setName("unique2");
+
+    gamelist.append(gameOne);
+    gamelist.append(gameTwo);
+
+    EXPECT_EQ(gamelist.size(), 2);
+
+    gamelist.remove(gameOne);
+
+    ASSERT_EQ(gamelist.size(), 1);
+}
+
+TEST(QGamelistTest, RemoveAGameNotInsideGamelist)
+{
+    lanty::QGamelist gamelist;
+
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
+    gameOne->setName("unique1");
+    gameTwo->setName("unique2");
+
+    gamelist.append(gameTwo);
+
+    EXPECT_EQ(gamelist.size(), 1);
+
+    gamelist.remove(gameOne);
+
+    ASSERT_EQ(gamelist.size(), 1);
+}
+
 TEST(QGamelistTest, SortGamesForGameNames)
 {
     lanty::QGamelist gamelist;
     QSignalSpy spyModelAboutToBeReset(&gamelist, SIGNAL(modelAboutToBeReset(void)));
     QSignalSpy spyModelReset(&gamelist, SIGNAL(modelReset(void)));
 
-    lanty::Game* game1 = new lanty::QGame();
-    lanty::Game* game2 = new lanty::QGame();
+    lanty::QGame* game1 = new lanty::QGame();
+    lanty::QGame* game2 = new lanty::QGame();
     game1->setName("aaaaa");
     game2->setName("hh");
 
@@ -197,19 +233,19 @@ TEST(QGamelistTest, UpdateWithAnotherList)
     QSignalSpy spyRowsRemoved(&gamelistToUpdate, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
 
     {
-        lanty::Game* gameOne = new lanty::QGame();
+        lanty::QGame* gameOne = new lanty::QGame();
         gameOne->setName("game1");
-        lanty::Game* gameUnique = new lanty::QGame();
+        lanty::QGame* gameUnique = new lanty::QGame();
         gameUnique->setName("unique");
         gamelistToUpdate.append(gameOne);
         gamelistToUpdate.append(gameUnique);
 
-        lanty::Game* gameTwo = new lanty::QGame();
+        lanty::QGame* gameTwo = new lanty::QGame();
         gameTwo->setName("game2");
-        lanty::Game* gameThree = new lanty::QGame();
+        lanty::QGame* gameThree = new lanty::QGame();
         gameThree->setName("game3");
-        lanty::Game* gameOneAsFour = new lanty::QGame();
-        gameOneAsFour->operator=(*gameOne);
+        lanty::QGame* gameOneAsFour = new lanty::QGame();
+        gameOneAsFour->operator=(static_cast<lanty::Game>(*gameOne));
         lanty::QGamelist gamelist;
         gamelist.append(gameThree);
         gamelist.append(gameTwo);
@@ -233,8 +269,8 @@ TEST(QGamelistTest, RowCountSameAsSize)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -248,8 +284,8 @@ TEST(QGamelistTest, ReturnNoDataIfIndexOutOfBound)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -267,8 +303,8 @@ TEST(QGamelistTest, ReturnNoDataIfIndexIsInvalid)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -286,8 +322,8 @@ TEST(QGamelistTest, ReturnNoDataIfRoleNotDisplayRole)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -305,8 +341,8 @@ TEST(QGamelistTest, ReturnData)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* gameOne = new lanty::QGame();
-    lanty::Game* gameTwo = new lanty::QGame();
+    lanty::QGame* gameOne = new lanty::QGame();
+    lanty::QGame* gameTwo = new lanty::QGame();
     gameOne->setName("unique1");
     gameTwo->setName("unique2");
 
@@ -323,8 +359,8 @@ TEST(QGamelistTest, ReturnData)
 TEST(QGamelistTest, SerializeToJSON)
 {
     lanty::QGamelist gamelist;
-    lanty::Game* game1 = new lanty::QGame();
-    lanty::Game* game2 = new lanty::QGame();
+    lanty::QGame* game1 = new lanty::QGame();
+    lanty::QGame* game2 = new lanty::QGame();
 
     game1->setName("test");
     game1->setClientExecutableFilePath("wow.exe");
@@ -348,8 +384,8 @@ TEST(QGamelistTest, SerializeToYAML)
 {
     lanty::QGamelist gamelist;
 
-    lanty::Game* game1 = new lanty::QGame();
-    lanty::Game* game2 = new lanty::QGame();
+    lanty::QGame* game1 = new lanty::QGame();
+    lanty::QGame* game2 = new lanty::QGame();
     game1->setName("test");
     game1->setClientExecutableFilePath("wow.exe");
     game2->setName("test2");
