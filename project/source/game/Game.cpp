@@ -15,6 +15,7 @@
  */
 
 #include "game/Game.hpp"
+#include <QFileInfo>
 
 namespace lanty
 {
@@ -106,6 +107,16 @@ bool Game::operator<(const Game& game) const noexcept
 }
 
 
+QString Game::getFilepath(void) const noexcept
+{
+    return QFileInfo(this->file).absoluteFilePath();
+}
+
+const QFile& Game::getFile(void) const noexcept
+{
+    return this->file;
+}
+
 const QString& Game::getName(void) const noexcept
 {
     return this->name;
@@ -141,6 +152,11 @@ const QPixmap& Game::getIcon(void) const noexcept
     return this->icon;
 }
 
+
+void Game::setFilepath(const QString& filepath) noexcept
+{
+    this->file.setFileName(filepath);
+}
 
 void Game::setName(const QString& name) noexcept
 {

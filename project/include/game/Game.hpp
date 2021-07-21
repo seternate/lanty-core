@@ -17,6 +17,7 @@
 #pragma once
 
 #include <yaml-cpp/yaml.h>
+#include <QFile>
 #include <QPixmap>
 #include <QString>
 #include <nlohmann/json.hpp>
@@ -58,6 +59,8 @@ public:
     bool operator!=(const Game& game) const noexcept;
     bool operator<(const Game& game) const noexcept;
 
+    QString getFilepath(void) const noexcept;
+    const QFile& getFile(void) const noexcept;
     const QString& getName(void) const noexcept;
     const QString& getArchiveFileName(void) const noexcept;
     const GameClient& getClient(void) const noexcept;
@@ -66,6 +69,7 @@ public:
     const QPixmap& getCover(void) const noexcept;
     const QPixmap& getIcon(void) const noexcept;
 
+    virtual void setFilepath(const QString& filepath) noexcept;
     virtual void setName(const QString& name) noexcept;
     virtual void setArchiveFileName(const QString& archiveFileName) noexcept;
     virtual void setClientExecutableFilePath(const QString& clientExecutableFilePath) noexcept;
@@ -84,6 +88,7 @@ public:
     YAML::Node toYAML(void) const override;
 
 private:
+    QFile file;
     QString name;
     QString archiveFileName;
     GameClient client;
