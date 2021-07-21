@@ -75,6 +75,7 @@ QGamelist* QGamelistFactory::loadGamesFromYamlFiles(const QFileInfoList& yamlFil
             YAML::Node yamlGame = yaml[QGamelistFactory::GAME_DESERIALIZER_KEY];
 
             Game game = gameloader.load(yamlGame);
+            game.setFilepath(yamlFilePath);
             gamelist->append(new QGame(game));
         }
     }
