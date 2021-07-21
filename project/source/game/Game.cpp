@@ -223,6 +223,14 @@ void Game::setIcon(const QPixmap& icon) noexcept
     this->icon = icon;
 }
 
+
+bool Game::isValid(void) const noexcept
+{
+    return !(this->getName().isEmpty()) && !(this->getArchiveFileName().isEmpty())
+           && !(this->client.getExecutableFilePath().isEmpty());
+}
+
+
 nlohmann::json Game::toJSON(void) const
 {
     nlohmann::json json = nlohmann::json::object();

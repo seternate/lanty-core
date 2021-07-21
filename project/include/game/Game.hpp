@@ -84,6 +84,8 @@ public:
     virtual void setCover(const QPixmap& cover) noexcept;
     virtual void setIcon(const QPixmap& icon) noexcept;
 
+    bool isValid(void) const noexcept;
+
     nlohmann::json toJSON(void) const override;
     YAML::Node toYAML(void) const override;
 
