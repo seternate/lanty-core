@@ -32,6 +32,7 @@ Game::Game(const QString& name,
            const GameServer& server,
            const GameVersion& version) noexcept :
     Serializable(),
+    fileInfo(),
     name(name),
     archiveFileName(archiveFilePath),
     client(client),
@@ -42,6 +43,7 @@ Game::Game(const QString& name,
 { }
 
 Game::Game(const Game& game) noexcept :
+    fileInfo(game.getFileInfo()),
     name(game.getName()),
     archiveFileName(game.getArchiveFileName()),
     client(game.client),
@@ -53,6 +55,7 @@ Game::Game(const Game& game) noexcept :
 
 Game::Game(Game&& game) noexcept
 {
+    this->fileInfo = std::move(game.fileInfo);
     this->name = std::move(game.name);
     this->archiveFileName = std::move(game.archiveFileName);
     this->client = std::move(game.client);
@@ -65,6 +68,7 @@ Game::Game(Game&& game) noexcept
 
 Game& Game::operator=(const Game& game) noexcept
 {
+    this->setFilepath(game.getFilepath());
     this->setName(game.getName());
     this->client = game.client;
     this->server = game.server;
@@ -76,6 +80,7 @@ Game& Game::operator=(const Game& game) noexcept
 
 Game& Game::operator=(Game&& game) noexcept
 {
+    this->fileInfo = std::move(game.fileInfo);
     this->name = std::move(game.name);
     this->archiveFileName = std::move(game.archiveFileName);
     this->client = std::move(game.client);
@@ -90,8 +95,9 @@ Game& Game::operator=(Game&& game) noexcept
 bool Game::operator==(const Game& game) const noexcept
 {
 
-    return this->getName() == game.getName() && this->getArchiveFileName() == game.getArchiveFileName()
-           && this->client == game.client && this->server == game.server && this->version == game.version
+    return this->getFilepath() == game.getFilepath() && this->getName() == game.getName()
+           && this->getArchiveFileName() == game.getArchiveFileName() && this->client == game.client
+           && this->server == game.server && this->version == game.version
            && this->getCover().toImage() == game.getCover().toImage()
            && this->getIcon().toImage() == game.getCover().toImage();
 }
