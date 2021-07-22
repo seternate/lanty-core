@@ -109,12 +109,12 @@ bool Game::operator<(const Game& game) const noexcept
 
 QString Game::getFilepath(void) const noexcept
 {
-    return QFileInfo(this->file).absoluteFilePath();
+    return this->fileInfo.absoluteFilePath();
 }
 
-const QFile& Game::getFile(void) const noexcept
+const QFileInfo& Game::getFileInfo(void) const noexcept
 {
-    return this->file;
+    return this->fileInfo;
 }
 
 const QString& Game::getName(void) const noexcept
@@ -155,7 +155,7 @@ const QPixmap& Game::getIcon(void) const noexcept
 
 void Game::setFilepath(const QString& filepath) noexcept
 {
-    this->file.setFileName(filepath);
+    this->fileInfo.setFile(filepath);
 }
 
 void Game::setName(const QString& name) noexcept

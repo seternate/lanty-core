@@ -17,7 +17,7 @@
 #pragma once
 
 #include <yaml-cpp/yaml.h>
-#include <QFile>
+#include <QFileInfo>
 #include <QPixmap>
 #include <QString>
 #include <nlohmann/json.hpp>
@@ -60,7 +60,7 @@ public:
     bool operator<(const Game& game) const noexcept;
 
     QString getFilepath(void) const noexcept;
-    const QFile& getFile(void) const noexcept;
+    const QFileInfo& getFileInfo(void) const noexcept;
     const QString& getName(void) const noexcept;
     const QString& getArchiveFileName(void) const noexcept;
     const GameClient& getClient(void) const noexcept;
@@ -90,7 +90,7 @@ public:
     YAML::Node toYAML(void) const override;
 
 private:
-    QFile file;
+    QFileInfo fileInfo;
     QString name;
     QString archiveFileName;
     GameClient client;
