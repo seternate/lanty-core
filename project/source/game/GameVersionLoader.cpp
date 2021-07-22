@@ -24,7 +24,8 @@ GameVersion GameVersionLoader::load(const YAML::Node& yaml) const
     GameVersion gameversion;
 
     gameversion.setVersion(this->loadFieldAsQString(yaml, GameVersion::VERSION_SERIALIZER_KEY));
-    gameversion.setSource(GameVersion::QStringToSource(this->loadFieldAsQString(yaml, GameVersion::SOURCE_SERIALIZER_KEY)));
+    gameversion.setSource(
+        GameVersion::QStringToSource(this->loadFieldAsQString(yaml, GameVersion::SOURCE_SERIALIZER_KEY).toUpper()));
     gameversion.setFilePath(this->loadFieldAsQString(yaml, GameVersion::FILEPATH_SERIALIZER_KEY));
     gameversion.setFileQuery(this->loadFieldAsQString(yaml, GameVersion::FILEQUERY_SERIALIZER_KEY));
 

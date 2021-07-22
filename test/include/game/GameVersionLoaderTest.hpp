@@ -36,12 +36,12 @@ protected:
     {
         gameversionYAMLWithAllFields[lanty::GameVersion::VERSION_SERIALIZER_KEY] = versionString.toStdString();
         gameversionYAMLWithAllFields[lanty::GameVersion::SOURCE_SERIALIZER_KEY]
-            = lanty::GameVersion::SourceToQString(source).toStdString();
+            = lanty::GameVersion::SourceToQString(source).toLower().toStdString();
         gameversionYAMLWithAllFields[lanty::GameVersion::FILEPATH_SERIALIZER_KEY] = filePath.toStdString();
         gameversionYAMLWithAllFields[lanty::GameVersion::FILEQUERY_SERIALIZER_KEY] = fileQuery.toStdString();
 
         gameclientYAMLWithMissingFields[lanty::GameVersion::VERSION_SERIALIZER_KEY] = versionString.toStdString();
         gameclientYAMLWithMissingFields[lanty::GameVersion::SOURCE_SERIALIZER_KEY]
-            = lanty::GameVersion::SourceToQString(source).toStdString();
+            = lanty::GameVersion::SourceToQString(source).toLower().toStdString();
     }
 };
