@@ -54,7 +54,6 @@ SOURCES += \
     $$PWD/source/game/GameTest.cpp \
     $$PWD/source/game/GameVersionLoaderTest.cpp \
     $$PWD/source/game/GameVersionTest.cpp \
-    $$PWD/source/game/QGamelistFactoryTest.cpp \
     $$PWD/source/game/QGamelistTest.cpp \
     $$PWD/source/game/QGameTest.cpp \
     $$PWD/source/user/QUserlistTest.cpp \
