@@ -99,7 +99,7 @@ bool Game::operator==(const Game& game) const noexcept
            && this->getArchiveFileName() == game.getArchiveFileName() && this->client == game.client
            && this->server == game.server && this->version == game.version
            && this->getCover().toImage() == game.getCover().toImage()
-           && this->getIcon().toImage() == game.getCover().toImage();
+           && this->getIcon().toImage() == game.getIcon().toImage();
 }
 
 bool Game::operator!=(const Game& game) const noexcept
