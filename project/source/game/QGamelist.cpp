@@ -77,7 +77,7 @@ bool QGamelist::contains(const QGame* game) const
 
     for (std::shared_ptr<QGame> gamePtrFromList : this->list)
     {
-        if (game == gamePtrFromList.get())
+        if (*game == *gamePtrFromList.get())
         {
             foundEqualGameInList = true;
             break;

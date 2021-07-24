@@ -38,7 +38,7 @@ QGame& QGame::operator=(const Game& game) noexcept
 
 bool QGame::operator==(const QGame& game) const noexcept
 {
-    return (static_cast<Game>(*this)).operator==(static_cast<Game>(game));
+    return static_cast<Game>(*this) == static_cast<Game>(game);
 }
 
 bool QGame::operator!=(const QGame& game) const noexcept
