@@ -31,6 +31,7 @@ INCLUDEPATH += \
     $$PWD/include
 
 HEADERS += \
+    $$PWD/include/core/JSONLoadableTest.hpp \
     $$PWD/include/core/YAMLLoadableTest.hpp \
     $$PWD/include/game/GameClientLoaderTest.hpp \
     $$PWD/include/game/GameLoaderTest.hpp \
@@ -44,6 +45,7 @@ SOURCES += \
     $$PWD/../library/googletest/googlemock/src/gmock-all.cc \
     $$PWD/source/core/FileExtensionTest.cpp \
     $$PWD/source/core/main.cpp \
+    $$PWD/source/core/JSONLoadableTest.cpp \
     $$PWD/source/core/YAMLLoadableTest.cpp \
     $$PWD/source/game/GameClientLoaderTest.cpp \
     $$PWD/source/game/GameClientTest.cpp \

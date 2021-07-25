@@ -16,24 +16,53 @@
 
 #pragma once
 
-#include <yaml-cpp/yaml.h>
-
-#include "core/JSONLoadable.hpp"
-#include "core/YAMLLoadable.hpp"
-#include "core/ltycore_global.hpp"
-#include "user/User.hpp"
+#include <QString>
+#include <nlohmann/json.hpp>
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT UserLoader : public YAMLLoadable<User>, public JSONLoadable<User>
+template<typename T>
+class JSONLoadable
 {
 public:
-    UserLoader(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~UserLoader(void) = default;    // GCOVR_EXCL_LINE
+    virtual T load(const nlohmann::json& json) const = 0;
 
-    User load(const YAML::Node& yaml) const override;
-    User load(const nlohmann::json& json) const override;
+protected:
+    QString loadFieldAsQString(const nlohmann::json& json, const std::string& key) const
+    {
+        QString field;
+
+        if (json.contains(key) == true)
+        {
+            std::string fieldFromJSON = json[key].get<std::string>();
+            field = QString::fromStdString(fieldFromJSON);
+        }
+
+        return field;
+    }
+
+    qint64 loadFieldAsInteger(const nlohmann::json& json, const std::string& key) const
+    {
+        qint64 field = 0;
+
+        if (json.contains(key) == true)
+        {
+            field = json[key].get<qint64>();
+        }
+
+        return field;
+    }
+
+    nlohmann::json loadFieldAsJSON(const nlohmann::json& json, const std::string& key) const
+    {
+        if (json.contains(key) == false)
+        {
+            return nlohmann::json();
+        }
+
+        return json[key];
+    }
 };
 
 } /* namespace lanty */

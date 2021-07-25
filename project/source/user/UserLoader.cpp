@@ -23,16 +23,34 @@ User UserLoader::load(const YAML::Node& yaml) const
 {
     User user;
 
-    user.setUsername(this->loadFieldAsQString(yaml, User::USERNAME_SERIALIZER_KEY));
-    user.setGamepath(this->loadFieldAsQString(yaml, User::GAMEPATH_SERIALIZER_KEY));
-    YAML::Node yamlResolution = this->loadFieldAsYAML(yaml, User::RESOLUTION_SERIALIZER_KEY);
+    user.setUsername(YAMLLoadable::loadFieldAsQString(yaml, User::USERNAME_SERIALIZER_KEY));
+    user.setGamepath(YAMLLoadable::loadFieldAsQString(yaml, User::GAMEPATH_SERIALIZER_KEY));
+    YAML::Node yamlResolution = YAMLLoadable::loadFieldAsYAML(yaml, User::RESOLUTION_SERIALIZER_KEY);
     if (yamlResolution.IsNull() == false)
     {
-        qint64 X = this->loadFieldAsInteger(yamlResolution, User::RESOLUTION_X_SERIALIZER_KEY);
-        qint64 Y = this->loadFieldAsInteger(yamlResolution, User::RESOLUTION_Y_SERIALIZER_KEY);
+        qint64 X = YAMLLoadable::loadFieldAsInteger(yamlResolution, User::RESOLUTION_X_SERIALIZER_KEY);
+        qint64 Y = YAMLLoadable::loadFieldAsInteger(yamlResolution, User::RESOLUTION_Y_SERIALIZER_KEY);
         user.setResolution(X, Y);
     }
-    user.setIPAddress(this->loadFieldAsQString(yaml, User::IPADDRESS_SERIALIZER_KEY));
+    user.setIPAddress(YAMLLoadable::loadFieldAsQString(yaml, User::IPADDRESS_SERIALIZER_KEY));
+
+    return user;
+}
+
+User UserLoader::load(const nlohmann::json& json) const
+{
+    User user;
+
+    user.setUsername(JSONLoadable::loadFieldAsQString(json, User::USERNAME_SERIALIZER_KEY));
+    user.setGamepath(JSONLoadable::loadFieldAsQString(json, User::GAMEPATH_SERIALIZER_KEY));
+    nlohmann::json jsonResolution = JSONLoadable::loadFieldAsJSON(json, User::RESOLUTION_SERIALIZER_KEY);
+    if (jsonResolution.is_null() == false)
+    {
+        qint64 X = JSONLoadable::loadFieldAsInteger(json, User::RESOLUTION_X_SERIALIZER_KEY);
+        qint64 Y = JSONLoadable::loadFieldAsInteger(json, User::RESOLUTION_Y_SERIALIZER_KEY);
+        user.setResolution(X, Y);
+    }
+    user.setIPAddress(JSONLoadable::loadFieldAsQString(json, User::IPADDRESS_SERIALIZER_KEY));
 
     return user;
 }

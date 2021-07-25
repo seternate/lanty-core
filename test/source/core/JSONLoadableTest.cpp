@@ -14,26 +14,34 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#pragma once
+#include "core/JSONLoadableTest.hpp"
 
-#include <yaml-cpp/yaml.h>
+#include <gtest/gtest.h>
 
-#include "core/JSONLoadable.hpp"
-#include "core/YAMLLoadable.hpp"
-#include "core/ltycore_global.hpp"
-#include "user/User.hpp"
-
-namespace lanty
+TEST_F(JSONLoadableTest, loadFieldAsQStringKeyDoesNotExistReturnEmptyQString)
 {
+    QString emptyValue = this->loadFieldAsQString(emptyJSON, "not_existing_key");
 
-class LTYCORE_EXPORT UserLoader : public YAMLLoadable<User>, public JSONLoadable<User>
+    ASSERT_TRUE(emptyValue.isEmpty() == true);
+}
+
+TEST_F(JSONLoadableTest, loadFieldAsQStringKeyDoesExistReturnValue)
 {
-public:
-    UserLoader(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~UserLoader(void) = default;    // GCOVR_EXCL_LINE
+    QString value = this->loadFieldAsQString(json, "existing_key_string");
 
-    User load(const YAML::Node& yaml) const override;
-    User load(const nlohmann::json& json) const override;
-};
+    ASSERT_EQ(value, "value");
+}
 
-} /* namespace lanty */
+TEST_F(JSONLoadableTest, loadFieldAsIntegerKeyDoesNotExistsReturnZero)
+{
+    qint64 zeroValue = this->loadFieldAsInteger(emptyJSON, "not_existing_key");
+
+    ASSERT_EQ(zeroValue, 0);
+}
+
+TEST_F(JSONLoadableTest, loadFieldAsIntegerKeyDoesExistReturnValue)
+{
+    qint64 value = this->loadFieldAsInteger(json, "existing_key_integer");
+
+    ASSERT_EQ(value, 99);
+}

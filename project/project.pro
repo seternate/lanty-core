@@ -53,6 +53,7 @@ HEADERS += \
     $$PWD/include/core/ltycore_global.hpp \
     $$PWD/include/core/Serializable.hpp \
     $$PWD/include/core/version.hpp \
+    $$PWD/include/core/JSONLoadable.hpp \
     $$PWD/include/core/YAMLLoadable.hpp \
     $$PWD/include/game/Game.hpp \
     $$PWD/include/game/GameClient.hpp \

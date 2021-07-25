@@ -16,24 +16,28 @@
 
 #pragma once
 
-#include <yaml-cpp/yaml.h>
+#include <gtest/gtest.h>
 
 #include "core/JSONLoadable.hpp"
-#include "core/YAMLLoadable.hpp"
-#include "core/ltycore_global.hpp"
-#include "user/User.hpp"
 
-namespace lanty
-{
-
-class LTYCORE_EXPORT UserLoader : public YAMLLoadable<User>, public JSONLoadable<User>
+class JSONLoadableTest : public lanty::JSONLoadable<int>, public ::testing::Test
 {
 public:
-    UserLoader(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~UserLoader(void) = default;    // GCOVR_EXCL_LINE
+    JSONLoadableTest(void) = default;
 
-    User load(const YAML::Node& yaml) const override;
-    User load(const nlohmann::json& json) const override;
+    int load(const nlohmann::json& json) const override
+    {
+        Q_UNUSED(json)
+        return 0;
+    }
+
+protected:
+    nlohmann::json emptyJSON;
+    nlohmann::json json;
+
+    void SetUp() override
+    {
+        json["existing_key_string"] = "value";
+        json["existing_key_integer"] = 99;
+    }
 };
-
-} /* namespace lanty */
