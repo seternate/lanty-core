@@ -62,3 +62,45 @@ TEST_F(UserLoaderTest, LoadYAMLWithOnlyUsername)
     ASSERT_EQ(user.getResolutionY(), 0);
     ASSERT_TRUE(user.getIPAddress().isNull());
 }
+
+TEST_F(UserLoaderTest, LoadJSONWithAllFields)
+{
+    lanty::UserLoader loader;
+    lanty::User user;
+
+    user = loader.load(userJSONWithAllFields);
+
+    ASSERT_EQ(user.getUsername(), username);
+    ASSERT_EQ(user.getGamepath(), gamepath);
+    ASSERT_EQ(user.getResolutionX(), resolutionX);
+    ASSERT_EQ(user.getResolutionY(), resolutionY);
+    ASSERT_EQ(user.getIPAddress().toString(), ipAddress);
+}
+
+TEST_F(UserLoaderTest, LoadJSONWithMissingIPAddress)
+{
+    lanty::UserLoader loader;
+    lanty::User user;
+
+    user = loader.load(userJSONWithMissingIPAddress);
+
+    ASSERT_EQ(user.getUsername(), username);
+    ASSERT_EQ(user.getGamepath(), gamepath);
+    ASSERT_EQ(user.getResolutionX(), resolutionX);
+    ASSERT_EQ(user.getResolutionY(), resolutionY);
+    ASSERT_TRUE(user.getIPAddress().isNull());
+}
+
+TEST_F(UserLoaderTest, LoadJSONWithOnlyUsername)
+{
+    lanty::UserLoader loader;
+    lanty::User user;
+
+    user = loader.load(userJSONWithOnlyUsername);
+
+    ASSERT_EQ(user.getUsername(), username);
+    ASSERT_TRUE(user.getGamepath().isEmpty());
+    ASSERT_EQ(user.getResolutionX(), 0);
+    ASSERT_EQ(user.getResolutionY(), 0);
+    ASSERT_TRUE(user.getIPAddress().isNull());
+}

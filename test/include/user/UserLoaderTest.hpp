@@ -34,6 +34,10 @@ protected:
     YAML::Node userYAMLWithMissingIPAddress;
     YAML::Node userYAMLWithOnlyUsername;
 
+    nlohmann::json userJSONWithAllFields;
+    nlohmann::json userJSONWithMissingIPAddress;
+    nlohmann::json userJSONWithOnlyUsername;
+
     void SetUp(void) override
     {
         userYAMLWithAllFields[lanty::User::USERNAME_SERIALIZER_KEY] = username.toStdString();
@@ -41,14 +45,25 @@ protected:
         userYAMLWithAllFields[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_X_SERIALIZER_KEY] = resolutionX;
         userYAMLWithAllFields[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_Y_SERIALIZER_KEY] = resolutionY;
         userYAMLWithAllFields[lanty::User::IPADDRESS_SERIALIZER_KEY] = ipAddress.toStdString();
-
         userYAMLWithMissingIPAddress[lanty::User::USERNAME_SERIALIZER_KEY] = username.toStdString();
         userYAMLWithMissingIPAddress[lanty::User::GAMEPATH_SERIALIZER_KEY] = gamepath.toStdString();
         userYAMLWithMissingIPAddress[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_X_SERIALIZER_KEY]
             = resolutionX;
         userYAMLWithMissingIPAddress[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_Y_SERIALIZER_KEY]
             = resolutionY;
-
         userYAMLWithOnlyUsername[lanty::User::USERNAME_SERIALIZER_KEY] = username.toStdString();
+
+        userJSONWithAllFields[lanty::User::USERNAME_SERIALIZER_KEY] = username.toStdString();
+        userJSONWithAllFields[lanty::User::GAMEPATH_SERIALIZER_KEY] = gamepath.toStdString();
+        userJSONWithAllFields[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_X_SERIALIZER_KEY] = resolutionX;
+        userJSONWithAllFields[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_Y_SERIALIZER_KEY] = resolutionY;
+        userJSONWithAllFields[lanty::User::IPADDRESS_SERIALIZER_KEY] = ipAddress.toStdString();
+        userJSONWithMissingIPAddress[lanty::User::USERNAME_SERIALIZER_KEY] = username.toStdString();
+        userJSONWithMissingIPAddress[lanty::User::GAMEPATH_SERIALIZER_KEY] = gamepath.toStdString();
+        userJSONWithMissingIPAddress[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_X_SERIALIZER_KEY]
+            = resolutionX;
+        userJSONWithMissingIPAddress[lanty::User::RESOLUTION_SERIALIZER_KEY][lanty::User::RESOLUTION_Y_SERIALIZER_KEY]
+            = resolutionY;
+        userJSONWithOnlyUsername[lanty::User::USERNAME_SERIALIZER_KEY] = username.toStdString();
     }
 };

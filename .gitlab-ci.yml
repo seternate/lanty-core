@@ -196,8 +196,8 @@ build-unit-test-linux-debug:
     - cd ${ARTIFACT_DIR}
     - ./${UNIT_TEST_EXECUTABLE} --gtest_output="xml:${ARTIFACT_NAME}-report.xml"
   after_script:
-    - gcovr --filter project/ --exclude '(.+\/)?(((json)|(traits)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h)))$' --exclude '(.+\/)?(moc_QGame)\.((cpp)|(c))$' --xml-pretty -o ${ARTIFACT_NAME}-coverage.xml
-    - gcovr --filter project/ --exclude '(.+\/)?(((json)|(traits)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h)))$' --exclude '(.+\/)?(moc_QGame)\.((cpp)|(c))$'
+    - gcovr --filter project/ --exclude '(.+\/)?(((json)|(traits)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h)))$' --exclude '(.+\/)?((moc_QGame)|(moc_QUser))\.((cpp)|(c))$' --xml-pretty -o ${ARTIFACT_NAME}-coverage.xml
+    - gcovr --filter project/ --exclude '(.+\/)?(((json)|(traits)|(convert)|(exceptions)|(impl)|(mark)|(memory)|(node(_.+)?))\.((hpp)|(h)))$' --exclude '(.+\/)?((moc_QGame)|(moc_QUser))\.((cpp)|(c))$'
     - cp ${ARTIFACT_DIR}/${ARTIFACT_NAME}-report.xml .
   artifacts:
     when: always

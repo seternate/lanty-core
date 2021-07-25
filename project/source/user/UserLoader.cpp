@@ -46,8 +46,8 @@ User UserLoader::load(const nlohmann::json& json) const
     nlohmann::json jsonResolution = JSONLoadable::loadFieldAsJSON(json, User::RESOLUTION_SERIALIZER_KEY);
     if (jsonResolution.is_null() == false)
     {
-        qint64 X = JSONLoadable::loadFieldAsInteger(json, User::RESOLUTION_X_SERIALIZER_KEY);
-        qint64 Y = JSONLoadable::loadFieldAsInteger(json, User::RESOLUTION_Y_SERIALIZER_KEY);
+        qint64 X = JSONLoadable::loadFieldAsInteger(jsonResolution, User::RESOLUTION_X_SERIALIZER_KEY);
+        qint64 Y = JSONLoadable::loadFieldAsInteger(jsonResolution, User::RESOLUTION_Y_SERIALIZER_KEY);
         user.setResolution(X, Y);
     }
     user.setIPAddress(JSONLoadable::loadFieldAsQString(json, User::IPADDRESS_SERIALIZER_KEY));
