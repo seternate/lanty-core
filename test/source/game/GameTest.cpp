@@ -171,6 +171,20 @@ TEST(GameTest, MoveConstructorAndOperator)
     ASSERT_EQ(game, moveOperator);
 }
 
+TEST(GameTest, CheckIfGameIsValid)
+{
+    lanty::Game game("Call of Duty 2", "cod2.zip", lanty::GameClient("bin/cod2mp.exe"));
+
+    ASSERT_TRUE(game.isValid());
+}
+
+TEST(GameTest, CheckIfGameIsNotValid)
+{
+    lanty::Game game("Call of Duty 2", "cod2.zip");
+
+    ASSERT_FALSE(game.isValid());
+}
+
 TEST(GameTest, SerializeToJSON)
 {
     lanty::Game game("Call of Duty 2", "cod2.zip");
