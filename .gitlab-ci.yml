@@ -34,7 +34,7 @@ include:
       - '/sast.gitlab-ci.yml'
       - '/codequality.gitlab-ci.yml'
       - '/deploy.gitlab-ci.yml'
-      - 'documentation.gitlab-ci.yml'
+      - '/documentation.gitlab-ci.yml'
 
 
 
@@ -224,6 +224,10 @@ unit-test-debug:
     UNIT_TEST_EXECUTABLE: ltycored-test
 
 eslint-sast:
+  rules:
+    - when: never
+
+semgrep-sast:
   rules:
     - when: never
 
