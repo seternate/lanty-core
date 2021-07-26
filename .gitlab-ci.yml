@@ -229,7 +229,7 @@ eslint-sast:
 
 .cppcheck:
   variables:
-    SUPPRESS: '--suppress=useStlAlgorithm:project/source/yaml/YamlNode.cpp'
+    SUPPRESS: '--suppress=unmatchedSuppression --suppress=useStlAlgorithm:*/QGamelist.cpp --suppress=useStlAlgorithm:*/QUserlist.cpp'
 
 deploy-windows:
   extends: .deploy
