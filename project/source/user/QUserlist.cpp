@@ -23,7 +23,7 @@ bool QUserlist::operator==(const QUserlist& userlist) const
 {
     bool result = false;
 
-    for (std::shared_ptr<User> userPtr : userlist.list)
+    for (std::shared_ptr<QUser> userPtr : userlist.list)
     {
         result = this->contains(userPtr.get());
         if (result == false)
@@ -40,30 +40,30 @@ bool QUserlist::operator!=(const QUserlist& userlist) const
     return !(this->operator==(userlist));
 }
 
-User& QUserlist::operator[](const qint64 index)
+QUser& QUserlist::operator[](const qint64 index)
 {
     return *(this->list[index]);
 }
 
-const User& QUserlist::operator[](const qint64 index) const
+const QUser& QUserlist::operator[](const qint64 index) const
 {
     return *(this->list[index]);
 }
 
 
-const User& QUserlist::at(const qint64 index) const
+const QUser& QUserlist::at(const qint64 index) const
 {
     return *(this->list.at(index).get());
 }
 
-bool QUserlist::append(User* user)
+bool QUserlist::append(QUser* user)
 {
     bool userWasAppended = false;
 
     if (this->contains(user) == false)
     {
         beginInsertRows(QModelIndex(), this->size(), this->size());
-        this->list.append(std::shared_ptr<User>(user));
+        this->list.append(std::shared_ptr<QUser>(user));
         endInsertRows();
         userWasAppended = true;
     }
@@ -71,13 +71,13 @@ bool QUserlist::append(User* user)
     return userWasAppended;
 }
 
-bool QUserlist::contains(const User* user) const
+bool QUserlist::contains(const QUser* user) const
 {
     bool foundEqualUserInList = false;
 
-    for (std::shared_ptr<User> userPtrFromList : this->list)
+    for (std::shared_ptr<QUser> userPtrFromList : this->list)
     {
-        User& userFromList = *userPtrFromList.get();
+        QUser& userFromList = *userPtrFromList.get();
 
         if (user->operator==(userFromList))
         {
@@ -97,7 +97,9 @@ quint64 QUserlist::size(void) const
 void QUserlist::sortUsers(void)
 {
     beginResetModel();
-    std::sort(this->list.begin(), this->list.end());
+    std::sort(this->list.begin(), this->list.end(), [](std::shared_ptr<QUser> l, std::shared_ptr<QUser> r) {
+        return *l.get() < *r.get();
+    });
     endResetModel();
 }
 
@@ -105,7 +107,7 @@ bool QUserlist::update(const QUserlist& userlist)
 {
     bool updated = false;
 
-    for (std::shared_ptr<User> userPtr : userlist.list)
+    for (std::shared_ptr<QUser> userPtr : userlist.list)
     {
         if (this->contains(userPtr.get()) == false)
         {
@@ -116,7 +118,7 @@ bool QUserlist::update(const QUserlist& userlist)
         }
     }
 
-    for (std::shared_ptr<User> userPtr : this->list)
+    for (std::shared_ptr<QUser> userPtr : this->list)
     {
         if (userlist.contains(userPtr.get()) == false)
         {
@@ -157,7 +159,7 @@ nlohmann::json QUserlist::toJSON(void) const
 {
     nlohmann::json json = nlohmann::json::array();
 
-    for (std::shared_ptr<User> userPtr : this->list)
+    for (std::shared_ptr<QUser> userPtr : this->list)
     {
         json.push_back(userPtr->toJSON());
     }
@@ -169,7 +171,7 @@ YAML::Node QUserlist::toYAML(void) const
 {
     YAML::Node yaml;
 
-    for (std::shared_ptr<User> userPtr : this->list)
+    for (std::shared_ptr<QUser> userPtr : this->list)
     {
         yaml.push_back(userPtr->toYAML());
     }

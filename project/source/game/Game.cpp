@@ -109,7 +109,7 @@ bool Game::operator!=(const Game& game) const noexcept
 
 bool Game::operator<(const Game& game) const noexcept
 {
-    return this->getName().compare(game.getName(), Qt::CaseSensitivity::CaseInsensitive);
+    return this->getName().compare(game.getName(), Qt::CaseSensitivity::CaseInsensitive) < 0;
 }
 
 

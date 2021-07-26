@@ -24,7 +24,7 @@
 
 #include "core/Serializable.hpp"
 #include "core/ltycore_global.hpp"
-#include "user/User.hpp"
+#include "user/QUser.hpp"
 
 namespace lanty
 {
@@ -39,12 +39,12 @@ public:
 
     bool operator==(const QUserlist& userlist) const;
     bool operator!=(const QUserlist& userlist) const;
-    User& operator[](const qint64 index);
-    const User& operator[](const qint64 index) const;
+    QUser& operator[](const qint64 index);
+    const QUser& operator[](const qint64 index) const;
 
-    const User& at(const qint64 index) const;
-    bool append(User* user);
-    bool contains(const User* user) const;
+    const QUser& at(const qint64 index) const;
+    bool append(QUser* user);
+    bool contains(const QUser* user) const;
     quint64 size(void) const;
     void sortUsers(void);
     bool update(const QUserlist& userlist);
@@ -56,7 +56,7 @@ public:
     YAML::Node toYAML(void) const override;
 
 private:
-    QVector<std::shared_ptr<User>> list;
+    QVector<std::shared_ptr<QUser>> list;
 };
 
 } /* namespace lanty */

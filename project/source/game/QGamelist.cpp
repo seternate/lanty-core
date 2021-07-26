@@ -109,7 +109,9 @@ quint64 QGamelist::size(void) const
 void QGamelist::sortGames(void)
 {
     beginResetModel();
-    std::sort(this->list.begin(), this->list.end());
+    std::sort(this->list.begin(), this->list.end(), [](std::shared_ptr<QGame> l, std::shared_ptr<QGame> r) {
+        return *l.get() < *r.get();
+    });
     endResetModel();
 }
 

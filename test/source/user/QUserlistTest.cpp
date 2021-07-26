@@ -19,7 +19,6 @@
 #include "helper/QStringPrintHelper.hpp"
 #include "user/QUser.hpp"
 #include "user/QUserlist.hpp"
-#include "user/User.hpp"
 
 #include <QDebug>
 #include <QSignalSpy>
@@ -36,10 +35,10 @@ TEST(QUserlistTest, ComparisonOperatorIfBothObjectsAreEqual)
     lanty::QUserlist userlistOne;
     lanty::QUserlist userlistTwo;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
-    lanty::User* userThree = new lanty::QUser();
-    lanty::User* userFour = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
+    lanty::QUser* userThree = new lanty::QUser();
+    lanty::QUser* userFour = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
     userThree->setUsername("unique1");
@@ -58,10 +57,10 @@ TEST(QUserlistTest, ComparisonOperatorIfBothObjectsAreUnEqual)
     lanty::QUserlist userlistOne;
     lanty::QUserlist userlistTwo;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
-    lanty::User* userThree = new lanty::QUser();
-    lanty::User* userFour = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
+    lanty::QUser* userThree = new lanty::QUser();
+    lanty::QUser* userFour = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
     userThree->setUsername("unique3");
@@ -80,7 +79,7 @@ TEST(QUserlistTest, AccessOperator)
     lanty::QUserlist userlist;
     const lanty::QUserlist* userlistPtr = &userlist;
 
-    lanty::User* user = new lanty::QUser();
+    lanty::QUser* user = new lanty::QUser();
     user->setUsername("user");
 
     userlist.append(user);
@@ -95,8 +94,8 @@ TEST(QUserlistTest, AppendUniqueUsersToList)
     QSignalSpy spyRowsAboutToBeInserted(&userlist, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)));
     QSignalSpy spyRowsInserted(&userlist, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -117,8 +116,8 @@ TEST(QUserlistTest, AppendNonUniqueUsersToList)
     QSignalSpy spyRowsAboutToBeInserted(&userlist, SIGNAL(rowsAboutToBeInserted(const QModelIndex&, int, int)));
     QSignalSpy spyRowsInserted(&userlist, SIGNAL(rowsInserted(const QModelIndex&, int, int)));
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("non-unique");
     userTwo->setUsername("non-unique");
 
@@ -138,8 +137,8 @@ TEST(QUserlistTest, GamelistContainsUserAlready)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("non-unique");
     userTwo->setUsername("non-unique");
 
@@ -152,8 +151,8 @@ TEST(QUserlistTest, GamelistContainsUserNot)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -168,8 +167,8 @@ TEST(QUserlistTest, SortUsersForUsernames)
     QSignalSpy spyModelAboutToBeReset(&userlist, SIGNAL(modelAboutToBeReset(void)));
     QSignalSpy spyModelReset(&userlist, SIGNAL(modelReset(void)));
 
-    lanty::User* user1 = new lanty::QUser();
-    lanty::User* user2 = new lanty::QUser();
+    lanty::QUser* user1 = new lanty::QUser();
+    lanty::QUser* user2 = new lanty::QUser();
     user1->setUsername("aaaaa");
     user2->setUsername("hh");
 
@@ -197,19 +196,19 @@ TEST(QUserlistTest, UpdateWithAnotherList)
     QSignalSpy spyRowsRemoved(&userlistToUpdate, SIGNAL(rowsRemoved(const QModelIndex&, int, int)));
 
     {
-        lanty::User* userOne = new lanty::QUser();
+        lanty::QUser* userOne = new lanty::QUser();
         userOne->setUsername("user1");
-        lanty::User* userUnique = new lanty::QUser();
+        lanty::QUser* userUnique = new lanty::QUser();
         userUnique->setUsername("unique");
         userlistToUpdate.append(userOne);
         userlistToUpdate.append(userUnique);
 
-        lanty::User* userTwo = new lanty::QUser();
+        lanty::QUser* userTwo = new lanty::QUser();
         userTwo->setUsername("user2");
-        lanty::User* userThree = new lanty::QUser();
+        lanty::QUser* userThree = new lanty::QUser();
         userThree->setUsername("user3");
-        lanty::User* userOneAsFour = new lanty::QUser();
-        userOneAsFour->operator=(*userOne);
+        lanty::QUser* userOneAsFour = new lanty::QUser();
+        userOneAsFour->operator=(static_cast<lanty::User>(*userOne));
         lanty::QUserlist userlist;
         userlist.append(userThree);
         userlist.append(userTwo);
@@ -233,8 +232,8 @@ TEST(QUserlistTest, RowCountSameAsSize)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -248,8 +247,8 @@ TEST(QUserlistTest, ReturnNoDataIfIndexOutOfBound)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -267,8 +266,8 @@ TEST(QUserlistTest, ReturnNoDataIfIndexIsInvalid)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -286,8 +285,8 @@ TEST(QUserlistTest, ReturnNoDataIfRoleNotDisplayRole)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -305,8 +304,8 @@ TEST(QUserlistTest, ReturnData)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* userOne = new lanty::QUser();
-    lanty::User* userTwo = new lanty::QUser();
+    lanty::QUser* userOne = new lanty::QUser();
+    lanty::QUser* userTwo = new lanty::QUser();
     userOne->setUsername("unique1");
     userTwo->setUsername("unique2");
 
@@ -323,8 +322,8 @@ TEST(QUserlistTest, ReturnData)
 TEST(QUserlistTest, SerializeToJSON)
 {
     lanty::QUserlist userlist;
-    lanty::User* user1 = new lanty::QUser();
-    lanty::User* user2 = new lanty::QUser();
+    lanty::QUser* user1 = new lanty::QUser();
+    lanty::QUser* user2 = new lanty::QUser();
 
     user1->setUsername("test");
     user1->setGamepath("C:/test/games");
@@ -353,8 +352,8 @@ TEST(QUserlistTest, SerializeToYAML)
 {
     lanty::QUserlist userlist;
 
-    lanty::User* user1 = new lanty::QUser();
-    lanty::User* user2 = new lanty::QUser();
+    lanty::QUser* user1 = new lanty::QUser();
+    lanty::QUser* user2 = new lanty::QUser();
 
     user1->setUsername("test");
     user1->setGamepath("C:/test/games");
