@@ -45,6 +45,7 @@ public:
     const QUser& at(const qint64 index) const;
     bool append(QUser* user);
     bool contains(const QUser* user) const;
+    void remove(const QUser* user);
     quint64 size(void) const;
     void sortUsers(void);
     bool update(const QUserlist& userlist);

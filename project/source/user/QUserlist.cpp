@@ -89,6 +89,20 @@ bool QUserlist::contains(const QUser* user) const
     return foundEqualUserInList;
 }
 
+void QUserlist::remove(const QUser* user)
+{
+    for (qint64 i = 0; i < this->list.size(); i++)
+    {
+        QUser* listuser = this->list.at(i).get();
+        if (user == listuser)
+        {
+            beginRemoveRows(QModelIndex(), i, i);
+            this->list.remove(i);
+            endRemoveRows();
+        }
+    }
+}
+
 quint64 QUserlist::size(void) const
 {
     return this->list.size();
