@@ -39,6 +39,7 @@
 !CMakeLists.txt
 !*.cpp
 !*.hpp
+!*.hpp.in
 !*.pro
 !*.md
 !*.doxyfile
