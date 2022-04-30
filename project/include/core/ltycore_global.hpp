@@ -18,7 +18,7 @@
 
 #include <QtCore/qglobal.h>
 
-#if defined(LTYCORE_LIBRARY)
+#if defined(LANTY_CORE_DLL)
     #define LTYCORE_EXPORT Q_DECL_EXPORT
 #else
     #define LTYCORE_EXPORT Q_DECL_IMPORT
