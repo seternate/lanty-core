@@ -2,15 +2,11 @@
 *
 
 #Whitelist directories
-!/configuration/
-!/configuration/doxygen/
+!/documentation/
+!/documentation/doxygen/
 !/library/
 !/library/googletest/
 !/library/googletest/**
-!/library/nlohmann-json/
-!/library/nlohmann-json/**
-!/library/yaml-cpp/
-!/library/yaml-cpp/**
 !/project/
 !/project/include/
 !/project/include/core/
@@ -40,6 +36,7 @@
 !/test/source/user/
 
 #Whitelist files
+!CMakeLists.txt
 !*.cpp
 !*.hpp
 !*.pro
