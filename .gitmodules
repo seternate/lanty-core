@@ -1,9 +1,3 @@
-[submodule "library/yaml-cpp"]
-	path = library/yaml-cpp
-	url = ../../../library/yaml-cpp.git
 [submodule "library/googletest"]
 	path = library/googletest
 	url = ../../../library/googletest.git
-[submodule "library/nlohmann-json"]
-	path = library/nlohmann-json
-	url = ../../../library/nlohmann-json.git
