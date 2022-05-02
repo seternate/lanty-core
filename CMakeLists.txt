@@ -9,6 +9,8 @@ project(lanty-core
 
 include(CMakeDependentOption)
 
+option(BUILD_SHARED_LIBS "Building shared library." OFF)
+option(BUILD_TESTING "Build tests." OFF)
 option(LANTY_CORE_BUILD_SHARED_LIBS "Build lanty-core as a shared library" ${BUILD_SHARED_LIBS})
 cmake_dependent_option(LANTY_CORE_BUILD_TESTS
   "Enable lanty-core tests." ON
@@ -28,6 +30,7 @@ set(build-windows-dll $<AND:$<BOOL:${CMAKE_HOST_WIN32}>,$<BOOL:${LANTY_CORE_BUIL
 add_subdirectory(project)
 
 if(LANTY_CORE_BUILD_TESTS)
+    enable_testing()
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
     add_subdirectory(library/googletest)
     add_subdirectory(test)

@@ -3,7 +3,6 @@
 
 #Whitelist directories
 !/documentation/
-!/documentation/doxygen/
 !/library/
 !/library/googletest/
 !/library/googletest/**
@@ -42,7 +41,7 @@
 !*.hpp.in
 !*.pro
 !*.md
-!*.doxyfile
+!*.doxyfile.in
 !*.qrc
 !*.qss
 !.clang-format

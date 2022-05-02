@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.18)
 
-include(GoogleTest)
-
 project(lanty-core-test)
 
 find_package(Qt5
@@ -53,7 +51,9 @@ target_link_libraries(lanty-core-test
       Qt5::Test
       lanty-core-library::lanty-core-library)
 
-gtest_discover_tests(lanty-core-test)
+include(GoogleTest)
+gtest_discover_tests(lanty-core-test
+   XML_OUTPUT_DIR $<TARGET_FILE:lanty-core-test>-report)
 
 if(LANTY_CORE_LLVM_COVERAGE)
    find_program(LLVM_PROFDATA llvm-profdata REQUIRED)

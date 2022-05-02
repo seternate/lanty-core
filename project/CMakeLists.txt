@@ -69,8 +69,8 @@ set(LANTY_CORE_LIBRARY_HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/include/user/UserLoader.hpp)
 
 set(LANTY_CORE_LIBRARY_RCC
-   ${CMAKE_SOURCE_DIR}/resource/core.qrc
-   ${CMAKE_SOURCE_DIR}/resource/style.qrc)
+   ${CMAKE_CURRENT_SOURCE_DIR}/../resource/core.qrc
+   ${CMAKE_CURRENT_SOURCE_DIR}/../resource/style.qrc)
 
 add_library(lanty-core-library ${lanty-core-type}
    ${LANTY_CORE_LIBRARY_SOURCES}
