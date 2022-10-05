@@ -47,6 +47,7 @@ set(LANTY_CORE_LIBRARY_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGame.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGamelist.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGamelistFactory.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/source/network/Connection.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/NetworkHelper.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/exploration/HostExplorer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/exploration/HostExposer.cpp
@@ -78,7 +79,8 @@ set(LANTY_CORE_LIBRARY_HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGame.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGamelist.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGamelistFactory.hpp
-   ${CMAKE_CURRENT_SOURCE_DIR}/include/network/NetworkHelper
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/network/Connection.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/network/NetworkHelper.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExploration.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExplorer.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExposer.hpp
