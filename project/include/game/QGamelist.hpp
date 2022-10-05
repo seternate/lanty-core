@@ -22,20 +22,21 @@
 #include <memory>
 #include <nlohmann/json.hpp>
 
-#include "core/Serializable.hpp"
+#include "core/JSONSerializable.hpp"
+#include "core/YAMLSerializable.hpp"
 #include "core/ltycore_global.hpp"
 #include "game/QGame.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT QGamelist : public QAbstractListModel, public Serializable
+class LTYCORE_EXPORT QGamelist : public QAbstractListModel, public JSONSerializable, public YAMLSerializable
 {
     Q_DISABLE_COPY_MOVE(QGamelist)
 
 public:
-    QGamelist(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~QGamelist(void) = default;    // GCOVR_EXCL_LINE
+    QGamelist(void) = default;
+    virtual ~QGamelist(void) = default;
 
     bool operator==(const QGamelist& gamelist) const;
     bool operator!=(const QGamelist& gamelist) const;

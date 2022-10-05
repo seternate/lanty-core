@@ -22,13 +22,14 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
-#include "core/Serializable.hpp"
+#include "core/JSONSerializable.hpp"
+#include "core/YAMLSerializable.hpp"
 #include "core/ltycore_global.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT User : public Serializable
+class LTYCORE_EXPORT User : public JSONSerializable, public YAMLSerializable
 {
 public:
     static const std::string USERNAME_SERIALIZER_KEY;
@@ -43,7 +44,7 @@ public:
          const QString& ipAddress = QString("")) noexcept;
     User(const User& user) noexcept;
     User(User&& user) noexcept;
-    virtual ~User(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~User(void) = default;
 
     User& operator=(const User& user) noexcept;
     User& operator=(User&& user) noexcept;

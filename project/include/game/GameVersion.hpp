@@ -22,13 +22,14 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
-#include "core/Serializable.hpp"
+#include "core/JSONSerializable.hpp"
+#include "core/YAMLSerializable.hpp"
 #include "core/ltycore_global.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT GameVersion : public Serializable
+class LTYCORE_EXPORT GameVersion : public JSONSerializable, public YAMLSerializable
 {
 public:
     enum class Source : quint32
@@ -49,7 +50,7 @@ public:
     GameVersion(void) noexcept;
     GameVersion(const GameVersion& gameversion) noexcept;
     GameVersion(GameVersion&& gameversion) noexcept;
-    virtual ~GameVersion(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~GameVersion(void) = default;
 
     GameVersion& operator=(const GameVersion& gameversion) noexcept;
     GameVersion& operator=(GameVersion&& gameversion) noexcept;

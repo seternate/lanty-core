@@ -32,7 +32,7 @@ class LTYCORE_EXPORT QGame : public QObject, public Game
 public:
     explicit QGame(QObject* parent = nullptr) noexcept;
     QGame(const Game& game, QObject* parent = nullptr) noexcept;
-    virtual ~QGame(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~QGame(void) = default;
 
     QGame& operator=(const Game& game) noexcept;
     bool operator==(const QGame& game) const noexcept;

@@ -33,7 +33,7 @@ namespace lanty
 
 class GameLoader;
 
-class LTYCORE_EXPORT Game : public Serializable
+class LTYCORE_EXPORT Game : public JSONSerializable, public YAMLSerializable
 {
     friend GameLoader;
 
@@ -51,7 +51,7 @@ public:
          const GameVersion& version = GameVersion()) noexcept;
     Game(const Game& game) noexcept;
     Game(Game&& game) noexcept;
-    virtual ~Game(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~Game(void) = default;
 
     Game& operator=(const Game& game) noexcept;
     Game& operator=(Game&& game) noexcept;

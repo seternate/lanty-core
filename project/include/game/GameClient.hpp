@@ -21,13 +21,14 @@
 #include <nlohmann/json.hpp>
 #include <string>
 
-#include "core/Serializable.hpp"
+#include "core/JSONSerializable.hpp"
+#include "core/YAMLSerializable.hpp"
 #include "core/ltycore_global.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT GameClient : public Serializable
+class LTYCORE_EXPORT GameClient : public JSONSerializable, public YAMLSerializable
 {
 public:
     static const std::string EXECUTABLE_FILE_PATH_SERIALIZER_KEY;
@@ -39,7 +40,7 @@ public:
                const QString& argument = QString("")) noexcept;
     GameClient(const GameClient& gameclient) noexcept;
     GameClient(GameClient&& gameclient) noexcept;
-    virtual ~GameClient(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~GameClient(void) = default;
 
     GameClient& operator=(const GameClient& gameclient) noexcept;
     GameClient& operator=(GameClient&& gameclient) noexcept;

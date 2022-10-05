@@ -34,8 +34,8 @@ public:
     static const QString BMP;
     static const QString ZIP;
 
-    FileExtension(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~FileExtension(void) = default;    // GCOVR_EXCL_LINE
+    FileExtension(void) = default;
+    virtual ~FileExtension(void) = default;
 
     QString toWildcard(const QString& fileExtension) const noexcept;
 };

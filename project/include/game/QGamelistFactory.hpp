@@ -31,8 +31,8 @@ public:
     static const QString YAML_TEMPLATE_FILE;
     static const std::string GAME_DESERIALIZER_KEY;
 
-    QGamelistFactory(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~QGamelistFactory(void) = default;    // GCOVR_EXCL_LINE
+    QGamelistFactory(void) = default;
+    virtual ~QGamelistFactory(void) = default;
 
     QGamelist* makeQGamelist(const QDir& gameYamlDirectory, const QDir& gameImageDirectory) const;
 

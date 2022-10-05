@@ -27,7 +27,8 @@ const std::string User::RESOLUTION_Y_SERIALIZER_KEY = "y";
 const std::string User::IPADDRESS_SERIALIZER_KEY = "ip-address";
 
 User::User(const QString& username, const QString& gamepath, const QString& ipAddress) noexcept :
-    Serializable(),
+    JSONSerializable(),
+    YAMLSerializable(),
     username(username),
     gamepath(gamepath),
     resolutionX(0),
@@ -36,7 +37,8 @@ User::User(const QString& username, const QString& gamepath, const QString& ipAd
 { }
 
 User::User(const User& user) noexcept :
-    Serializable(),
+    JSONSerializable(),
+    YAMLSerializable(),
     username(user.getUsername()),
     gamepath(user.getGamepath()),
     resolutionX(user.getResolutionX()),
@@ -45,7 +47,8 @@ User::User(const User& user) noexcept :
 { }
 
 User::User(User&& user) noexcept :
-    Serializable(),
+    JSONSerializable(),
+    YAMLSerializable(),
     username(std::move(user.username)),
     gamepath(std::move(user.gamepath)),
     resolutionX(std::move(user.resolutionX)),

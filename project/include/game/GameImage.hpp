@@ -31,7 +31,7 @@ public:
     static const QString ICON_SUFFIX;
 
     GameImage(const Game& game) noexcept;
-    virtual ~GameImage(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~GameImage(void) = default;
 
     QString coverFilename(void) const noexcept;
     QString iconFilename(void) const noexcept;

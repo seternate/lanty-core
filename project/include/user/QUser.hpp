@@ -36,7 +36,7 @@ public:
           const QString& ipAddress = QString(""),
           QObject* parent = nullptr) noexcept;
     QUser(const User& user, QObject* parent = nullptr) noexcept;
-    virtual ~QUser(void) = default;    // GCOVR_EXCL_LINE
+    virtual ~QUser(void) = default;
 
     QUser& operator=(const User& user) noexcept;
     bool operator==(const QUser& user) const noexcept;

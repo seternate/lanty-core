@@ -28,8 +28,8 @@ namespace lanty
 class LTYCORE_EXPORT GameClientLoader : public YAMLLoadable<GameClient>
 {
 public:
-    GameClientLoader(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~GameClientLoader(void) = default;    // GCOVR_EXCL_LINE
+    GameClientLoader(void) = default;
+    virtual ~GameClientLoader(void) = default;
 
     GameClient load(const YAML::Node& yaml) const override;
 };

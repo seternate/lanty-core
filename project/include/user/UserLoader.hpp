@@ -29,8 +29,8 @@ namespace lanty
 class LTYCORE_EXPORT UserLoader : public YAMLLoadable<User>, public JSONLoadable<User>
 {
 public:
-    UserLoader(void) = default;             // GCOVR_EXCL_LINE
-    virtual ~UserLoader(void) = default;    // GCOVR_EXCL_LINE
+    UserLoader(void) = default;
+    virtual ~UserLoader(void) = default;
 
     User load(const YAML::Node& yaml) const override;
     User load(const nlohmann::json& json) const override;
