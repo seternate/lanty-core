@@ -30,7 +30,8 @@ public:
     enum class Type : quint64
     {
         UNKNOWN = 0x00,
-        ADDRESS = 0x01
+        ADDRESS = 0x01,
+        USER = 0x02
     };
 
     static std::string typeToString(MessageType::Type type) noexcept;

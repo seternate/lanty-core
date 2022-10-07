@@ -17,6 +17,7 @@
 #include <nlohmann/json.hpp>
 
 #include "network/Connection.hpp"
+#include "network/message/MessageLoader.hpp"
 
 namespace lanty
 {
@@ -55,9 +56,27 @@ void Connection::handleIncomingMessage(void) noexcept
         }
     }
 
-    nlohmann::json jsonMessage = nlohmann::json::parse(rawMessage.toStdString());
+    QStringList messageList = QString::fromStdString(rawMessage.toStdString()).split("\n\r\n\r");
 
-    qDebug() << QString::fromStdString(jsonMessage.dump());
+    //Remove empty items in messageList
+
+    for(QString messageString : messageList)
+    {
+        try
+        {
+            nlohmann::json jsonMessage = nlohmann::json::parse(messageString.toStdString());
+
+            Message message = MessageLoader().load(jsonMessage);
+
+            if(message.getType() == MessageType(MessageType::Type::UNKNOWN))
+            {
+                qDebug() << "UNKNOWN message: " << messageString;
+            }
+        }
+        catch(std::exception& exception){
+            qDebug() << "Can not parse message: " << messageString;
+        }
+    }
 
     //QByteArray jsonData;
     //QDataStream socketStream(this->socket);

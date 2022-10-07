@@ -55,6 +55,7 @@ set(LANTY_CORE_LIBRARY_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/Message.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/MessageLoader.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/MessageType.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/UserMessage.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/user/QUser.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/user/QUserlist.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/user/User.cpp
@@ -88,6 +89,7 @@ set(LANTY_CORE_LIBRARY_HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/Message.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/MessageLoader.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/MessageType.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/UserMessage.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/user/QUser.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/user/QUserlist.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/user/User.hpp
