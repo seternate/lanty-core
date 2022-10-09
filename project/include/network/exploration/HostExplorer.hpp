@@ -26,7 +26,7 @@
 namespace lanty
 {
 
-class LTYCORE_EXPORT HostExplorer : QObject
+class LTYCORE_EXPORT HostExplorer : public QObject
 {
     Q_OBJECT
     Q_DISABLE_COPY_MOVE(HostExplorer)
