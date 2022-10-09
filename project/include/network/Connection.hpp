@@ -20,6 +20,8 @@
 
 #include "core/ltycore_global.hpp"
 
+#include "user/User.hpp"
+
 namespace lanty
 {
 
@@ -34,6 +36,9 @@ public:
 
 public slots:
     void handleIncomingMessage(void) noexcept;
+
+signals:
+    void userUpdate(User user);
 
 private:
     QTcpSocket socket;

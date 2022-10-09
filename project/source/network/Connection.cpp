@@ -18,6 +18,7 @@
 
 #include "network/Connection.hpp"
 #include "network/message/MessageLoader.hpp"
+#include "network/message/UserMessage.hpp"
 
 namespace lanty
 {
@@ -59,6 +60,7 @@ void Connection::handleIncomingMessage(void) noexcept
     QStringList messageList = QString::fromStdString(rawMessage.toStdString()).split("\n\r\n\r");
 
     //Remove empty items in messageList
+    messageList.removeAll("");
 
     for(QString messageString : messageList)
     {
@@ -71,6 +73,14 @@ void Connection::handleIncomingMessage(void) noexcept
             if(message.getType() == MessageType(MessageType::Type::UNKNOWN))
             {
                 qDebug() << "UNKNOWN message: " << messageString;
+            }
+
+            switch(message.getType())
+            {
+            case MessageType::Type::USER:
+                emit userUpdate(static_cast<UserMessage>(message).getUser());
+                break;
+            default: break;
             }
         }
         catch(std::exception& exception){
