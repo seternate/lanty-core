@@ -16,11 +16,13 @@
 
 #pragma once
 
+#include <qhostaddress.h>
 #include <QTcpSocket>
 
 #include "core/ltycore_global.hpp"
 
 #include "user/User.hpp"
+#include "network/message/Message.hpp"
 
 namespace lanty
 {
@@ -31,17 +33,25 @@ class LTYCORE_EXPORT Connection : public QObject
     Q_DISABLE_COPY_MOVE(Connection)
 
 public:
+    Connection(void) = default;
     Connection(qintptr socket, QObject* parent = nullptr);
     virtual ~Connection(void);
 
+    User getUser(void);
+    void connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode = QIODevice::ReadWrite);
+    void sendMessage(Message message);
+
 public slots:
     void handleIncomingMessage(void) noexcept;
+    void handleDisconnect(void);
 
 signals:
     void userUpdate(User user);
+    void disconnected(User user);
 
 private:
     QTcpSocket socket;
+    User user;
 };
 
 } /* namespace lanty::server */

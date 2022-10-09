@@ -25,7 +25,8 @@ namespace lanty
 
 Connection::Connection(qintptr socket, QObject* parent) :
     QObject(parent),
-    socket(this)
+    socket(this),
+    user()
 {
     bool successfullySetSocket = this->socket.setSocketDescriptor(socket);
     if (!successfullySetSocket)
@@ -33,7 +34,8 @@ Connection::Connection(qintptr socket, QObject* parent) :
         throw std::runtime_error("SocketDescriptor can not be set. (SocketDescriptor: " + std::to_string(socket));
     }
 
-    QObject::connect(&(this->socket), SIGNAL(readyRead()), this, SLOT(handleIncomingMessage()));
+    QObject::connect(&(this->socket), SIGNAL(readyRead(void)), this, SLOT(handleIncomingMessage(void)));
+    QObject::connect(&(this->socket), SIGNAL(disconnected(void)), this, SLOT(handleDisconnect(void)));
 }
 
 Connection::~Connection(void)
@@ -41,6 +43,11 @@ Connection::~Connection(void)
     this->socket.close();
 }
 
+
+User Connection::getUser(void)
+{
+    return this->user;
+}
 
 void Connection::handleIncomingMessage(void) noexcept
 {
@@ -78,7 +85,8 @@ void Connection::handleIncomingMessage(void) noexcept
             switch(message.getType())
             {
             case MessageType::Type::USER:
-                emit userUpdate(static_cast<UserMessage>(message).getUser());
+                this->user = static_cast<UserMessage>(message).getUser();
+                emit userUpdate(this->getUser());
                 break;
             default: break;
             }
@@ -143,6 +151,22 @@ void Connection::handleIncomingMessage(void) noexcept
     //        break;
     //    }
     //}
+}
+
+void Connection::connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode)
+{
+    this->socket.connectToHost(address, port, mode);
+}
+
+void Connection::sendMessage(Message message)
+{
+    this->socket.write(message.toJSON().dump().data());
+    this->socket.write("\n\r\n\r");
+}
+
+void Connection::handleDisconnect(void)
+{
+    emit this->disconnected(this->getUser());
 }
 
 }    // namespace lanty::server

@@ -78,7 +78,6 @@ void HostExplorer::processReply(void) noexcept
 
         if(replyMessage.getType() == MessageType(MessageType::Type::ADDRESS)){
             this->stopExploring();
-            qDebug() << replyMessage.getHostAsString() << replyMessage.getPort();
             emit this->hostDiscovered(replyMessage.getHost(), replyMessage.getPort());
         }
     }
