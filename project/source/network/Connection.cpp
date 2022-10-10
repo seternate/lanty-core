@@ -25,6 +25,14 @@
 namespace lanty
 {
 
+Connection::Connection(void) :
+    QObject(nullptr),
+    socket(this),
+    user()
+{
+    QObject::connect(&(this->socket), SIGNAL(readyRead(void)), this, SLOT(handleIncomingMessage(void)));
+}
+
 Connection::Connection(qintptr socket, QObject* parent) :
     QObject(parent),
     socket(this),
@@ -84,6 +92,8 @@ void Connection::handleIncomingMessage(void) noexcept
                 qDebug() << "UNKNOWN message: " << messageString;
             }
 
+            QGamelist* gamelist = nullptr;
+
             switch(message.getType())
             {
             case MessageType::Type::USER:
@@ -91,7 +101,9 @@ void Connection::handleIncomingMessage(void) noexcept
                 emit userUpdate(this->getUser());
                 break;
             case MessageType::Type::GAMELIST:
-                qDebug() << "GAMELIST" << static_cast<GamelistMessage>(message).getGamelist()->toJSON().dump().c_str();
+                gamelist = static_cast<GamelistMessage>(message).getGamelist();
+                qDebug() << "GAMELIST" << gamelist->toJSON().dump().c_str();
+                emit gamelistUpdate(gamelist);
                 break;
             default: break;
             }
@@ -165,6 +177,7 @@ void Connection::connectToHost(const QHostAddress& address, quint16 port, QIODev
 
 void Connection::sendMessage(Message message)
 {
+    qDebug() << "Address" << this->socket.peerAddress().toString() << this->socket.peerPort();
     this->socket.write(message.toJSON().dump().data());
     this->socket.write("\n\r\n\r");
 }

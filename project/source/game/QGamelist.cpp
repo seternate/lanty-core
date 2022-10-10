@@ -15,6 +15,8 @@
  */
 
 #include "game/QGamelist.hpp"
+#include <qnamespace.h>
+#include <qvariant.h>
 
 namespace lanty
 {
@@ -162,6 +164,11 @@ QVariant QGamelist::data(const QModelIndex& index, int role) const
         QString gameName = this->list.at(index.row())->getName();
         return QVariant::fromValue(gameName);
     }
+    else if(role == Version)
+    {
+        QString gameVersion = this->list.at(index.row())->getVersion().getVersion();
+        return QVariant::fromValue(gameVersion);
+    }
 
     return QVariant();
 }
@@ -190,5 +197,12 @@ YAML::Node QGamelist::toYAML(void) const
 
     return yaml;
 }
+
+QHash<int, QByteArray> QGamelist::roleNames() const {
+      QHash<int, QByteArray> roles;
+      roles[Version] = "version";
+      roles[Qt::DisplayRole] = "display";
+      return roles;
+  }
 
 } /* namespace lanty */

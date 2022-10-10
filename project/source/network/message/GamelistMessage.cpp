@@ -31,7 +31,7 @@ GamelistMessage::GamelistMessage(Message& message) noexcept : Message(message) {
 GamelistMessage::GamelistMessage(Message&& message) noexcept : Message(std::move(message)) { }
 
 GamelistMessage::GamelistMessage(const QGamelist& gamelist) noexcept :
-    Message(MessageType::Type::ADDRESS)
+    Message(MessageType::Type::GAMELIST)
 {
     nlohmann::json payload = nlohmann::json::object();
 
@@ -78,7 +78,7 @@ bool GamelistMessage::operator!=(const GamelistMessage& message) const noexcept
 
 QGamelist* GamelistMessage::getGamelist(void) const noexcept
 {
-    return QGamelistLoader().load(this->getPayloadAsJSON());
+    return QGamelistLoader().load(this->getPayloadAsJSON()[GamelistMessage::GAMELIST_SERIALIZER_KEY]);
 }
 
 } /* namespace lanty */

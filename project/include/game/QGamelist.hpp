@@ -16,6 +16,7 @@
 
 #pragma once
 
+#include <qnamespace.h>
 #include <QAbstractListModel>
 #include <QVariant>
 #include <QVector>
@@ -35,6 +36,10 @@ class LTYCORE_EXPORT QGamelist : public QAbstractListModel, public JSONSerializa
     Q_DISABLE_COPY_MOVE(QGamelist)
 
 public:
+    enum GamelistRoles {
+        Version = Qt::UserRole + 1
+    };
+
     QGamelist(void) = default;
     virtual ~QGamelist(void) = default;
 
@@ -42,6 +47,8 @@ public:
     bool operator!=(const QGamelist& gamelist) const;
     QGame& operator[](const qint64 index);
     const QGame& operator[](const qint64 index) const;
+
+    QHash<int, QByteArray> roleNames(void) const override;
 
     const QGame& at(const qint64 index) const;
     bool append(QGame* game);

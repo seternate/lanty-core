@@ -23,6 +23,7 @@
 
 #include "user/User.hpp"
 #include "network/message/Message.hpp"
+#include "game/QGamelist.hpp"
 
 namespace lanty
 {
@@ -33,7 +34,7 @@ class LTYCORE_EXPORT Connection : public QObject
     Q_DISABLE_COPY_MOVE(Connection)
 
 public:
-    Connection(void) = default;
+    Connection(void);
     Connection(qintptr socket, QObject* parent = nullptr);
     virtual ~Connection(void);
 
@@ -47,6 +48,7 @@ public slots:
 
 signals:
     void userUpdate(User user);
+    void gamelistUpdate(QGamelist* gamelist);
     void disconnected(User user);
 
 private:
