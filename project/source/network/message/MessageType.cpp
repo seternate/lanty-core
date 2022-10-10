@@ -21,7 +21,8 @@ namespace lanty
 
 const std::map<std::string, MessageType::Type> MessageType::STRING_TYPE_MAP = { { "unknown", MessageType::Type::UNKNOWN },
                                                                                 { "address", MessageType::Type::ADDRESS },
-                                                                                { "user", MessageType::Type::USER} };
+                                                                                { "user", MessageType::Type::USER},
+                                                                                { "gamelist", MessageType::Type::GAMELIST } };
 
 
 std::string MessageType::typeToString(MessageType::Type type) noexcept

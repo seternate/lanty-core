@@ -14,29 +14,22 @@
  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "game/GameServerLoader.hpp"
+#pragma once
+
+#include "core/JSONLoadable.hpp"
+#include "core/ltycore_global.hpp"
+#include "game/QGamelist.hpp"
 
 namespace lanty
 {
 
-GameServer GameServerLoader::load(const YAML::Node& yaml) const
+class LTYCORE_EXPORT QGamelistLoader : public JSONLoadable<QGamelist*>
 {
-    GameServer gameserver;
+public:
+    QGamelistLoader(void) = default;
+    virtual ~QGamelistLoader(void) = default;
 
-    gameserver.setExecutableFilePath(YAMLLoadable::loadFieldAsQString(yaml, GameServer::EXECUTABLE_FILE_PATH_SERIALIZER_KEY));
-    gameserver.setArgument(YAMLLoadable::loadFieldAsQString(yaml, GameServer::ARGUMENT_SERIALIZER_KEY));
-
-    return gameserver;
-}
-
-GameServer GameServerLoader::load(const nlohmann::json& json) const
-{
-    GameServer gameserver;
-
-    gameserver.setExecutableFilePath(JSONLoadable::loadFieldAsQString(json, GameServer::EXECUTABLE_FILE_PATH_SERIALIZER_KEY));
-    gameserver.setArgument(JSONLoadable::loadFieldAsQString(json, GameServer::ARGUMENT_SERIALIZER_KEY));
-
-    return gameserver;
-}
+    QGamelist* load(const nlohmann::json& json) const override;
+};
 
 } /* namespace lanty */

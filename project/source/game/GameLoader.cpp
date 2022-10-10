@@ -28,11 +28,24 @@ Game GameLoader::load(const YAML::Node& yaml) const
 {
     Game game;
 
-    game.setName(this->loadFieldAsQString(yaml, Game::NAME_SERIALIZER_KEY));
-    game.setArchiveFileName(this->loadFieldAsQString(yaml, Game::ARCHIVE_SERIALIZER_KEY));
+    game.setName(YAMLLoadable::loadFieldAsQString(yaml, Game::NAME_SERIALIZER_KEY));
+    game.setArchiveFileName(YAMLLoadable::loadFieldAsQString(yaml, Game::ARCHIVE_SERIALIZER_KEY));
     game.client = GameClientLoader().load(this->loadFieldAsYAML(yaml, Game::CLIENT_SERIALIZER_KEY));
     game.server = GameServerLoader().load(this->loadFieldAsYAML(yaml, Game::SERVER_SERIALIZER_KEY));
     game.version = GameVersionLoader().load(this->loadFieldAsYAML(yaml, Game::VERSION_SERIALIZER_KEY));
+
+    return game;
+}
+
+Game GameLoader::load(const nlohmann::json& json) const
+{
+    Game game;
+
+    game.setName(JSONLoadable::loadFieldAsQString(json, Game::NAME_SERIALIZER_KEY));
+    game.setArchiveFileName(JSONLoadable::loadFieldAsQString(json, Game::ARCHIVE_SERIALIZER_KEY));
+    game.client = GameClientLoader().load(this->loadFieldAsJSON(json, Game::CLIENT_SERIALIZER_KEY));
+    game.server = GameServerLoader().load(this->loadFieldAsJSON(json, Game::SERVER_SERIALIZER_KEY));
+    game.version = GameVersionLoader().load(this->loadFieldAsJSON(json, Game::VERSION_SERIALIZER_KEY));
 
     return game;
 }

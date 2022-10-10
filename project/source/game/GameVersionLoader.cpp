@@ -23,11 +23,24 @@ GameVersion GameVersionLoader::load(const YAML::Node& yaml) const
 {
     GameVersion gameversion;
 
-    gameversion.setVersion(this->loadFieldAsQString(yaml, GameVersion::VERSION_SERIALIZER_KEY));
+    gameversion.setVersion(YAMLLoadable::loadFieldAsQString(yaml, GameVersion::VERSION_SERIALIZER_KEY));
     gameversion.setSource(
-        GameVersion::QStringToSource(this->loadFieldAsQString(yaml, GameVersion::SOURCE_SERIALIZER_KEY).toUpper()));
-    gameversion.setFilePath(this->loadFieldAsQString(yaml, GameVersion::FILEPATH_SERIALIZER_KEY));
-    gameversion.setFileQuery(this->loadFieldAsQString(yaml, GameVersion::FILEQUERY_SERIALIZER_KEY));
+        GameVersion::QStringToSource(YAMLLoadable::loadFieldAsQString(yaml, GameVersion::SOURCE_SERIALIZER_KEY).toUpper()));
+    gameversion.setFilePath(YAMLLoadable::loadFieldAsQString(yaml, GameVersion::FILEPATH_SERIALIZER_KEY));
+    gameversion.setFileQuery(YAMLLoadable::loadFieldAsQString(yaml, GameVersion::FILEQUERY_SERIALIZER_KEY));
+
+    return gameversion;
+}
+
+GameVersion GameVersionLoader::load(const nlohmann::json& json) const
+{
+    GameVersion gameversion;
+
+    gameversion.setVersion(JSONLoadable::loadFieldAsQString(json, GameVersion::VERSION_SERIALIZER_KEY));
+    gameversion.setSource(
+        GameVersion::QStringToSource(JSONLoadable::loadFieldAsQString(json, GameVersion::SOURCE_SERIALIZER_KEY).toUpper()));
+    gameversion.setFilePath(JSONLoadable::loadFieldAsQString(json, GameVersion::FILEPATH_SERIALIZER_KEY));
+    gameversion.setFileQuery(JSONLoadable::loadFieldAsQString(json, GameVersion::FILEQUERY_SERIALIZER_KEY));
 
     return gameversion;
 }

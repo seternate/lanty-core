@@ -18,6 +18,7 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "core/JSONLoadable.hpp"
 #include "core/YAMLLoadable.hpp"
 #include "core/ltycore_global.hpp"
 #include "game/GameClient.hpp"
@@ -25,13 +26,14 @@
 namespace lanty
 {
 
-class LTYCORE_EXPORT GameClientLoader : public YAMLLoadable<GameClient>
+class LTYCORE_EXPORT GameClientLoader : public JSONLoadable<GameClient>, public YAMLLoadable<GameClient>
 {
 public:
     GameClientLoader(void) = default;
     virtual ~GameClientLoader(void) = default;
 
     GameClient load(const YAML::Node& yaml) const override;
+    GameClient load(const nlohmann::json& json) const override;
 };
 
 } /* namespace lanty */

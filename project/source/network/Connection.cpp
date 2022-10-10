@@ -18,7 +18,9 @@
 
 #include "network/Connection.hpp"
 #include "network/message/MessageLoader.hpp"
+#include "network/message/MessageType.hpp"
 #include "network/message/UserMessage.hpp"
+#include "network/message/GamelistMessage.hpp"
 
 namespace lanty
 {
@@ -87,6 +89,9 @@ void Connection::handleIncomingMessage(void) noexcept
             case MessageType::Type::USER:
                 this->user = static_cast<UserMessage>(message).getUser();
                 emit userUpdate(this->getUser());
+                break;
+            case MessageType::Type::GAMELIST:
+                qDebug() << "GAMELIST" << static_cast<GamelistMessage>(message).getGamelist()->toJSON().dump().c_str();
                 break;
             default: break;
             }

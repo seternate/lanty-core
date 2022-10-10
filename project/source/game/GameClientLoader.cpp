@@ -23,9 +23,20 @@ GameClient GameClientLoader::load(const YAML::Node& yaml) const
 {
     GameClient gameclient;
 
-    gameclient.setExecutableFilePath(this->loadFieldAsQString(yaml, GameClient::EXECUTABLE_FILE_PATH_SERIALIZER_KEY));
-    gameclient.setArgument(this->loadFieldAsQString(yaml, GameClient::ARGUMENT_SERIALIZER_KEY));
-    gameclient.setConnectArgument(this->loadFieldAsQString(yaml, GameClient::CONNECT_ARGUMENT_SERIALIZER_KEY));
+    gameclient.setExecutableFilePath(YAMLLoadable::loadFieldAsQString(yaml, GameClient::EXECUTABLE_FILE_PATH_SERIALIZER_KEY));
+    gameclient.setArgument(YAMLLoadable::loadFieldAsQString(yaml, GameClient::ARGUMENT_SERIALIZER_KEY));
+    gameclient.setConnectArgument(YAMLLoadable::loadFieldAsQString(yaml, GameClient::CONNECT_ARGUMENT_SERIALIZER_KEY));
+
+    return gameclient;
+}
+
+GameClient GameClientLoader::load(const nlohmann::json& json) const
+{
+    GameClient gameclient;
+
+    gameclient.setExecutableFilePath(JSONLoadable::loadFieldAsQString(json, GameClient::EXECUTABLE_FILE_PATH_SERIALIZER_KEY));
+    gameclient.setArgument(JSONLoadable::loadFieldAsQString(json, GameClient::ARGUMENT_SERIALIZER_KEY));
+    gameclient.setConnectArgument(JSONLoadable::loadFieldAsQString(json, GameClient::CONNECT_ARGUMENT_SERIALIZER_KEY));
 
     return gameclient;
 }

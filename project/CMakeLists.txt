@@ -47,11 +47,13 @@ set(LANTY_CORE_LIBRARY_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGame.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGamelist.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGamelistFactory.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/source/game/QGamelistLoader.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/Connection.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/NetworkHelper.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/exploration/HostExplorer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/exploration/HostExposer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/AddressMessage.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/GamelistMessage.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/Message.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/MessageLoader.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/MessageType.cpp
@@ -80,12 +82,14 @@ set(LANTY_CORE_LIBRARY_HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGame.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGamelist.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGamelistFactory.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/game/QGamelistLoader.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/Connection.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/NetworkHelper.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExploration.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExplorer.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExposer.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/AddressMessage.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/GamelistMessage.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/Message.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/MessageLoader.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/MessageType.hpp
