@@ -32,7 +32,8 @@ public:
         UNKNOWN = 0x00,
         ADDRESS = 0x01,
         USER = 0x02,
-        GAMELIST = 0x03
+        GAMELIST = 0x03,
+        GAMEDOWNLOAD_REQUEST = 0x04
     };
 
     static std::string typeToString(MessageType::Type type) noexcept;

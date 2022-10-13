@@ -53,6 +53,7 @@ set(LANTY_CORE_LIBRARY_SOURCES
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/exploration/HostExplorer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/exploration/HostExposer.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/AddressMessage.cpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/GameDownloadRequest.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/GamelistMessage.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/Message.cpp
    ${CMAKE_CURRENT_SOURCE_DIR}/source/network/message/MessageLoader.cpp
@@ -89,6 +90,7 @@ set(LANTY_CORE_LIBRARY_HEADERS
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExplorer.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/exploration/HostExposer.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/AddressMessage.hpp
+   ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/GameDownloadRequest.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/GamelistMessage.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/Message.hpp
    ${CMAKE_CURRENT_SOURCE_DIR}/include/network/message/MessageLoader.hpp

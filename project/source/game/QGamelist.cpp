@@ -53,9 +53,9 @@ const QGame& QGamelist::operator[](const qint64 index) const
 }
 
 
-const QGame& QGamelist::at(const qint64 index) const
+lanty::QGame* QGamelist::at(const qint64 index) const
 {
-    return *(this->list.at(index).get());
+    return this->list.at(index).get();
 }
 
 bool QGamelist::append(QGame* game)

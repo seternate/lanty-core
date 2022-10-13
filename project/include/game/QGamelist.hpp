@@ -33,6 +33,7 @@ namespace lanty
 
 class LTYCORE_EXPORT QGamelist : public QAbstractListModel, public JSONSerializable, public YAMLSerializable
 {
+    Q_OBJECT
     Q_DISABLE_COPY_MOVE(QGamelist)
 
 public:
@@ -50,7 +51,7 @@ public:
 
     QHash<int, QByteArray> roleNames(void) const override;
 
-    const QGame& at(const qint64 index) const;
+    Q_INVOKABLE lanty::QGame* at(const qint64 index) const;
     bool append(QGame* game);
     bool contains(const QGame* game) const;
     void remove(const QGame* game);
