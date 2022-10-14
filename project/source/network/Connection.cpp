@@ -63,6 +63,7 @@ User Connection::getUser(void)
 
 void Connection::handleIncomingMessage(void) noexcept
 {
+    static QStringList messageOverFlow;
     QByteArray buffer;
     QByteArray rawMessage;
 
@@ -81,8 +82,10 @@ void Connection::handleIncomingMessage(void) noexcept
     //Remove empty items in messageList
     messageList.removeAll("");
 
-    for(QString messageString : messageList)
+    for(quint64 i = 0; i < messageList.size(); i ++)
     {
+        QString messageString = messageList.at(i);
+
         try
         {
             nlohmann::json jsonMessage = nlohmann::json::parse(messageString.toStdString());
@@ -105,80 +108,37 @@ void Connection::handleIncomingMessage(void) noexcept
                 break;
             case MessageType::Type::GAMELIST:
                 gamelist = static_cast<GamelistMessage>(message).getGamelist();
-                qDebug() << "GAMELIST" << gamelist->toJSON().dump().c_str();
+                //qDebug() << "GAMELIST" << gamelist->toJSON().dump().c_str();
                 emit gamelistUpdate(gamelist);
                 break;
             case MessageType::Type::GAMEDOWNLOAD_REQUEST:
                 game = static_cast<GameDownloadRequest>(message).getGame();
-                qDebug() << "GAME" << game.toJSON().dump().c_str();
+                //qDebug() << "GAME" << game.toJSON().dump().c_str();
                 emit gamedownloadRequest(this->user, game);
                 break;
             case MessageType::Type::GAMEDOWNLOAD_REPLY:
-                qDebug() << "GamedownloadReply:" << static_cast<GameDownloadReply>(message).getGame().getName();
-                emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGame(), static_cast<GameDownloadReply>(message).getGameSize());
+                //qDebug() << "GamedownloadReply:" << static_cast<GameDownloadReply>(message).getGame().getName();
+                emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGame(), static_cast<GameDownloadReply>(message).getGameSize(), static_cast<GameDownloadReply>(message).getData());
             default: break;
             }
         }
         catch(std::exception& exception){
-            qDebug() << "Can not parse message: " << messageString;
+            //qDebug().nospace() << "Can not parse message: \n"<< i << " : " << messageString << "\n\n";
+
+            if(messageList.indexOf(messageString) == 0)
+            {
+                messageOverFlow.append(messageString);
+                messageList.removeOne(messageString);
+                messageList.push_front(messageOverFlow.at(0) + messageOverFlow.at(1));
+                i--;
+            }
+            else if(messageList.indexOf(messageString) == messageList.size() - 1)
+            {
+                messageOverFlow = QStringList();
+                messageOverFlow.append(messageString);
+            }
         }
     }
-
-    //QByteArray jsonData;
-    //QDataStream socketStream(this->socket);
-    //socketStream.setVersion(QDataStream::Qt_5_14);
-    //for (;;)
-    //{
-    //    socketStream.startTransaction();
-    //    socketStream >> jsonData;
-    //    if (socketStream.commitTransaction())
-    //    {
-    //        nlohmann::json json = nlohmann::json::object();
-    //        Message* message = nullptr;
-    //        try
-    //        {
-    //            json = nlohmann::json::parse(jsonData.toStdString());
-    //            message = MessageFactory::createMessage(json);
-//
-    //            message->handle();
-//
-    //            /*
-    //            lanty::UserLoader userloader;
-//
-    //            switch (message->getType())
-    //            {
-    //                case Message::Type::LOGIN:
-    //                    this->user->operator=(userloader.load(message->getData()["user"]));
-    //                    emit this->login();
-    //                    break;
-    //                case Message::Type::LOGOUT:
-    //                    this->socket->close();
-    //                    break;
-    //                case Message::Type::USERLIST:
-    //                    qDebug() << "USERLIST";
-    //                    break;
-    //                case Message::Type::UNKNOWN:
-    //                default:
-    //                    break;
-    //            }
-    //            */
-    //        }
-    //        catch (nlohmann::json::parse_error& e)
-    //        {
-    //            qDebug() << "Invalid message: " + QString::fromUtf8(jsonData);
-    //            qDebug() << "Exception: " + QString::fromStdString(e.what());
-    //        }
-//
-    //        if (message != nullptr)
-    //        {
-    //            qDebug() << message->getData().dump().c_str();
-    //        }
-    //    }
-    //    else
-    //    {
-    //        break;
-    //    }
-    //}
 }
 
 void Connection::connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode)
@@ -188,7 +148,6 @@ void Connection::connectToHost(const QHostAddress& address, quint16 port, QIODev
 
 void Connection::sendMessage(Message message)
 {
-    qDebug() << "Address" << this->socket.peerAddress().toString() << this->socket.peerPort();
     this->socket.write(message.toJSON().dump().data());
     this->socket.write("\n\r\n\r");
 }

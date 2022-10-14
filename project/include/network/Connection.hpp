@@ -50,7 +50,7 @@ signals:
     void userUpdate(User user);
     void gamelistUpdate(QGamelist* gamelist);
     void gamedownloadRequest(User user, Game game);
-    void gamedownloadReply(Game game, quint64 gamesize);
+    void gamedownloadReply(Game game, quint64 gamesize, QByteArray data);
     void disconnected(User user);
 
 private:
