@@ -17,6 +17,7 @@
 #include <nlohmann/json.hpp>
 
 #include "network/Connection.hpp"
+#include "network/message/GameDownloadReply.hpp"
 #include "network/message/GameDownloadRequest.hpp"
 #include "network/message/MessageLoader.hpp"
 #include "network/message/MessageType.hpp"
@@ -112,6 +113,9 @@ void Connection::handleIncomingMessage(void) noexcept
                 qDebug() << "GAME" << game.toJSON().dump().c_str();
                 emit gamedownloadRequest(this->user, game);
                 break;
+            case MessageType::Type::GAMEDOWNLOAD_REPLY:
+                qDebug() << "GamedownloadReply:" << static_cast<GameDownloadReply>(message).getGame().getName();
+                emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGame(), static_cast<GameDownloadReply>(message).getGameSize());
             default: break;
             }
         }

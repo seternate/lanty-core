@@ -23,7 +23,8 @@ const std::map<std::string, MessageType::Type> MessageType::STRING_TYPE_MAP = { 
                                                                                 { "address", MessageType::Type::ADDRESS },
                                                                                 { "user", MessageType::Type::USER},
                                                                                 { "gamelist", MessageType::Type::GAMELIST },
-                                                                                { "gamedownloadrequest", MessageType::Type::GAMEDOWNLOAD_REQUEST} };
+                                                                                { "gamedownloadrequest", MessageType::Type::GAMEDOWNLOAD_REQUEST},
+                                                                                { "gamedownloadreply", MessageType::Type::GAMEDOWNLOAD_REPLY} };
 
 
 std::string MessageType::typeToString(MessageType::Type type) noexcept

@@ -16,46 +16,38 @@
 
 #pragma once
 
-#include <qhostaddress.h>
-#include <QTcpSocket>
+#include <QHostAddress>
 
 #include "core/ltycore_global.hpp"
-
-#include "user/User.hpp"
 #include "network/message/Message.hpp"
-#include "game/QGamelist.hpp"
+#include "game/Game.hpp"
 
 namespace lanty
 {
 
-class LTYCORE_EXPORT Connection : public QObject
+class LTYCORE_EXPORT GameDownloadReply : public Message
 {
-    Q_OBJECT
-    Q_DISABLE_COPY_MOVE(Connection)
-
 public:
-    Connection(void);
-    Connection(qintptr socket, QObject* parent = nullptr);
-    virtual ~Connection(void);
+    static const std::string GAME_SERIALIZER_KEY;
+    static const std::string GAMESIZE_SERIALIZER_KEY;
 
-    User getUser(void);
-    void connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode = QIODevice::ReadWrite);
-    void sendMessage(Message message);
+    GameDownloadReply(void) = delete;
+    GameDownloadReply(GameDownloadReply& message) noexcept;
+    GameDownloadReply(GameDownloadReply&& message) noexcept;
+    GameDownloadReply(Message& message) noexcept;
+    GameDownloadReply(Message&& message) noexcept;
+    GameDownloadReply(const Game& game, quint64 gamesize) noexcept;
+    virtual ~GameDownloadReply(void) = default;    // GCOVR_EXCL_LINE
 
-public slots:
-    void handleIncomingMessage(void) noexcept;
-    void handleDisconnect(void);
+    GameDownloadReply& operator=(const GameDownloadReply& message) noexcept;
+    GameDownloadReply& operator=(GameDownloadReply&& message) noexcept;
+    GameDownloadReply& operator=(const Message& message) noexcept;
+    GameDownloadReply& operator=(Message&& message) noexcept;
+    bool operator==(const GameDownloadReply& message) const noexcept;
+    bool operator!=(const GameDownloadReply& message) const noexcept;
 
-signals:
-    void userUpdate(User user);
-    void gamelistUpdate(QGamelist* gamelist);
-    void gamedownloadRequest(User user, Game game);
-    void gamedownloadReply(Game game, quint64 gamesize);
-    void disconnected(User user);
-
-private:
-    QTcpSocket socket;
-    User user;
+    Game getGame(void) const noexcept;
+    quint64 getGameSize() const noexcept;
 };
 
-} /* namespace lanty::server */
+} /* namespace lanty */
