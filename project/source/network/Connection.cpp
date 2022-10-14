@@ -17,6 +17,7 @@
 #include <nlohmann/json.hpp>
 
 #include "network/Connection.hpp"
+#include "network/message/GameDownloadRequest.hpp"
 #include "network/message/MessageLoader.hpp"
 #include "network/message/MessageType.hpp"
 #include "network/message/UserMessage.hpp"
@@ -93,6 +94,7 @@ void Connection::handleIncomingMessage(void) noexcept
             }
 
             QGamelist* gamelist = nullptr;
+            Game game;
 
             switch(message.getType())
             {
@@ -104,6 +106,11 @@ void Connection::handleIncomingMessage(void) noexcept
                 gamelist = static_cast<GamelistMessage>(message).getGamelist();
                 qDebug() << "GAMELIST" << gamelist->toJSON().dump().c_str();
                 emit gamelistUpdate(gamelist);
+                break;
+            case MessageType::Type::GAMEDOWNLOAD_REQUEST:
+                game = static_cast<GameDownloadRequest>(message).getGame();
+                qDebug() << "GAME" << game.toJSON().dump().c_str();
+                emit gamedownloadRequest(this->user, game);
                 break;
             default: break;
             }

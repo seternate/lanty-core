@@ -49,6 +49,7 @@ public slots:
 signals:
     void userUpdate(User user);
     void gamelistUpdate(QGamelist* gamelist);
+    void gamedownloadRequest(User user, Game game);
     void disconnected(User user);
 
 private:
