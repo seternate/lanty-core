@@ -40,7 +40,7 @@ public:
 
     User getUser(void);
     void connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode = QIODevice::ReadWrite);
-    void sendMessage(Message message);
+    void sendMessage(const Message& message);
 
 public slots:
     void handleIncomingMessage(void) noexcept;
@@ -49,8 +49,8 @@ public slots:
 signals:
     void userUpdate(User user);
     void gamelistUpdate(QGamelist* gamelist);
-    void gamedownloadRequest(User user, Game game);
-    void gamedownloadReply(Game game, quint64 gamesize, QByteArray data);
+    void gamedownloadRequest(User user, qint64 gameid);
+    void gamedownloadReply(qint64 gameid, quint64 gamesize);
     void disconnected(User user);
 
 private:

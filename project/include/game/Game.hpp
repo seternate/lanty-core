@@ -38,6 +38,7 @@ class LTYCORE_EXPORT Game : public JSONSerializable, public YAMLSerializable
     friend GameLoader;
 
 public:
+    static const std::string ID_SERIALIZER_KEY;
     static const std::string NAME_SERIALIZER_KEY;
     static const std::string ARCHIVE_SERIALIZER_KEY;
     static const std::string VERSION_SERIALIZER_KEY;
@@ -59,6 +60,7 @@ public:
     bool operator!=(const Game& game) const noexcept;
     bool operator<(const Game& game) const noexcept;
 
+    qint64 getID(void) const noexcept;
     QString getFilepath(void) const noexcept;
     const QFileInfo& getFileInfo(void) const noexcept;
     const QString& getName(void) const noexcept;
@@ -69,6 +71,7 @@ public:
     const QPixmap& getCover(void) const noexcept;
     const QPixmap& getIcon(void) const noexcept;
 
+    virtual void setID(qint64 id) noexcept;
     virtual void setFilepath(const QString& filepath) noexcept;
     virtual void setName(const QString& name) noexcept;
     virtual void setArchiveFileName(const QString& archiveFileName) noexcept;
@@ -90,6 +93,7 @@ public:
     YAML::Node toYAML(void) const override;
 
 private:
+    qint64 id = -1;
     QFileInfo fileInfo;
     QString name;
     QString archiveFileName;

@@ -24,9 +24,9 @@ const std::string Message::TYPE_SERIALIZER_KEY = "type";
 const std::string Message::PAYLOAD_SERIALIZER_KEY = "payload";
 
 
-Message::Message(MessageType type, const nlohmann::json& payload) noexcept :
+Message::Message(MessageType type) noexcept :
     type(type),
-    payload(payload)
+    payload()
 { }
 
 Message::Message(const Message& message) noexcept :

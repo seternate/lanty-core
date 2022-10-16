@@ -28,16 +28,15 @@ namespace lanty
 class LTYCORE_EXPORT GameDownloadReply : public Message
 {
 public:
-    static const std::string GAME_SERIALIZER_KEY;
+    static const std::string GAMEID_SERIALIZER_KEY;
     static const std::string GAMESIZE_SERIALIZER_KEY;
-    static const std::string DATA_SERIALIZER_KEY;
 
     GameDownloadReply(void) = delete;
     GameDownloadReply(GameDownloadReply& message) noexcept;
     GameDownloadReply(GameDownloadReply&& message) noexcept;
     GameDownloadReply(Message& message) noexcept;
     GameDownloadReply(Message&& message) noexcept;
-    GameDownloadReply(const Game& game, quint64 gamesize, QByteArray data) noexcept;
+    GameDownloadReply(const Game& game, quint64 gamesize) noexcept;
     virtual ~GameDownloadReply(void) = default;    // GCOVR_EXCL_LINE
 
     GameDownloadReply& operator=(const GameDownloadReply& message) noexcept;
@@ -47,9 +46,8 @@ public:
     bool operator==(const GameDownloadReply& message) const noexcept;
     bool operator!=(const GameDownloadReply& message) const noexcept;
 
-    Game getGame(void) const noexcept;
+    qint64 getGameID(void) const noexcept;
     quint64 getGameSize() const noexcept;
-    QByteArray getData(void) const noexcept;
 };
 
 } /* namespace lanty */

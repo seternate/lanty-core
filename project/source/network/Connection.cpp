@@ -98,7 +98,6 @@ void Connection::handleIncomingMessage(void) noexcept
             }
 
             QGamelist* gamelist = nullptr;
-            Game game;
 
             switch(message.getType())
             {
@@ -108,17 +107,13 @@ void Connection::handleIncomingMessage(void) noexcept
                 break;
             case MessageType::Type::GAMELIST:
                 gamelist = static_cast<GamelistMessage>(message).getGamelist();
-                //qDebug() << "GAMELIST" << gamelist->toJSON().dump().c_str();
                 emit gamelistUpdate(gamelist);
                 break;
             case MessageType::Type::GAMEDOWNLOAD_REQUEST:
-                game = static_cast<GameDownloadRequest>(message).getGame();
-                //qDebug() << "GAME" << game.toJSON().dump().c_str();
-                emit gamedownloadRequest(this->user, game);
+                emit gamedownloadRequest(this->user, static_cast<GameDownloadRequest>(message).getGameID());
                 break;
             case MessageType::Type::GAMEDOWNLOAD_REPLY:
-                //qDebug() << "GamedownloadReply:" << static_cast<GameDownloadReply>(message).getGame().getName();
-                emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGame(), static_cast<GameDownloadReply>(message).getGameSize(), static_cast<GameDownloadReply>(message).getData());
+                emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGameID(), static_cast<GameDownloadReply>(message).getGameSize());
             default: break;
             }
         }
@@ -146,10 +141,12 @@ void Connection::connectToHost(const QHostAddress& address, quint16 port, QIODev
     this->socket.connectToHost(address, port, mode);
 }
 
-void Connection::sendMessage(Message message)
+void Connection::sendMessage(const Message& message)
 {
-    this->socket.write(message.toJSON().dump().data());
+    this->socket.write(message.toJSON().dump().c_str());
     this->socket.write("\n\r\n\r");
+    this->socket.flush();
+
 }
 
 void Connection::handleDisconnect(void)

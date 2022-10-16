@@ -39,6 +39,7 @@ public:
     bool operator!=(const QGame& game) const noexcept;
 
 public slots:
+    void setID(qint64 id) noexcept override;
     void setName(const QString& name) noexcept override;
     void setArchiveFileName(const QString& archiveFileName) noexcept override;
     void setClientExecutableFilePath(const QString& clientExecutableFilePath) noexcept override;
@@ -54,6 +55,7 @@ public slots:
     void setIcon(const QPixmap& icon) noexcept override;
 
 signals:
+    void idChanged(qint64 id);
     void nameChanged(const QString& newName);
     void archiveFileNameChanged(const QString& newArchiveFileName);
     void clientExecutableFilePathChanged(const QString& newClientExecutableFilePath);

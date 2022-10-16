@@ -32,7 +32,8 @@ Message MessageLoader::load(const nlohmann::json& json) const
         {
             type.setType(JSONLoadable::loadFieldAsQString(jsonHeader, Message::TYPE_SERIALIZER_KEY).toStdString());
         }
-        message = Message(type, JSONLoadable::loadFieldAsJSON(json, Message::PAYLOAD_SERIALIZER_KEY));
+        message = Message(type);
+        message.setPayload(JSONLoadable::loadFieldAsJSON(json, Message::PAYLOAD_SERIALIZER_KEY));
     }
 
     return message;

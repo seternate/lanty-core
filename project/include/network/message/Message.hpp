@@ -33,7 +33,7 @@ public:
     static const std::string TYPE_SERIALIZER_KEY;
     static const std::string PAYLOAD_SERIALIZER_KEY;
 
-    Message(MessageType type = MessageType::Type::UNKNOWN, const nlohmann::json& payload = nlohmann::json::object()) noexcept;
+    Message(MessageType type = MessageType::Type::UNKNOWN) noexcept;
     Message(const Message& message) noexcept;
     Message(Message&& message) noexcept;
     virtual ~Message(void) = default;    // GCOVR_EXCL_LINE
@@ -51,7 +51,7 @@ public:
 
     void setPayload(const nlohmann::json& payload) noexcept;
 
-private:
+protected:
     MessageType type;
     nlohmann::json payload;
 };

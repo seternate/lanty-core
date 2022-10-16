@@ -15,12 +15,11 @@
  */
 
 #include "network/message/GameDownloadRequest.hpp"
-#include "game/GameLoader.hpp"
 
 namespace lanty
 {
 
-const std::string GameDownloadRequest::GAME_SERIALIZER_KEY("game");
+const std::string GameDownloadRequest::GAMEID_SERIALIZER_KEY("gameid");
 
 GameDownloadRequest::GameDownloadRequest(GameDownloadRequest& message) noexcept : Message(message) { }
 
@@ -33,11 +32,7 @@ GameDownloadRequest::GameDownloadRequest(Message&& message) noexcept : Message(s
 GameDownloadRequest::GameDownloadRequest(const Game& game) noexcept :
     Message(MessageType::Type::GAMEDOWNLOAD_REQUEST)
 {
-    nlohmann::json payload = nlohmann::json::object();
-
-    payload[GameDownloadRequest::GAME_SERIALIZER_KEY] = game.toJSON();
-
-    this->setPayload(payload);
+    this->payload[GameDownloadRequest::GAMEID_SERIALIZER_KEY] = game.getID();
 }
 
 
@@ -76,9 +71,9 @@ bool GameDownloadRequest::operator!=(const GameDownloadRequest& message) const n
 }
 
 
-Game GameDownloadRequest::getGame(void) const noexcept
+qint64 GameDownloadRequest::getGameID(void) const noexcept
 {
-    return GameLoader().load(this->getPayloadAsJSON()[GameDownloadRequest::GAME_SERIALIZER_KEY]);
+    return this->getPayloadAsJSON()[GameDownloadRequest::GAMEID_SERIALIZER_KEY].get<qint64>();
 }
 
 } /* namespace lanty */

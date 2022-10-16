@@ -28,6 +28,7 @@ Game GameLoader::load(const YAML::Node& yaml) const
 {
     Game game;
 
+    game.setID(YAMLLoadable::loadFieldAsInteger(yaml, Game::ID_SERIALIZER_KEY));
     game.setName(YAMLLoadable::loadFieldAsQString(yaml, Game::NAME_SERIALIZER_KEY));
     game.setArchiveFileName(YAMLLoadable::loadFieldAsQString(yaml, Game::ARCHIVE_SERIALIZER_KEY));
     game.client = GameClientLoader().load(this->loadFieldAsYAML(yaml, Game::CLIENT_SERIALIZER_KEY));
@@ -41,6 +42,7 @@ Game GameLoader::load(const nlohmann::json& json) const
 {
     Game game;
 
+    game.setID(JSONLoadable::loadFieldAsInteger(json, Game::ID_SERIALIZER_KEY));
     game.setName(JSONLoadable::loadFieldAsQString(json, Game::NAME_SERIALIZER_KEY));
     game.setArchiveFileName(JSONLoadable::loadFieldAsQString(json, Game::ARCHIVE_SERIALIZER_KEY));
     game.client = GameClientLoader().load(this->loadFieldAsJSON(json, Game::CLIENT_SERIALIZER_KEY));

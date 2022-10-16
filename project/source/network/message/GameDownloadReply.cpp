@@ -15,16 +15,14 @@
  */
 
 #include "network/message/GameDownloadReply.hpp"
-#include "game/GameLoader.hpp"
 
 #include <string>
 
 namespace lanty
 {
 
-const std::string GameDownloadReply::GAME_SERIALIZER_KEY("game");
+const std::string GameDownloadReply::GAMEID_SERIALIZER_KEY("gameid");
 const std::string GameDownloadReply::GAMESIZE_SERIALIZER_KEY("gamesize");
-const std::string GameDownloadReply::DATA_SERIALIZER_KEY("data");
 
 GameDownloadReply::GameDownloadReply(GameDownloadReply& message) noexcept : Message(message) { }
 
@@ -34,16 +32,11 @@ GameDownloadReply::GameDownloadReply(Message& message) noexcept : Message(messag
 
 GameDownloadReply::GameDownloadReply(Message&& message) noexcept : Message(std::move(message)) { }
 
-GameDownloadReply::GameDownloadReply(const Game& game, quint64 gamesize, QByteArray data) noexcept :
+GameDownloadReply::GameDownloadReply(const Game& game, quint64 gamesize) noexcept :
     Message(MessageType::Type::GAMEDOWNLOAD_REPLY)
 {
-    nlohmann::json payload = nlohmann::json::object();
-
-    payload[GameDownloadReply::GAME_SERIALIZER_KEY] = game.toJSON();
-    payload[GameDownloadReply::GAMESIZE_SERIALIZER_KEY] = gamesize;
-    payload[GameDownloadReply::DATA_SERIALIZER_KEY] = data.toHex().data();
-
-    this->setPayload(payload);
+    this->payload[GameDownloadReply::GAMEID_SERIALIZER_KEY] = game.getID();
+    this->payload[GameDownloadReply::GAMESIZE_SERIALIZER_KEY] = gamesize;
 }
 
 
@@ -82,21 +75,14 @@ bool GameDownloadReply::operator!=(const GameDownloadReply& message) const noexc
 }
 
 
-Game GameDownloadReply::getGame(void) const noexcept
+qint64 GameDownloadReply::getGameID(void) const noexcept
 {
-    return GameLoader().load(this->getPayloadAsJSON()[GameDownloadReply::GAME_SERIALIZER_KEY]);
+    return this->getPayloadAsJSON()[GameDownloadReply::GAMEID_SERIALIZER_KEY].get<qint64>();
 }
 
 quint64 GameDownloadReply::getGameSize(void) const noexcept
 {
     return this->getPayloadAsJSON()[GameDownloadReply::GAMESIZE_SERIALIZER_KEY].get<quint64>();
-}
-
-QByteArray GameDownloadReply::getData(void) const noexcept
-{
-    QByteArray data(this->getPayloadAsJSON()[GameDownloadReply::DATA_SERIALIZER_KEY].get<std::string>().c_str());
-
-    return QByteArray::fromHex(data);
 }
 
 } /* namespace lanty */

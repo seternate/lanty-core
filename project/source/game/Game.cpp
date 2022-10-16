@@ -20,6 +20,7 @@
 namespace lanty
 {
 
+const std::string Game::ID_SERIALIZER_KEY = "id";
 const std::string Game::NAME_SERIALIZER_KEY = "name";
 const std::string Game::ARCHIVE_SERIALIZER_KEY = "archive";
 const std::string Game::VERSION_SERIALIZER_KEY = "version";
@@ -114,6 +115,11 @@ bool Game::operator<(const Game& game) const noexcept
 }
 
 
+qint64 Game::getID(void) const noexcept
+{
+    return this->id;
+}
+
 QString Game::getFilepath(void) const noexcept
 {
     return this->fileInfo.absoluteFilePath();
@@ -159,6 +165,11 @@ const QPixmap& Game::getIcon(void) const noexcept
     return this->icon;
 }
 
+
+void Game::setID(qint64 id) noexcept
+{
+    this->id = id;
+}
 
 void Game::setFilepath(const QString& filepath) noexcept
 {
@@ -242,6 +253,8 @@ nlohmann::json Game::toJSON(void) const
 {
     nlohmann::json json = nlohmann::json::object();
 
+    json["id"] = this->getID();
+
     if (this->getName().isEmpty() == false)
     {
         json["name"] = this->getName().toStdString();
@@ -275,6 +288,8 @@ nlohmann::json Game::toJSON(void) const
 YAML::Node Game::toYAML(void) const
 {
     YAML::Node yaml;
+
+    yaml["id"] = this->getID();
 
     if (this->getName().isEmpty() == false)
     {

@@ -28,7 +28,7 @@ namespace lanty
 class LTYCORE_EXPORT GameDownloadRequest : public Message
 {
 public:
-    static const std::string GAME_SERIALIZER_KEY;
+    static const std::string GAMEID_SERIALIZER_KEY;
 
     GameDownloadRequest(void) = delete;
     GameDownloadRequest(GameDownloadRequest& message) noexcept;
@@ -45,7 +45,7 @@ public:
     bool operator==(const GameDownloadRequest& message) const noexcept;
     bool operator!=(const GameDownloadRequest& message) const noexcept;
 
-    Game getGame(void) const noexcept;
+    qint64 getGameID(void) const noexcept;
 };
 
 } /* namespace lanty */
