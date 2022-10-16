@@ -34,6 +34,7 @@ Game::Game(const QString& name,
            const GameVersion& version) noexcept :
     JSONSerializable(),
     YAMLSerializable(),
+    id(-1),
     fileInfo(),
     name(name),
     archiveFileName(archiveFilePath),
@@ -45,6 +46,7 @@ Game::Game(const QString& name,
 { }
 
 Game::Game(const Game& game) noexcept :
+    id(game.getID()),
     fileInfo(game.getFileInfo()),
     name(game.getName()),
     archiveFileName(game.getArchiveFileName()),
@@ -57,6 +59,7 @@ Game::Game(const Game& game) noexcept :
 
 Game::Game(Game&& game) noexcept
 {
+    this->id = std::move(game.id);
     this->fileInfo = std::move(game.fileInfo);
     this->name = std::move(game.name);
     this->archiveFileName = std::move(game.archiveFileName);
@@ -70,6 +73,7 @@ Game::Game(Game&& game) noexcept
 
 Game& Game::operator=(const Game& game) noexcept
 {
+    this->setID(game.getID());
     this->setFilepath(game.getFilepath());
     this->setName(game.getName());
     this->client = game.client;
@@ -82,6 +86,7 @@ Game& Game::operator=(const Game& game) noexcept
 
 Game& Game::operator=(Game&& game) noexcept
 {
+    this->id = std::move(game.id);
     this->fileInfo = std::move(game.fileInfo);
     this->name = std::move(game.name);
     this->archiveFileName = std::move(game.archiveFileName);

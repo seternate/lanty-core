@@ -134,7 +134,7 @@ void QGame::setIcon(const QPixmap& icon) noexcept
 
 void QGame::connectSignals(void) noexcept
 {
-    QObject::connect(this, SIGNAL(idChanged(quint64)), this, SIGNAL(changed(void)));
+    QObject::connect(this, SIGNAL(idChanged(qint64)), this, SIGNAL(changed(void)));
     QObject::connect(this, SIGNAL(nameChanged(const QString&)), this, SIGNAL(changed(void)));
     QObject::connect(this, SIGNAL(archiveFileNameChanged(const QString&)), this, SIGNAL(changed(void)));
     QObject::connect(this, SIGNAL(clientExecutableFilePathChanged(const QString&)), this, SIGNAL(changed(void)));

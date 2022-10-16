@@ -40,7 +40,11 @@ public:
 
     User getUser(void);
     void connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode = QIODevice::ReadWrite);
+    QHostAddress peerAddress(void) const;
+    qint16 peerPort(void) const;
     void sendMessage(const Message& message);
+    void close();
+    void sendData(QString gamepath);
 
 public slots:
     void handleIncomingMessage(void) noexcept;
@@ -50,12 +54,16 @@ signals:
     void userUpdate(User user);
     void gamelistUpdate(QGamelist* gamelist);
     void gamedownloadRequest(User user, qint64 gameid);
-    void gamedownloadReply(qint64 gameid, quint64 gamesize);
+    void gamedownloadReply(qint64 gameid, quint64 downloadsize, QByteArray data);
     void disconnected(User user);
+    void disconnected();
 
 private:
     QTcpSocket socket;
     User user;
+    bool gamedownloadMode = false;
+    quint64 gamedownloadSize = -1;
+    qint64 gameid = -1;
 };
 
 } /* namespace lanty::server */

@@ -33,6 +33,9 @@ Connection::Connection(void) :
     user()
 {
     QObject::connect(&(this->socket), SIGNAL(readyRead(void)), this, SLOT(handleIncomingMessage(void)));
+    QObject::connect(&(this->socket), SIGNAL(disconnected(void)), this, SLOT(handleDisconnect(void)));
+    QObject::connect(&(this->socket), SIGNAL(disconnected()), this, SIGNAL(disconnected()));
+
 }
 
 Connection::Connection(qintptr socket, QObject* parent) :
@@ -48,11 +51,47 @@ Connection::Connection(qintptr socket, QObject* parent) :
 
     QObject::connect(&(this->socket), SIGNAL(readyRead(void)), this, SLOT(handleIncomingMessage(void)));
     QObject::connect(&(this->socket), SIGNAL(disconnected(void)), this, SLOT(handleDisconnect(void)));
+    QObject::connect(&(this->socket), SIGNAL(disconnected()), this, SIGNAL(disconnected()));
 }
 
 Connection::~Connection(void)
 {
-    this->socket.close();
+    qDebug() << "Destructor Connection";
+    QObject::disconnect(&(this->socket), SIGNAL(readyRead(void)), this, SLOT(handleIncomingMessage(void)));
+    QObject::disconnect(&(this->socket), SIGNAL(disconnected(void)), this, SLOT(handleDisconnect(void)));
+    QObject::disconnect(&(this->socket), SIGNAL(disconnected()), this, SIGNAL(disconnected()));
+    //this->socket.close();
+}
+
+void Connection::sendData(QString gamepath)
+{
+    qDebug() << "Send data";
+    QFile gamefile(gamepath);
+    gamefile.open(QIODevice::ReadOnly);
+    qint64 gamesize = gamefile.size();
+
+    qDebug() << gamesize;
+    qDebug() << gamepath;
+    qDebug() << this->socket.socketDescriptor();
+
+    int buffersize = 1024;
+    char* buffer = new char[buffersize];
+
+    qint64 totalread = 0;
+
+    while(totalread < gamesize)
+    {
+        int read = gamefile.read(buffer, buffersize);
+        totalread += read;
+
+        this->socket.write(buffer, read);
+        this->socket.flush();
+    }
+
+    qDebug() << "data send";
+
+    delete[] buffer;
+    gamefile.close();
 }
 
 
@@ -75,6 +114,13 @@ void Connection::handleIncomingMessage(void) noexcept
         {
             rawMessage.append(buffer.constData(), byteRead);
         }
+    }
+
+    if(this->gamedownloadMode == true)
+    {
+        this->gamedownloadSize -= rawMessage.size();
+        emit this->gamedownloadReply(this->gameid, this->gamedownloadSize, rawMessage);
+        return;
     }
 
     QStringList messageList = QString::fromStdString(rawMessage.toStdString()).split("\n\r\n\r");
@@ -113,7 +159,10 @@ void Connection::handleIncomingMessage(void) noexcept
                 emit gamedownloadRequest(this->user, static_cast<GameDownloadRequest>(message).getGameID());
                 break;
             case MessageType::Type::GAMEDOWNLOAD_REPLY:
-                emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGameID(), static_cast<GameDownloadReply>(message).getGameSize());
+                this->gamedownloadMode = true;
+                this->gamedownloadSize = static_cast<GameDownloadReply>(message).getGameSize();
+                this->gameid = static_cast<GameDownloadReply>(message).getGameID();
+                //emit this->gamedownloadReply(static_cast<GameDownloadReply>(message).getGameID(), static_cast<GameDownloadReply>(message).getGameSize());
             default: break;
             }
         }
@@ -139,6 +188,17 @@ void Connection::handleIncomingMessage(void) noexcept
 void Connection::connectToHost(const QHostAddress& address, quint16 port, QIODevice::OpenMode mode)
 {
     this->socket.connectToHost(address, port, mode);
+    this->socket.waitForConnected();
+}
+
+QHostAddress Connection::peerAddress(void) const
+{
+    return this->socket.peerAddress();
+}
+
+qint16 Connection::peerPort(void) const
+{
+    return this->socket.peerPort();
 }
 
 void Connection::sendMessage(const Message& message)
@@ -152,6 +212,11 @@ void Connection::sendMessage(const Message& message)
 void Connection::handleDisconnect(void)
 {
     emit this->disconnected(this->getUser());
+}
+
+void Connection::close()
+{
+    this->socket.close();
 }
 
 }    // namespace lanty::server

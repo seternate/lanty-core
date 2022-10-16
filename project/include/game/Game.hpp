@@ -93,7 +93,7 @@ public:
     YAML::Node toYAML(void) const override;
 
 private:
-    qint64 id = -1;
+    qint64 id;
     QFileInfo fileInfo;
     QString name;
     QString archiveFileName;
